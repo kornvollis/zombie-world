@@ -9,13 +9,13 @@ package
 		private var _cellX : int = 0;
 		private var _cellY : int = 0;
 		
-		public function Box(cellX : int, cellY)  
+		public function Box(row : int, col : int)  
 		{
-			this._cellX = cellX;
-			this._cellY = cellY;
+			this._cellX = col;
+			this._cellY = row;
 			
-			this.posX = cellX * Constants.GRID_SIZE;			
-			this.posY = cellY * Constants.GRID_SIZE;
+			this.posX = _cellX * Constants.GRID_SIZE;			
+			this.posY = _cellY * Constants.GRID_SIZE;
 			
 			this.graphics.beginFill(0xB35900);
 			this.graphics.drawRect(0, 0, Constants.GRID_SIZE, Constants.GRID_SIZE);

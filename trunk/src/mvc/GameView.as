@@ -1,6 +1,7 @@
 package mvc
 {
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	/**
 	 * ...
@@ -11,12 +12,19 @@ package mvc
 		private var model : GameModel;
 		private var controller : GameController;
 		
+		private var debugArrows : Sprite = new Sprite();
+		
 		public function GameView(model: GameModel, controller : GameController) 
 		{
 			this.model = model;
 			this.controller = controller;
 			
 			addChild(model.map);
+			addChild(debugArrows);
+			
+			//TEST stuff
+			debugArrows.graphics.lineStyle(2, 0xFF0000, 1.0);
+			
 		}
 		
 		public function update(e:Event) : void
@@ -61,29 +69,64 @@ package mvc
 			
 			
 			//DRAW DUBG ARROWS
-			/*
-			for (i = 0; i < Constants.ROW_NUM; i++)
+			if (model.needUpdate)
 			{
-				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
+				for (var i : int = 0; i < Constants.ROW_NUM; i++)
 				{
-					var actuelCell : Cell = model.map.cells[i][j];
-					var nextCell : Cell = model.map.cells[i][j].nextCell;
-				
-					//LEFT
-					if (nextCell.col - actuelCell.col == -1) 
+					for (var  j:int  = 0; j < Constants.COL_NUM; j++)
 					{
+						//trace("draw arrow");
+						var actuelCell : Cell = model.map.cells[i][j];
 						
-					}
-					
-					//RIGHT
-					
-					//TOP
-					
-					//BOTTOM
-					
-				}				
+						switch (actuelCell.next_direction)
+						{
+							case Cell.BOTTOM_NEXT:
+								debugArrows.graphics.moveTo(j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2, i * Constants.GRID_SIZE);
+								debugArrows.graphics.lineTo(j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2, i * Constants.GRID_SIZE + Constants.GRID_SIZE);
+								
+								debugArrows.graphics.moveTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2), (i * Constants.GRID_SIZE + Constants.GRID_SIZE) );
+								debugArrows.graphics.lineTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2) - 3, (i * Constants.GRID_SIZE + Constants.GRID_SIZE) - 3 );
+								
+								debugArrows.graphics.moveTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2), (i * Constants.GRID_SIZE + Constants.GRID_SIZE) );
+								debugArrows.graphics.lineTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2)+3, (i * Constants.GRID_SIZE + Constants.GRID_SIZE)-3 );
+							break;
+							case Cell.LEFT_NEXT:
+								debugArrows.graphics.moveTo(j * Constants.GRID_SIZE, i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2);
+								debugArrows.graphics.lineTo(j * Constants.GRID_SIZE + Constants.GRID_SIZE, i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2);
+								
+								debugArrows.graphics.moveTo( (j * Constants.GRID_SIZE ), (i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2) );
+								debugArrows.graphics.lineTo( (j * Constants.GRID_SIZE ) + 3, (i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2) - 3 );
+								
+								debugArrows.graphics.moveTo( (j * Constants.GRID_SIZE ) , (i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2) );
+								debugArrows.graphics.lineTo( (j * Constants.GRID_SIZE ) + 3, (i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2)+3 );
+							break;
+							
+							case Cell.RIGHT_NEXT:
+								debugArrows.graphics.moveTo(j * Constants.GRID_SIZE, i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2);
+								debugArrows.graphics.lineTo(j * Constants.GRID_SIZE + Constants.GRID_SIZE, i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2);
+								
+								debugArrows.graphics.moveTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE), (i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2) );
+								debugArrows.graphics.lineTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE) - 3, (i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2) - 3 );
+								
+								debugArrows.graphics.moveTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE), (i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2) );
+								debugArrows.graphics.lineTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE)-3, (i * Constants.GRID_SIZE + Constants.GRID_SIZE / 2)+3 );								
+							break;
+								
+							case Cell.TOP_NEXT:
+								debugArrows.graphics.moveTo(j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2, i * Constants.GRID_SIZE);
+								debugArrows.graphics.lineTo(j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2, i * Constants.GRID_SIZE + Constants.GRID_SIZE);
+								
+								debugArrows.graphics.moveTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2), (i * Constants.GRID_SIZE) );
+								debugArrows.graphics.lineTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2) - 3, (i * Constants.GRID_SIZE) + 3 );
+								
+								debugArrows.graphics.moveTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2), (i * Constants.GRID_SIZE) );
+								debugArrows.graphics.lineTo( (j * Constants.GRID_SIZE + Constants.GRID_SIZE / 2) + 3, (i * Constants.GRID_SIZE) + 3 );
+							break;
+						}
+					}				
+				}
+				model.needUpdate = false;
 			}
-			*/
 		}
 		
 	}

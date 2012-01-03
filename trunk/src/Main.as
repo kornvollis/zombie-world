@@ -17,6 +17,8 @@ package
 		private var view  : GameView;
 		private var controller : GameController;
 		
+		private var pathFinder : PathFinder;
+		
 		public function Main():void 
 		{			
 			if (stage) init();
@@ -37,8 +39,13 @@ package
 			
 			//GAME MODEL
 			model = new GameModel();
+			model.myStage = stage;
 			controller = new GameController(model);
 			view = new GameView(model, controller);
+			
+			
+			
+			pathFinder = new PathFinder(model);
 			
 			addChild(view);
 		}

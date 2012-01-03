@@ -1,5 +1,6 @@
 package mvc
 {
+	import flash.display.Stage;
 	import flash.events.Event;
 	/**
 	 * ...
@@ -7,6 +8,8 @@ package mvc
 	 */
 	public class GameModel 
 	{
+		public var needUpdate : Boolean = false;
+		public var myStage : Stage = null;
 		private var _zombies  : Vector.<Zombie>   = new Vector.<Zombie>();
 		private var _surviors : Vector.<Survivor> = new Vector.<Survivor>();
 		
@@ -23,22 +26,29 @@ package mvc
 			var survivor : Survivor = new Survivor(15, 10);
 			
 			//TEST BLOCKERS
-			var block1 : Box = new Box(7, 3);
-			var block2 : Box = new Box(7, 4);
-			var block3 : Box = new Box(7, 5);
-			var block4 : Box = new Box(7, 6);
-			var block5 : Box = new Box(7, 7);
-			var block6 : Box = new Box(7, 8);
+			addBox(3,7);
+			addBox(4,7);
+			addBox(5, 7);
+			addBox(6, 7);
+			addBox(7, 7);
+			addBox(8, 7);
+			
+			addBox(8, 6);
+			addBox(8, 5);
+			addBox(8, 4);
+			addBox(9, 4);
+			addBox(10, 4);
 			
 			zombies.push(zombie);
 			surviors.push(survivor);
+		}
+		
+		public function addBox(row : int , col : int) : void
+		{
 			
-			boxes.push(block1);
-			boxes.push(block2);
-			boxes.push(block3);
-			boxes.push(block4);
-			boxes.push(block5);
-			boxes.push(block6);
+			var block : Box = new Box(row, col);
+			map.getCell(row, col).occupied = true;
+			boxes.push(block);
 		}
 		
 		public function update(e: Event) : void
