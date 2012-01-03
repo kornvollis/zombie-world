@@ -17,7 +17,7 @@ package
 		private var view  : GameView;
 		private var controller : GameController;
 		
-		private var pathFinder : PathFinder;
+		
 		
 		public function Main():void 
 		{			
@@ -43,9 +43,6 @@ package
 			controller = new GameController(model);
 			view = new GameView(model, controller);
 			
-			
-			
-			pathFinder = new PathFinder(model);
 			
 			addChild(view);
 		}

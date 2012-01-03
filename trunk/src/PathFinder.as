@@ -18,12 +18,27 @@ package
 			
 			//INIT PATH
 			model.needUpdate = true;
-			InitPathFinder();
+			findPath();
 			model.needUpdate = true;
 		}
 		
-		private function InitPathFinder() : void 
+		private function ResetNodes() : void
 		{
+			for (var i : int = 0; i < Constants.ROW_NUM; i++)
+			{
+				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
+				{
+					model.map.cells[i][j].distance = 99999;
+					model.map.cells[i][j].next_direction = null;
+					model.map.cells[i][j].isOpen = true;
+				}
+			}
+				
+		}
+		
+		public function findPath() : void 
+		{
+			ResetNodes();
 			// 1. Get starting open nodes
 			openNodes = getStartNodes();
 			

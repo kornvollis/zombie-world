@@ -17,6 +17,8 @@ package mvc
 		
 		private var _map : Map = new Map(); 
 		
+		public var pathFinder : PathFinder;
+		
 		public function GameModel() 
 		{
 			//TEST ZOMBIE
@@ -41,6 +43,9 @@ package mvc
 			
 			zombies.push(zombie);
 			surviors.push(survivor);
+			
+			
+			pathFinder = new PathFinder(this);
 		}
 		
 		public function addBox(row : int , col : int) : void

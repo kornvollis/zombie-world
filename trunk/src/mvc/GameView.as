@@ -22,8 +22,6 @@ package mvc
 			addChild(model.map);
 			addChild(debugArrows);
 			
-			//TEST stuff
-			debugArrows.graphics.lineStyle(2, 0xFF0000, 1.0);
 			
 		}
 		
@@ -71,6 +69,8 @@ package mvc
 			//DRAW DUBG ARROWS
 			if (model.needUpdate)
 			{
+				debugArrows.graphics.clear();
+				debugArrows.graphics.lineStyle(2, 0xFF0000, 1.0);
 				for (var i : int = 0; i < Constants.ROW_NUM; i++)
 				{
 					for (var  j:int  = 0; j < Constants.COL_NUM; j++)

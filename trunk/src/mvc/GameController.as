@@ -20,6 +20,14 @@ package mvc
 		private function myClick(e:MouseEvent):void 
 		{
 			trace(e.stageX + " " + e.stageY);
+			
+			var row:int = e.stageY / Constants.GRID_SIZE;
+			var col:int = e.stageX / Constants.GRID_SIZE;
+			
+			model.addBox(row, col);
+			
+			model.pathFinder.findPath();
+			model.needUpdate = true;
 		}
 		
 	}
