@@ -2,48 +2,60 @@ package mvc
 {
 	import flash.display.Stage;
 	import flash.events.Event;
+	import debug.ZDebug;
 	/**
 	 * ...
 	 * @author OML!
 	 */
 	public class GameModel 
 	{
-		public var needUpdate : Boolean = false;
 		public var myStage : Stage = null;
+		
 		private var _zombies  : Vector.<Zombie>   = new Vector.<Zombie>();
 		private var _surviors : Vector.<Survivor> = new Vector.<Survivor>();
-		
 		private var _boxes : Vector.<Box> = new Vector.<Box>();
 		
 		private var _map : Map = new Map(); 
 		
 		public var pathFinder : PathFinder;
+		public var needPathUpdate : Boolean = false;
 		
 		public function GameModel() 
 		{
+			Factory.getInstance().setModel(this);
+			
 			//TEST ZOMBIE
 			var zombie :Zombie = new Zombie(1, 2);			
 			
 			//TEST SURVIVOR
 			var survivor : Survivor = new Survivor(15, 10);
+			var survivor2 : Survivor = new Survivor(20, 15);
+			var survivor3 : Survivor = new Survivor(5, 5);
+			var survivor4 : Survivor = new Survivor(5, 25);
 			
 			//TEST BLOCKERS
-			addBox(3,7);
-			addBox(4,7);
-			addBox(5, 7);
-			addBox(6, 7);
-			addBox(7, 7);
-			addBox(8, 7);
+			Factory.getInstance().addBox(3,7);
+			Factory.getInstance().addBox(4,7);
+			Factory.getInstance().addBox(5, 7);
+			Factory.getInstance().addBox(6, 7);
+			Factory.getInstance().addBox(7, 7);
+			Factory.getInstance().addBox(8, 7);
 			
-			addBox(8, 6);
-			addBox(8, 5);
-			addBox(8, 4);
-			addBox(9, 4);
-			addBox(10, 4);
+			Factory.getInstance().addBox(8, 6);
+			Factory.getInstance().addBox(8, 5);
+			Factory.getInstance().addBox(8, 4);
+			Factory.getInstance().addBox(9, 4);
+			Factory.getInstance().addBox(10, 4);
 			
 			zombies.push(zombie);
 			surviors.push(survivor);
+			surviors.push(survivor2);
+			surviors.push(survivor3);
+			surviors.push(survivor4);
 			
+			Factory.getInstance().setModel(this);
+			
+			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
 			
 			pathFinder = new PathFinder(this);
 		}
@@ -59,6 +71,11 @@ package mvc
 		public function update(e: Event) : void
 		{
 			
+			
+			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
+			ZDebug.getInstance().watch("Zombik szama", _zombies.length);
+			ZDebug.getInstance().watch("Túlélők szama", _surviors.length);
+			ZDebug.getInstance().refresh();
 		}
 		
 		public function get map():Map 

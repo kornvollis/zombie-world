@@ -17,9 +17,9 @@ package
 			this.model = gameModel;
 			
 			//INIT PATH
-			model.needUpdate = true;
+			model.needPathUpdate = true;
 			findPath();
-			model.needUpdate = true;
+			model.needPathUpdate = true;
 		}
 		
 		private function ResetNodes() : void
@@ -29,11 +29,10 @@ package
 				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
 				{
 					model.map.cells[i][j].distance = 99999;
-					model.map.cells[i][j].next_direction = null;
+					model.map.cells[i][j].next_direction = -1;
 					model.map.cells[i][j].isOpen = true;
 				}
 			}
-				
 		}
 		
 		public function findPath() : void 
@@ -43,9 +42,7 @@ package
 			openNodes = getStartNodes();
 			
 			while (openNodes.length > 0)
-			//for (var i:int = 0; i < 1000;i++)
 			{
-				//trace("kakas - " + openNodes.length);
 				var pickedCell : Cell = openNodes.shift();
 				
 				processNeighbour(model.map.getLeftNeighbour(pickedCell),pickedCell,Cell.RIGHT_NEXT);

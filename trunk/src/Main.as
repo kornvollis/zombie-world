@@ -1,5 +1,6 @@
 package 
 {
+	import debug.ZDebug;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import mvc.GameController;
@@ -17,7 +18,7 @@ package
 		private var view  : GameView;
 		private var controller : GameController;
 		
-		
+		private var zdebug : ZDebug;
 		
 		public function Main():void 
 		{			
@@ -30,6 +31,9 @@ package
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 		
+			//ZDebug
+			ZDebug.getInstance().x = 600;			
+			
 			//SET FRAME RATE
 			stage.frameRate = Constants.FRAME_RATE;
 			
@@ -45,6 +49,10 @@ package
 			
 			
 			addChild(view);
+			addChild(ZDebug.getInstance());
+			
+			ZDebug.getInstance().watch("satge width", stage.width);
+			ZDebug.getInstance().refresh();
 		}
 
 		private function update(e : Event) : void

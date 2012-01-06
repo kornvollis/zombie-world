@@ -43,5 +43,4 @@ package
 			_posY = value;
 		}
 	}
-
 }
