@@ -53,10 +53,6 @@ package debug
 			textArea.text = text;
 		}
 		
-		for (var :int = 0;  < ; ++) 
-		{
-			
-		}
 	}
 
 }

@@ -3,7 +3,6 @@ package mvc
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	/**
-	 * ...
 	 * @author OML!
 	 */
 	public class GameController extends MovieClip
@@ -13,8 +12,8 @@ package mvc
 		public function GameController(model : GameModel) 
 		{
 			this.model = model;
-			
 			model.myStage.addEventListener(MouseEvent.CLICK, myClick);
+			
 		}
 		
 		private function myClick(e:MouseEvent):void 
