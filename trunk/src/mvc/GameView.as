@@ -22,7 +22,9 @@ package mvc
 			addChild(model.map);
 			addChild(debugArrows);
 			
-			
+			addChild(model.testButton);
+			model.testButton.y = 430;
+			model.testButton.ztext.text = "savanyucukor";
 		}
 		
 		public function update(e:Event) : void

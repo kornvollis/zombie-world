@@ -20,6 +20,8 @@ package mvc
 		public var pathFinder : PathFinder;
 		public var needPathUpdate : Boolean = false;
 		
+		public var testButton : ZButton = new ZButton();
+		
 		public function GameModel() 
 		{
 			Factory.getInstance().setModel(this);
