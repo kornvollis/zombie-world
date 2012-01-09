@@ -25,9 +25,19 @@ package mvc
 		public function GameModel() 
 		{
 			Factory.getInstance().setModel(this);
-			
+			pathFinder = new PathFinder(this);			
+			/*
+			for (var i : int = 0; i < Constants.ROW_NUM; i++)
+			{
+				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
+				{
+					trace(map.cells[i][j].nextCell);
+				}
+			}
+			*/
 			//TEST ZOMBIE
-			var zombie :Zombie = new Zombie(1, 2);			
+			var zombie :Zombie = new Zombie(map.getCell(3,3));			
+			zombies.push(zombie);
 			
 			//TEST SURVIVOR
 			var survivor : Survivor = new Survivor(15, 10);
@@ -49,7 +59,7 @@ package mvc
 			Factory.getInstance().addBox(9, 4);
 			Factory.getInstance().addBox(10, 4);
 			
-			zombies.push(zombie);
+			
 			surviors.push(survivor);
 			surviors.push(survivor2);
 			surviors.push(survivor3);
@@ -59,7 +69,7 @@ package mvc
 			
 			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
 			
-			pathFinder = new PathFinder(this);
+			pathFinder.findPath();
 		}
 		
 		public function addBox(row : int , col : int) : void
@@ -72,7 +82,10 @@ package mvc
 		
 		public function update(e: Event) : void
 		{
-			
+			for each(var zombie:Zombie in _zombies)
+			{
+				zombie.update();
+			}
 			
 			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
 			ZDebug.getInstance().watch("Zombik szama", _zombies.length);

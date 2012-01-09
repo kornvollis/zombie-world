@@ -17,7 +17,12 @@ package
 		{
 			
 		}
-	
+		
+		public function update() : void
+		{
+			
+		}
+		
 		public function addGraphics(mc : MovieClip) : void
 		{
 			this.addChild(mc);

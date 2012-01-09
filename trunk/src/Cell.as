@@ -17,6 +17,9 @@ package
 		public var row : int;
 		public var col : int;
 		
+		public var middle_x : int;
+		public var middle_y : int;
+		
 		public var nextCell : Cell = null;
 		public var distance : int = 99999;
 		
@@ -27,6 +30,9 @@ package
 		public function Cell(row:int, col:int) 
 		{
 			super();
+			
+			this.middle_x = (col * Constants.GRID_SIZE) + Constants.GRID_SIZE / 2;
+			this.middle_y = (row * Constants.GRID_SIZE) + Constants.GRID_SIZE / 2;
 			
 			this.row = row;
 			this.col = col;

@@ -20,6 +20,15 @@ package
 			model.needPathUpdate = true;
 			findPath();
 			model.needPathUpdate = true;
+			
+			for (var i : int = 0; i < Constants.ROW_NUM; i++)
+			{
+				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
+				{
+					trace(model.map.cells[i][j].nextCell);
+				}
+			}
+			
 		}
 		
 		private function ResetNodes() : void
@@ -31,6 +40,7 @@ package
 					model.map.cells[i][j].distance = 99999;
 					model.map.cells[i][j].next_direction = -1;
 					model.map.cells[i][j].isOpen = true;
+					model.map.cells[i][j].nextCell = null;
 				}
 			}
 		}
@@ -51,6 +61,7 @@ package
 				processNeighbour(model.map.getBottomNeighbour(pickedCell), pickedCell,Cell.TOP_NEXT);
 				
 				pickedCell.isOpen = false;
+				
 			}
 		}	
 		
@@ -58,8 +69,9 @@ package
 		{
 			if (neighbourCell != null && openNodes != null)
 			{
-				if (neighbourCell.nextCell == null || neighbourCell.distance > pickedCell.distance + 1)
+				if (neighbourCell.distance > pickedCell.distance + 1)
 				{
+					if (pickedCell == null) throw(new Error("kakak"));
 					neighbourCell.nextCell = pickedCell;
 					neighbourCell.distance = pickedCell + 1;
 					neighbourCell.next_direction = direction;
@@ -80,7 +92,7 @@ package
 			// TARGET NODES ARE THE SURVIVORS
 			for (var i:int = 0; i < model.surviors.length; i++)
 			{
-				var cell : Cell = new Cell(model.surviors[i].cellY, model.surviors[i].cellX);
+				var cell : Cell = model.map.getCell(model.surviors[i].cellY, model.surviors[i].cellX);
 				cell.distance = 0;
 				cell.nextCell = cell;
 				
