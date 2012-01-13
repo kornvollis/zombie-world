@@ -40,7 +40,6 @@ package
 			//GAME UPDATE LOOP
 			addEventListener(Event.ENTER_FRAME, update);			
 			
-			
 			//GAME MODEL
 			model = new GameModel();
 			model.myStage = stage;

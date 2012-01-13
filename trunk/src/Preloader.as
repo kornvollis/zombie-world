@@ -8,7 +8,6 @@ package
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.utils.getDefinitionByName;
-	
 	/**
 	 * ...
 	 * @author OMLI
