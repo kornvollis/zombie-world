@@ -8,7 +8,7 @@ package
 	{
 		public static const FRAME_RATE : int = 30;
 		
-		public static const GRID_SIZE  : int = 15;
+		public static const GRID_SIZE  : Number = 15;
 		public static const SCREEN_WIDTH   : int = 600;
 		public static const SCREEN_HEIGHT  : int = 420;		
 		public static const COL_NUM  : int = 40;

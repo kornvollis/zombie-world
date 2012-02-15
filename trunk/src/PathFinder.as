@@ -15,20 +15,18 @@ package
 		{
 			cells = gameModel.map.cells;
 			this.model = gameModel;
-			
-			//INIT PATH
-			model.needPathUpdate = true;
-			findPath();
-			model.needPathUpdate = true;
-			
+		}
+		
+		public function traceNexts() : void
+		{
+			//debugstuff
 			for (var i : int = 0; i < Constants.ROW_NUM; i++)
 			{
 				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
 				{
-					trace(model.map.cells[i][j].nextCell);
+					trace("PATHFINDER: " + model.map.cells[i][j].nextCell);
 				}
 			}
-			
 		}
 		
 		private function ResetNodes() : void
@@ -50,6 +48,8 @@ package
 			ResetNodes();
 			// 1. Get starting open nodes
 			openNodes = getStartNodes();
+			
+			if (openNodes.length == 0) throw( new Error("Pathfinder: no target node"));
 			
 			while (openNodes.length > 0)
 			{

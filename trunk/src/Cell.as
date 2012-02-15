@@ -14,11 +14,13 @@ package
 		
 		public var occupied : Boolean = false;
 		
+		//Cell's gridposition
 		public var row : int;
 		public var col : int;
 		
-		public var middle_x : int;
-		public var middle_y : int;
+		//Cell's middle position
+		public var middle_x : Number;
+		public var middle_y : Number;
 		
 		public var nextCell : Cell = null;
 		public var distance : int = 99999;
@@ -37,7 +39,6 @@ package
 			this.row = row;
 			this.col = col;
 		}
-		
 	}
 
 }

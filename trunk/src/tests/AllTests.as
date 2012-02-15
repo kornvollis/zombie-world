@@ -11,8 +11,16 @@ package tests
 		public function AllTests() 
 		{
 			super();
-			addTest(new TestFirstTry("TestIntegerMath"));
-            addTest(new TestFirstTry("TestFloatMath"));
+			
+			/*CELL TESTS*/
+			addTest(new CellTest("TestConstructor"));
+            
+			/*ZOMBIE TESTS*/
+			addTest(new ZombieTest(ZombieTest.TEST1));
+			addTest(new ZombieTest(ZombieTest.TEST2));
+			addTest(new ZombieTest(ZombieTest.TEST3));
+			addTest(new ZombieTest(ZombieTest.TEST4));
+			addTest(new ZombieTest(ZombieTest.TEST5));
 		}
 		
 	}

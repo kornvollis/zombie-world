@@ -25,19 +25,7 @@ package mvc
 		public function GameModel() 
 		{
 			Factory.getInstance().setModel(this);
-			pathFinder = new PathFinder(this);			
-			/*
-			for (var i : int = 0; i < Constants.ROW_NUM; i++)
-			{
-				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
-				{
-					trace(map.cells[i][j].nextCell);
-				}
-			}
-			*/
-			//TEST ZOMBIE
-			var zombie :Zombie = new Zombie(map.getCell(3,3));			
-			zombies.push(zombie);
+			pathFinder = new PathFinder(this);
 			
 			//TEST SURVIVOR
 			var survivor : Survivor = new Survivor(15, 10);
@@ -45,9 +33,27 @@ package mvc
 			var survivor3 : Survivor = new Survivor(5, 5);
 			var survivor4 : Survivor = new Survivor(5, 25);
 			
+			//surviors.push(survivor);
+			surviors.push(survivor2);
+			//surviors.push(survivor3);
+			//surviors.push(survivor4);
+			
+			
+			pathFinder.findPath();
+			
+			//FORCE to redraw the PATH graphics
+			needPathUpdate = true;
+			
+			//TEST ZOMBIE
+			var zombie :Zombie = new Zombie(map.getCell(3,3));			
+			zombies.push(zombie);
+			
+			
+			
+			
 			//TEST BLOCKERS
-			Factory.getInstance().addBox(3,7);
-			Factory.getInstance().addBox(4,7);
+			Factory.getInstance().addBox(3, 7);
+			Factory.getInstance().addBox(4, 7);
 			Factory.getInstance().addBox(5, 7);
 			Factory.getInstance().addBox(6, 7);
 			Factory.getInstance().addBox(7, 7);
@@ -60,16 +66,14 @@ package mvc
 			Factory.getInstance().addBox(10, 4);
 			
 			
-			surviors.push(survivor);
-			surviors.push(survivor2);
-			surviors.push(survivor3);
-			surviors.push(survivor4);
-			
 			Factory.getInstance().setModel(this);
 			
 			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
 			
-			pathFinder.findPath();
+			
+			
+			
+			//pathFinder.traceNexts();
 		}
 		
 		public function addBox(row : int , col : int) : void
