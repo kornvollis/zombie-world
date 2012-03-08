@@ -46,6 +46,9 @@ package
 			controller = new GameController(model);
 			view = new GameView(model, controller);
 			
+			Factory.getInstance().setModel(model);
+			Factory.getInstance().setView(view);
+			Factory.getInstance().init();
 			
 			addChild(view);
 			addChild(ZDebug.getInstance());

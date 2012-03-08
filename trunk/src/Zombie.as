@@ -41,7 +41,14 @@ package
 			if (targetCell != null)
 			{						
 				moveTo(targetCell);	
-				trace("updateing zombie");
+				//trace("updateing zombie");
+				
+				if (currentCell.hasSurvivor())
+				{
+					trace("Zombie: target cell has a survivor Yuppy");
+					var s : Survivor = currentCell.giveMeASurvivor();
+					Factory.getInstance().removeSurvivor(s);
+				}
 			}
 		}
 		

@@ -14,6 +14,9 @@ package
 		
 		public var occupied : Boolean = false;
 		
+		//Survivors on it
+		public var survivors : Vector.<Survivor> = new Vector.<Survivor>();
+		
 		//Cell's gridposition
 		public var row : int;
 		public var col : int;
@@ -38,6 +41,33 @@ package
 			
 			this.row = row;
 			this.col = col;
+		}
+		
+		public function hasSurvivor() : Boolean
+		{
+			if (survivors.length > 0) return true;
+			else return false;
+		}
+		
+		public function giveMeASurvivor() : Survivor
+		{
+			if (survivors.length > 0)
+			{
+				return survivors[0];
+			} else {
+				return null;
+			}
+		}
+		
+		public function removeSurvivor(survivor : Survivor):void 
+		{
+			var index : int = this.survivors.indexOf(survivor);
+			this.survivors.splice(index, 1);
+		}
+		
+		public function addSurvivor(survivor : Survivor):void 
+		{
+			this.survivors.push(survivor);
 		}
 	}
 

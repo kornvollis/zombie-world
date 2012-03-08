@@ -13,67 +13,16 @@ package mvc
 		
 		private var _zombies  : Vector.<Zombie>   = new Vector.<Zombie>();
 		private var _surviors : Vector.<Survivor> = new Vector.<Survivor>();
-		private var _boxes : Vector.<Box> = new Vector.<Box>();
+		private var _boxes    : Vector.<Box> = new Vector.<Box>();
 		
 		private var _map : Map = new Map(); 
 		
-		public var pathFinder : PathFinder;
+		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
-		
-		public var testButton : ZButton = new ZButton();
 		
 		public function GameModel() 
 		{
-			Factory.getInstance().setModel(this);
 			pathFinder = new PathFinder(this);
-			
-			//TEST SURVIVOR
-			var survivor : Survivor = new Survivor(15, 10);
-			var survivor2 : Survivor = new Survivor(20, 15);
-			var survivor3 : Survivor = new Survivor(5, 5);
-			var survivor4 : Survivor = new Survivor(5, 25);
-			
-			//surviors.push(survivor);
-			surviors.push(survivor2);
-			//surviors.push(survivor3);
-			//surviors.push(survivor4);
-			
-			
-			pathFinder.findPath();
-			
-			//FORCE to redraw the PATH graphics
-			needPathUpdate = true;
-			
-			//TEST ZOMBIE
-			var zombie :Zombie = new Zombie(map.getCell(3,3));			
-			zombies.push(zombie);
-			
-			
-			
-			
-			//TEST BLOCKERS
-			Factory.getInstance().addBox(3, 7);
-			Factory.getInstance().addBox(4, 7);
-			Factory.getInstance().addBox(5, 7);
-			Factory.getInstance().addBox(6, 7);
-			Factory.getInstance().addBox(7, 7);
-			Factory.getInstance().addBox(8, 7);
-			
-			Factory.getInstance().addBox(8, 6);
-			Factory.getInstance().addBox(8, 5);
-			Factory.getInstance().addBox(8, 4);
-			Factory.getInstance().addBox(9, 4);
-			Factory.getInstance().addBox(10, 4);
-			
-			
-			Factory.getInstance().setModel(this);
-			
-			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
-			
-			
-			
-			
-			//pathFinder.traceNexts();
 		}
 		
 		public function addBox(row : int , col : int) : void

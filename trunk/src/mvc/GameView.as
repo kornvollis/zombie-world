@@ -3,6 +3,7 @@ package mvc
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	/**
 	 * ...
 	 * @author OML!
@@ -14,17 +15,31 @@ package mvc
 		
 		private var debugArrows : Sprite = new Sprite();
 		
+		
+		public var mapArea : Sprite = new Sprite();
+		
+		private var ui : UI = new UI();
+		
 		public function GameView(model: GameModel, controller : GameController) 
 		{
+			mapArea.mouseChildren = false;
+			//mapArea.width = 640;
+			//mapArea.height = 420;
+			
 			this.model = model;
 			this.controller = controller;
 			
-			addChild(model.map);
-			addChild(debugArrows);
+			mapArea.addChild(model.map);
+			mapArea.addChild(debugArrows);
 			
-			addChild(model.testButton);
-			model.testButton.y = 430;
-			model.testButton.ztext.text = "savanyucukor";
+			addChild(mapArea);
+			
+			
+			mapArea.addEventListener(MouseEvent.CLICK, controller.myClick);
+			
+			//model.testButton.y = 430;
+			//model.testButton.ztext.text = "savanyucukor";
+			addChild(ui);
 		}
 		
 		
@@ -86,6 +101,11 @@ package mvc
 					}
 				}
 			}
+		}
+		
+		public function removeSurvivor(s : Survivor) : void
+		{
+			removeChild(s);
 		}
 		
 		public function update(e:Event) : void

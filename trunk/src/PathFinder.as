@@ -17,6 +17,11 @@ package
 			this.model = gameModel;
 		}
 		
+		public function getCell(row: int, col: int): Cell
+		{
+			return cells[row][col];
+		}
+		
 		public function traceNexts() : void
 		{
 			//debugstuff
@@ -49,7 +54,17 @@ package
 			// 1. Get starting open nodes
 			openNodes = getStartNodes();
 			
-			if (openNodes.length == 0) throw( new Error("Pathfinder: no target node"));
+			if (openNodes.length == 0) 
+			{
+				trace("Pathfinder: no more survivor");
+				for (var i : int = 0; i < Constants.ROW_NUM; i++)
+				{
+					for (var  j:int  = 0; j < Constants.COL_NUM; j++)
+					{
+						model.map.cells[i][j].nextCell = null;
+					}
+				}				
+			}
 			
 			while (openNodes.length > 0)
 			{

@@ -12,7 +12,7 @@ package
 		private var _cellX : int = 0;
 		private var _cellY : int = 0;
 		
-		public function Survivor(cellX : int, cellY : int)
+		public function Survivor(cellY  : int, cellX : int)
 		{
 			this.cellX = cellX;
 			this.cellY = cellY;
