@@ -1,6 +1,7 @@
 package  
 {
 	import flash.display.MovieClip;
+	import flash.events.MouseEvent;
 	
 	/**
 	 * ...
@@ -28,6 +29,26 @@ package
 			addChild(addZombieButton);
 			addChild(addSurvivorButton);
 			addChild(addWallButton);
+			
+			//LISTENERS
+			addZombieButton.addEventListener(MouseEvent.CLICK, addZombieClick);
+			addWallButton.addEventListener(MouseEvent.CLICK, addWallClick);
+			addSurvivorButton.addEventListener(MouseEvent.CLICK, addSurvivorClick);
+		}
+		
+		private function addSurvivorClick(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.SURVIVOR_SPAWNER;
+		}
+		
+		private function addWallClick(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.WALL_BUILDER;
+		}
+		
+		private function addZombieClick(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.ZOMBIE_SPAWNER;
 		}
 		
 	}

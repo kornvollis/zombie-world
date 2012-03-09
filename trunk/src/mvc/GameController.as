@@ -19,8 +19,8 @@ package mvc
 		public function myClick(e:MouseEvent):void 
 		{
 			//Just for the test			
-			var row:int = e.stageY / Constants.GRID_SIZE;
-			var col:int = e.stageX / Constants.GRID_SIZE;
+			var row:int = e.stageY / Constants.CELL_SIZE;
+			var col:int = e.stageX / Constants.CELL_SIZE;
 			
 			if (Factory.getInstance().clickState == Factory.WALL_BUILDER)
 			{

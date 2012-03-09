@@ -33,8 +33,16 @@ package
 		public function init():void 
 		{
 			//TEST SURVIVOR
-			addSurvivor(1, 10);
+			addSurvivor(3, 3);
 			
+			//TEST ZOMBIE
+			//var zombie :Zombie = new Zombie(model.map.getCell(3,3));			
+			//model.zombies.push(zombie);
+			
+			
+			model.pathFinder.findPath();
+			
+		/*	
 			//FORCE to redraw the PATH graphics
 			model.needPathUpdate = true;
 			
@@ -54,6 +62,7 @@ package
 			model.zombies.push(zombie);
 			
 			ZDebug.getInstance().watch("Dobozok szama", model.boxes.length);
+			*/
 		}	
 		
 		public static function getInstance():Factory
@@ -73,30 +82,12 @@ package
 		
 		public function removeSurvivor(s : Survivor) : void
 		{
-			if (model != null && s != null)
-			{
-				trace("Factory: 1 survivor removed");
-				var row : int = s.cellY;
-				var col : int = s.cellX;
-				
-				//Remove from model
-				var index : int = model.surviors.indexOf(s);
-				model.surviors.splice(index, 1);
-				
-				//Remove from cell
-				var cell : Cell = model.pathFinder.getCell(row, col);
-				cell.removeSurvivor(s);
-				
-				//Refresh the view
-				view.removeSurvivor(s);
-				
-				model.needPathUpdate = true;
-				model.pathFinder.findPath();
-			}
+			
 		}
 		
 		public function addSurvivor(row : int , col : int) : void
 		{
+			
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
 			{
@@ -107,10 +98,6 @@ package
 					var survivor : Survivor = new Survivor(row, col);
 					model.surviors.push(survivor);
 					
-					var cell : Cell = model.pathFinder.getCell(row, col);
-					cell.addSurvivor(survivor);
-					
-					model.needPathUpdate = true;
 					model.pathFinder.findPath();
 				}
 			}
@@ -125,13 +112,12 @@ package
 			} else {
 				if (model != null)
 				{
-					if (!model.pathFinder.getCell(row, col).hasSurvivor())
-					{
-						var box : Box = new Box(row, col);
-						model.boxes.push(box);
-						model.pathFinder.findPath();
-						model.needPathUpdate = true;
-					}
+					var box : Box = new Box(row, col);
+					model.boxes.push(box);
+					model.pathFinder.cellGrid.blockCell(row, col);
+					
+					model.pathFinder.findPath();
+					model.needPathUpdate = true;
 				}
 			}
 			ZDebug.getInstance().refresh();
@@ -146,8 +132,8 @@ package
 			} else {
 				if (model != null)
 				{
-					var zombie : Zombie = new Zombie(model.pathFinder.getCell(row,col));
-					model.zombies.push(zombie);
+					//var zombie : Zombie = new Zombie(model.pathFinder.getCell(row,col));
+					//model.zombies.push(zombie);
 					
 					//var cell : Cell = model.pathFinder.getCell(row, col);
 					//cell.addSurvivor(survivor);

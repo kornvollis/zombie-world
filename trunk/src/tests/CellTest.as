@@ -20,8 +20,8 @@ package tests
 			assertEquals(8, c.col);
 			
 			c = new Cell(0, 0);
-			assertEquals(Constants.GRID_SIZE / 2, c.middle_x);
-			assertEquals(Constants.GRID_SIZE / 2, c.middle_y);
+			assertEquals(Constants.CELL_SIZE / 2, c.middle_x);
+			assertEquals(Constants.CELL_SIZE / 2, c.middle_y);
 		}
 	}
 }

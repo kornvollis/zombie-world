@@ -3,6 +3,7 @@ package mvc
 	import flash.display.Stage;
 	import flash.events.Event;
 	import debug.ZDebug;
+
 	/**
 	 * ...
 	 * @author OML!
@@ -15,8 +16,6 @@ package mvc
 		private var _surviors : Vector.<Survivor> = new Vector.<Survivor>();
 		private var _boxes    : Vector.<Box> = new Vector.<Box>();
 		
-		private var _map : Map = new Map(); 
-		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
 		
@@ -25,13 +24,6 @@ package mvc
 			pathFinder = new PathFinder(this);
 		}
 		
-		public function addBox(row : int , col : int) : void
-		{
-			
-			var block : Box = new Box(row, col);
-			map.getCell(row, col).occupied = true;
-			boxes.push(block);
-		}
 		
 		public function update(e: Event) : void
 		{
@@ -44,11 +36,6 @@ package mvc
 			ZDebug.getInstance().watch("Zombik szama", _zombies.length);
 			ZDebug.getInstance().watch("Túlélők szama", _surviors.length);
 			ZDebug.getInstance().refresh();
-		}
-		
-		public function get map():Map 
-		{
-			return _map;
 		}
 		
 		public function get zombies():Vector.<Zombie> 

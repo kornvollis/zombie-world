@@ -49,8 +49,8 @@ package tests
 			
 			var z : Zombie = new Zombie(c);
 			
-			assertEquals(Constants.GRID_SIZE*2 + Constants.GRID_SIZE/2, z.posY);
-			assertEquals(Constants.GRID_SIZE*3 + Constants.GRID_SIZE/2, z.posX);
+			assertEquals(Constants.CELL_SIZE*2 + Constants.CELL_SIZE/2, z.posY);
+			assertEquals(Constants.CELL_SIZE*3 + Constants.CELL_SIZE/2, z.posX);
 		}
 		
 		public function test4() : void
@@ -71,7 +71,7 @@ package tests
 			var z : Zombie = new Zombie(c);
 			z.targetCell = t;
 			
-			assertEquals(z.distance(z.targetCell), Constants.GRID_SIZE);
+			assertEquals(z.distance(z.targetCell), Constants.CELL_SIZE);
 			
 			var startDist : Number = z.distance(t);
 			

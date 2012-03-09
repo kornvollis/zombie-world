@@ -7,95 +7,85 @@ package
 	 */
 	public class PathFinder 
 	{
-		private var cells : Vector.<Vector.<Cell>>;		
+		public var cellGrid : CellGrid = new CellGrid(); 
 		private var model : GameModel;
 		private var openNodes:Vector.<Cell> = null;
 		
 		public function PathFinder(gameModel : GameModel) : void
 		{
-			cells = gameModel.map.cells;
 			this.model = gameModel;
 		}
 		
-		public function getCell(row: int, col: int): Cell
-		{
-			return cells[row][col];
-		}
-		
-		public function traceNexts() : void
-		{
-			//debugstuff
-			for (var i : int = 0; i < Constants.ROW_NUM; i++)
-			{
-				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
-				{
-					trace("PATHFINDER: " + model.map.cells[i][j].nextCell);
-				}
-			}
-		}
-		
-		private function ResetNodes() : void
+		private function ResetCells() : void
 		{
 			for (var i : int = 0; i < Constants.ROW_NUM; i++)
 			{
 				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
 				{
-					model.map.cells[i][j].distance = 99999;
-					model.map.cells[i][j].next_direction = -1;
-					model.map.cells[i][j].isOpen = true;
-					model.map.cells[i][j].nextCell = null;
+					var c : Cell = cellGrid.getCell(i, j);
+					c.distance = 99999;
+					c.next_direction = Cell.NULL_NEXT;
+					//c.state = Cell.OPEN;
+					c.isProcessed = false;
 				}
 			}
 		}
 		
 		public function findPath() : void 
 		{
-			ResetNodes();
+			// 0. Reset Cells
+			ResetCells();
+			
 			// 1. Get starting open nodes
 			openNodes = getStartNodes();
 			
+			// If there is no survivor
 			if (openNodes.length == 0) 
 			{
 				trace("Pathfinder: no more survivor");
-				for (var i : int = 0; i < Constants.ROW_NUM; i++)
-				{
-					for (var  j:int  = 0; j < Constants.COL_NUM; j++)
-					{
-						model.map.cells[i][j].nextCell = null;
-					}
-				}				
+				
+				return;
 			}
 			
+			// If there is living survivor
 			while (openNodes.length > 0)
 			{
-				var pickedCell : Cell = openNodes.shift();
+				var startingCell : Cell = openNodes.shift();
 				
-				processNeighbour(model.map.getLeftNeighbour(pickedCell),pickedCell,Cell.RIGHT_NEXT);
-				processNeighbour(model.map.getRightNeighbour(pickedCell),pickedCell,Cell.LEFT_NEXT);
-				processNeighbour(model.map.getTopNeighbour(pickedCell),pickedCell,Cell.BOTTOM_NEXT);
-				processNeighbour(model.map.getBottomNeighbour(pickedCell), pickedCell,Cell.TOP_NEXT);
+				var leftCell   : Cell = cellGrid.getLeftNeighbour(startingCell);
+				var rightCell  : Cell = cellGrid.getRightNeighbour(startingCell);
+				var topCell    : Cell = cellGrid.getTopNeighbour(startingCell);
+				var bottomCell : Cell = cellGrid.getBottomNeighbour(startingCell);
 				
-				pickedCell.isOpen = false;
+				processNeighbour(leftCell,   startingCell,Cell.RIGHT_NEXT);
+				processNeighbour(rightCell,  startingCell,Cell.LEFT_NEXT);
+				processNeighbour(topCell,    startingCell,Cell.BOTTOM_NEXT);
+				processNeighbour(bottomCell, startingCell,Cell.TOP_NEXT);
+				
+				startingCell.isProcessed = true;
 				
 			}
+			
+			//REDRAW THE DEBUG ARROWS
+			model.needPathUpdate = true;
 		}	
 		
-		private function processNeighbour(neighbourCell:Cell,pickedCell:Cell, direction:int):void 
-		{
+		private function processNeighbour(neighbourCell:Cell, startingCell:Cell, direction:int):void 
+		{			
 			if (neighbourCell != null && openNodes != null)
 			{
-				if (neighbourCell.distance > pickedCell.distance + 1)
+				if (neighbourCell.distance > startingCell.distance + 1)
 				{
-					if (pickedCell == null) throw(new Error("kakak"));
-					neighbourCell.nextCell = pickedCell;
-					neighbourCell.distance = pickedCell + 1;
+					if (startingCell == null) throw(new Error("kakak"));
+					//neighbourCell.nextCell = pickedCell;
+					neighbourCell.distance = startingCell + 1;
 					neighbourCell.next_direction = direction;
 				}
 				
-				if (neighbourCell.isOpen)
+				if (!neighbourCell.isProcessed)
 				{
 					openNodes.push(neighbourCell);
-					neighbourCell.isOpen = false;
+					neighbourCell.isProcessed = true;
 				}
 			}
 		}
@@ -107,9 +97,10 @@ package
 			// TARGET NODES ARE THE SURVIVORS
 			for (var i:int = 0; i < model.surviors.length; i++)
 			{
-				var cell : Cell = model.map.getCell(model.surviors[i].cellY, model.surviors[i].cellX);
+				var survivor : Survivor = model.surviors[i];
+				
+				var cell : Cell = this.cellGrid.getCell(survivor.row, survivor.col);
 				cell.distance = 0;
-				cell.nextCell = cell;
 				
 				openNodes.push(cell);				
 			}	

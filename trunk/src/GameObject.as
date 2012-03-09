@@ -1,6 +1,7 @@
 package  
 {
 	import flash.display.MovieClip;
+	import flash.geom.Point;
 	
 	/**
 	 * ...
@@ -10,8 +11,7 @@ package
 	{
 		public var onStage : Boolean = false;
 		
-		private var _posX : Number = 0;
-		private var _posY : Number = 0;
+		public var position : Point = new Point();
 		
 		public function GameObject() 
 		{
@@ -26,26 +26,6 @@ package
 		public function addGraphics(mc : MovieClip) : void
 		{
 			this.addChild(mc);
-		}
-		
-			public function get posX():Number 
-		{
-			return _posX;
-		}
-		
-		public function set posX(value:Number):void 
-		{
-			_posX = value;
-		}
-		
-		public function get posY():Number 
-		{
-			return _posY;
-		}
-		
-		public function set posY(value:Number):void 
-		{
-			_posY = value;
 		}
 	}
 }
