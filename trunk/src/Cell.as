@@ -26,8 +26,8 @@ package
 		public var state : String = Cell.OPEN;
 		
 		//Cell's gridposition
-		public var row : int;
-		public var col : int;
+		private var _row : int;
+		private var _col : int;
 		
 		//Cell's world position center position
 		public var middle : Point = new Point();
@@ -47,10 +47,26 @@ package
 			super();
 		}
 		
-		public function setMiddlePoint(row, col) : void
+		public function get row():int 
 		{
-			this.middle.x = (col * size) + size * 0.5;
-			this.middle.y = (row * size) + size * 0.5;
+			return _row;
+		}
+		
+		public function set row(value:int):void 
+		{
+			_row = value;
+			this.middle.y = (value * size) + size * 0.5;
+		}
+		
+		public function get col():int 
+		{
+			return _col;
+		}
+		
+		public function set col(value:int):void 
+		{
+			_col = value;
+			this.middle.x = (value * size) + size * 0.5;
 		}
 	}
 

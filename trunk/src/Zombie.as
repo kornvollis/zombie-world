@@ -19,13 +19,12 @@ package
 		//PRIVI
 		private var speed : int = 50;
 		private var life  : int = 3;
-		private var row : int = -1;
-		private var col : int = -1;
-		
+		private var _target : Point = new Point;
 		
 		//PUBI
 		public var state : String = Z_IDLE;		
-		public var target : Point = new Point;
+		public var row : int = -1;
+		public var col : int = -1;
 		
 		/*
 		public var currentCell : Cell = null;
@@ -33,8 +32,11 @@ package
 		*/
 		public function Zombie(row: int, col :int) 
 		{
-			this.position.x = col * Constants.CELL_SIZE;			
-			this.position.y = row * Constants.CELL_SIZE;
+			this.row = row;
+			this.col = col;
+			
+			this.position.x = col * Constants.CELL_SIZE + Constants.CELL_SIZE/2;			
+			this.position.y = row * Constants.CELL_SIZE + Constants.CELL_SIZE/2;
 			
 			this.graphics.beginFill(0x009900);
 			this.graphics.drawCircle(0, 0, Constants.CELL_SIZE/2);
@@ -42,40 +44,50 @@ package
 		
 		override public function update() : void
 		{
-			//if (hasToGoSomeWhere)
+			if (state == Z_MOVING)
 			{
-				
+				moveToTarget();
 			}
 		}
 		
-		public function moveTo(cell : Cell):void 
+		private function moveToTarget():void 
 		{
-			/*var move_vector : Point = new Point();
-			move_vector.x = targetCell.middle_x - this.position.x;
-			move_vector.y = targetCell.middle_y - this.position.y;
+			var move_vector : Point = new Point();
+			move_vector.x = target.x - position.x;
+			move_vector.y = target.y - position.y;
 			
 			move_vector.normalize( 1 * (speed / 20) );
 			
-			if (distance(targetCell) < 3)
+			if (Point.distance(position, target) < 3)
 			{
-				position.x = targetCell.middle_x;
-				position.y = targetCell.middle_y;
-				hasToGoSomeWhere = false;
+				position.x = target.x;
+				position.y = target.y;
+				state = Z_IDLE;
 			} else {
-				posX += move_vector.x;
-				posY += move_vector.y;
-			}*/
-		}
-		
-		/*
-		public function distance(cell : Cell) : Number
-		{
-			if(cell != null) {
-				return Point.distance(new Point(posX, posY), new Point(targetCell.middle_x, targetCell.middle_y));
-			}			
-			throw new Error("Zombie distance cell null error");
+				position.x += move_vector.x;
+				position.y += move_vector.y;
+			}
+			
+			//SET ROW 
+			row = int(position.y / Constants.CELL_SIZE);
+			col = int(position.x / Constants.CELL_SIZE);
+			
+			//SET COL
 			
 		}
-		*/
+		
+		public function get target():Point 
+		{
+			return _target;
+		}
+		
+		public function set target(value:Point):void 
+		{
+			if (state == Z_IDLE)
+			{
+				state = Z_MOVING;
+			}
+			_target = value;
+		}
 	}
 }

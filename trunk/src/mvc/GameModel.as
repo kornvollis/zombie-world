@@ -3,6 +3,7 @@ package mvc
 	import flash.display.Stage;
 	import flash.events.Event;
 	import debug.ZDebug;
+	import flash.geom.Point;
 
 	/**
 	 * ...
@@ -24,12 +25,54 @@ package mvc
 			pathFinder = new PathFinder(this);
 		}
 		
+		public function getNextTargetFor(row: int, col : int) : Point
+		{
+			var targetPos : Point = null;
+			
+			var currentCell : Cell = pathFinder.cellGrid.getCell(row, col);
+			var nextCell : Cell = null;
+			
+			switch (currentCell.next_direction) 
+			{
+				case Cell.RIGHT_NEXT : 
+					nextCell = pathFinder.cellGrid.getCell(row, col+1);
+				break;
+				case Cell.LEFT_NEXT : 
+					nextCell = pathFinder.cellGrid.getCell(row, col-1);
+				break;
+				case Cell.TOP_NEXT : 
+					nextCell = pathFinder.cellGrid.getCell(row-1, col);
+				break;
+				case Cell.BOTTOM_NEXT : 
+					nextCell = pathFinder.cellGrid.getCell(row+1, col);
+				break;
+				default:
+			}
+			
+			if (nextCell != null)
+			{
+				targetPos = new Point(nextCell.middle.x, nextCell.middle.y);
+			}
+			
+			return targetPos;
+		}
+		
 		
 		public function update(e: Event) : void
 		{
 			for each(var zombie:Zombie in _zombies)
 			{
 				zombie.update();
+				
+				if (zombie.state == Zombie.Z_IDLE)
+				{
+					var target = getNextTargetFor(zombie.row, zombie.col);
+					
+					if (target != null) {
+						zombie.target = target;
+					}
+				}
+				
 			}
 			
 			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);

@@ -2,11 +2,11 @@ package
 {
 	import flash.display.Sprite;
 	import flash.events.EventDispatcher;
+	import flash.geom.Point;
 	import mvc.GameModel;
 	import debug.ZDebug;
 	import mvc.GameView;
 	/**
-	 * ...
 	 * @author OML!
 	 */
 	public class Factory extends EventDispatcher
@@ -132,11 +132,8 @@ package
 			} else {
 				if (model != null)
 				{
-					//var zombie : Zombie = new Zombie(model.pathFinder.getCell(row,col));
-					//model.zombies.push(zombie);
-					
-					//var cell : Cell = model.pathFinder.getCell(row, col);
-					//cell.addSurvivor(survivor);
+					var zombie : Zombie = new Zombie(row, col);
+					model.zombies.push(zombie);
 				}
 			}
 		}
