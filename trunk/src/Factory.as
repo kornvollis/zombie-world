@@ -110,7 +110,7 @@ package
 			{
 				throw(new Error("addBox row, col out of bound"));
 			} else {
-				if (model != null)
+				if (model != null && model.pathFinder.cellGrid.getCell(row,col).state != Cell.CLOSED)
 				{
 					var box : Box = new Box(row, col);
 					model.boxes.push(box);

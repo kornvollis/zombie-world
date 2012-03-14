@@ -9,6 +9,8 @@ package mvc
 	{
 		private var model : GameModel;
 		
+		private var mousePressed : Boolean = false;
+		
 		public function GameController(model : GameModel) 
 		{
 			this.model = model;
@@ -32,8 +34,28 @@ package mvc
 			{
 				Factory.getInstance().addSurvivor(row, col);
 			}
+		}
+		
+		public function mouseDown(e:MouseEvent):void 
+		{
+			mousePressed = true;
+		}
+		
+		public function mouseMove(e:MouseEvent):void 
+		{
+			var row:int = e.stageY / Constants.CELL_SIZE;
+			var col:int = e.stageX / Constants.CELL_SIZE;
 			
-			
+			if (mousePressed && Factory.getInstance().clickState == Factory.WALL_BUILDER)
+			{
+				Factory.getInstance().addBox(row, col);
+			}
+		}
+		
+		public function mouseUp(e:MouseEvent):void 
+		{
+			trace("Mouse Up");
+			mousePressed = false;
 		}
 		
 	}

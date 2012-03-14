@@ -39,6 +39,9 @@ package mvc
 			drawGrid() 
 			
 			mapArea.addEventListener(MouseEvent.CLICK, controller.myClick);
+			mapArea.addEventListener(MouseEvent.MOUSE_DOWN, controller.mouseDown);
+			mapArea.addEventListener(MouseEvent.MOUSE_UP, controller.mouseUp);
+			mapArea.addEventListener(MouseEvent.MOUSE_MOVE, controller.mouseMove);
 			
 			addChild(ui);
 		}
@@ -158,7 +161,7 @@ package mvc
 			for each(var box : Box in model.boxes) {
 				if (!box.onStage)
 				{
-					addChild(box);
+					mapArea.addChild(box);
 					box.onStage = true;
 				}
 				
