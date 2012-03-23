@@ -36,33 +36,12 @@ package
 			addSurvivor(3, 3);
 			
 			//TEST ZOMBIE
-			//var zombie :Zombie = new Zombie(model.map.getCell(3,3));			
-			//model.zombies.push(zombie);
+			addZombie(3, 10);
+			
+			model.pathFinder.addTargetCell(0, 0);
 			
 			
 			model.pathFinder.findPath();
-			
-		/*	
-			//FORCE to redraw the PATH graphics
-			model.needPathUpdate = true;
-			
-			
-			//TEST BLOCKERS
-			addBox(3, 7);
-			addBox(4, 7);
-			addBox(5, 7);
-			addBox(6, 7);
-			addBox(7, 7);
-			addBox(8, 7);
-			
-			model.pathFinder.findPath();
-			
-			//TEST ZOMBIE
-			var zombie :Zombie = new Zombie(model.map.getCell(3,3));			
-			model.zombies.push(zombie);
-			
-			ZDebug.getInstance().watch("Dobozok szama", model.boxes.length);
-			*/
 		}	
 		
 		public static function getInstance():Factory
@@ -73,6 +52,8 @@ package
 		public function setModel(model: GameModel) :void
 		{
 			Factory.model = model;
+			
+			Factory.model.addEventListener(GameEvents.ZOMBIE_REACHED_EXIT, removeZombie);
 		}
 		
 		public function setView(view: GameView) :void
@@ -98,7 +79,7 @@ package
 					var survivor : Survivor = new Survivor(row, col);
 					model.surviors.push(survivor);
 					
-					model.pathFinder.findPath();
+					//model.pathFinder.findPath();
 				}
 			}
 		}
@@ -108,7 +89,7 @@ package
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
 			{
-				throw(new Error("addBox row, col out of bound"));
+				//throw(new Error("addBox row, col out of bound"));
 			} else {
 				if (model != null && model.pathFinder.cellGrid.getCell(row,col).state != Cell.CLOSED)
 				{
@@ -136,6 +117,13 @@ package
 					model.zombies.push(zombie);
 				}
 			}
+		}
+		
+		public function removeZombie(e : GameEvents):void 
+		{
+			var zombie : Zombie = Zombie(e.data);
+			var zombieIndex : int = model.zombies.indexOf(zombie);
+			model.zombies.splice(zombieIndex, 1);
 		}
 	}
 

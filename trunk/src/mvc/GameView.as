@@ -17,7 +17,7 @@ package mvc
 		
 		public var mapArea : Sprite = new Sprite();
 		
-		private var ui : UI = new UI();
+		private var ui : UI;
 		
 		public function GameView(model: GameModel, controller : GameController) 
 		{
@@ -28,6 +28,7 @@ package mvc
 			mapArea.graphics.endFill();
 			
 			this.model = model;
+			this.ui = new UI(model);
 			this.controller = controller;
 			
 			//mapArea.addChild(model.cellGrid);
@@ -43,7 +44,14 @@ package mvc
 			mapArea.addEventListener(MouseEvent.MOUSE_UP, controller.mouseUp);
 			mapArea.addEventListener(MouseEvent.MOUSE_MOVE, controller.mouseMove);
 			
+			model.addEventListener(GameEvents.ZOMBIE_REACHED_EXIT, removeZombie);
+			
 			addChild(ui);
+		}
+		
+		private function removeZombie(e:GameEvents):void 
+		{
+			removeChild(Zombie(e.data));
 		}
 		
 		private function drawGrid() : void

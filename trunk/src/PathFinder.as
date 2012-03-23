@@ -11,9 +11,16 @@ package
 		private var model : GameModel;
 		private var openNodes:Vector.<Cell> = null;
 		
+		public var targetNodes : Vector.<Cell> = new Vector.<Cell>;
+		
 		public function PathFinder(gameModel : GameModel) : void
 		{
 			this.model = gameModel;
+		}
+		
+		public function addTargetCell(row: int, col:int) : void
+		{
+			targetNodes.push( cellGrid.getCell(row, col) );
 		}
 		
 		private function ResetCells() : void
@@ -38,6 +45,7 @@ package
 			
 			// 1. Get starting open nodes
 			openNodes = getStartNodes();
+			//openNodes = targetNodes;
 			
 			// If there is no survivor
 			if (openNodes.length == 0) 
@@ -95,6 +103,7 @@ package
 			var openNodes : Vector.<Cell> = new Vector.<Cell>();
 			
 			// TARGET NODES ARE THE SURVIVORS
+			/*
 			for (var i:int = 0; i < model.surviors.length; i++)
 			{
 				var survivor : Survivor = model.surviors[i];
@@ -103,8 +112,19 @@ package
 				cell.distance = 0;
 				
 				openNodes.push(cell);				
-			}	
+			}
+			*/
 			
+			
+			for (var i:int = 0; i < targetNodes.length; i++)
+			{
+				var cell : Cell = targetNodes[i];
+				cell.distance = 0;
+				openNodes.push(cell);
+			}
+			
+			
+			//return targetNodes;
 			return openNodes;
 		}
 	}

@@ -22,7 +22,5 @@ package
 			this.graphics.beginFill(0x000099);
 			this.graphics.drawCircle(Constants.CELL_SIZE/2, Constants.CELL_SIZE/2, Constants.CELL_SIZE/2);
 		}
-		
 	}
-
 }

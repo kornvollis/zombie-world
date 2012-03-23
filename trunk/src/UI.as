@@ -1,20 +1,35 @@
 package  
 {
+	import flash.display.FrameLabel;
 	import flash.display.MovieClip;
-	import flash.events.MouseEvent;
+	import flash.events.Event;
+	import flash.events.MouseEvent;	
+	import mvc.GameModel;
 	
 	/**
 	 * ...
 	 * @author OML!
 	 */
 	public class UI extends MovieClip 
-	{
+	{		
 		var addZombieButton   : ZButton = new ZButton();
 		var addWallButton 	  : ZButton = new ZButton();
 		var addSurvivorButton : ZButton = new ZButton();
+	
+		var model : GameModel = null;
 		
-		public function UI() 
+		var lifeText : ZButton = new ZButton();
+		
+		//var lifeLabel : Label
+		
+		public function UI(model : GameModel) 
 		{
+			this.model = model;
+			
+			lifeText.y = 430;
+			lifeText.x = 450;
+			//lifeText.ztext.text = "Life: " + GameModel.life;
+			
 			addZombieButton.y = 430;
 			addZombieButton.ztext.text = "Spawn zombie";
 			
@@ -26,6 +41,7 @@ package
 			addSurvivorButton.x = 300;
 			addSurvivorButton.ztext.text = "Spawn survivor";
 			
+			addChild(lifeText);
 			addChild(addZombieButton);
 			addChild(addSurvivorButton);
 			addChild(addWallButton);
@@ -34,6 +50,13 @@ package
 			addZombieButton.addEventListener(MouseEvent.CLICK, addZombieClick);
 			addWallButton.addEventListener(MouseEvent.CLICK, addWallClick);
 			addSurvivorButton.addEventListener(MouseEvent.CLICK, addSurvivorClick);
+			this.model.addEventListener(GameEvents.LIFE_LOST, lifeChanged);
+		}
+		
+		private function lifeChanged(e: GameEvents):void 
+		{
+			trace("UI: Szevasz");
+			lifeText.ztext.text = "Life: " + e.data;
 		}
 		
 		private function addSurvivorClick(e:MouseEvent):void 
@@ -50,7 +73,5 @@ package
 		{
 			Factory.getInstance().clickState = Factory.ZOMBIE_SPAWNER;
 		}
-		
 	}
-
 }

@@ -3,14 +3,21 @@ package mvc
 	import flash.display.Stage;
 	import flash.events.Event;
 	import debug.ZDebug;
+	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 
 	/**
 	 * ...
 	 * @author OML!
 	 */
-	public class GameModel 
+	public class GameModel extends EventDispatcher
 	{
+		// EVENTS //***********************************************************//		
+		private var lifeChangedEvent : GameEvents;
+		
+		private var _life : int = 10;
+		
+		
 		public var myStage : Stage = null;
 		
 		private var _zombies  : Vector.<Zombie>   = new Vector.<Zombie>();
@@ -19,6 +26,7 @@ package mvc
 		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
+		
 		
 		public function GameModel() 
 		{
@@ -64,6 +72,15 @@ package mvc
 			{
 				zombie.update();
 				
+				if (zombieReachedTarget(zombie)) {
+					
+					var event : GameEvents = new GameEvents(GameEvents.ZOMBIE_REACHED_EXIT);
+					event.data = zombie;
+					dispatchEvent(event);
+					
+					life-- ;
+				}
+				
 				if (zombie.state == Zombie.Z_IDLE)
 				{
 					var target = getNextTargetFor(zombie.row, zombie.col);
@@ -72,13 +89,23 @@ package mvc
 						zombie.target = target;
 					}
 				}
-				
 			}
 			
 			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
 			ZDebug.getInstance().watch("Zombik szama", _zombies.length);
 			ZDebug.getInstance().watch("Túlélők szama", _surviors.length);
 			ZDebug.getInstance().refresh();
+		}
+		
+		private function zombieReachedTarget(z : Zombie):Boolean 
+		{
+			for (var i:int = 0; i < pathFinder.targetNodes.length; i++) 
+			{
+				if (pathFinder.targetNodes[i].col == z.col && pathFinder.targetNodes[i].row == z.row) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		public function get zombies():Vector.<Zombie> 
@@ -109,6 +136,21 @@ package mvc
 		public function set boxes(value:Vector.<Box>):void 
 		{
 			_boxes = value;
+		}
+		
+		public function get life():int 
+		{
+			return _life;
+		}
+		
+		public function set life(value:int):void 
+		{
+			_life = value;
+			
+			lifeChangedEvent = new GameEvents(GameEvents.LIFE_LOST);
+			lifeChangedEvent.data = life;
+			dispatchEvent(lifeChangedEvent);
+			
 		}
 	}
 
