@@ -38,6 +38,9 @@ package
 			//TEST ZOMBIE
 			addZombie(3, 10);
 			
+			//TURRET
+			addTurret(5, 2);
+			
 			model.pathFinder.addTargetCell(0, 0);
 			
 			
@@ -102,6 +105,21 @@ package
 				}
 			}
 			ZDebug.getInstance().refresh();
+		}
+		
+		public function addTurret(row:int, col:int):void 
+		{
+			if (row <0 || row >= Constants.ROW_NUM ||
+			    col <0 || col >= Constants.COL_NUM)
+			{
+				throw(new Error("addTurret row, col out of bound"));
+			} else {
+				if (model != null)
+				{
+					var turret : Turret = new Turret(row, col);
+					model.turrets.push(turret);
+				}
+			}
 		}
 		
 		public function addZombie(row:int, col:int):void 

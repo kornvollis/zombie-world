@@ -139,6 +139,20 @@ package mvc
 		
 		public function update(e:Event) : void
 		{
+			//UPDATE TURRETS
+			for each(var turret : Turret in model.turrets) 
+			{
+				if (!turret.onStage)
+				{
+					addChild(turret);
+					turret.onStage = true;
+					turret.x = turret.position.x;
+					turret.y = turret.position.y;
+				}
+				
+				
+			}
+			
 			//UPDATE ZOMBIES
 			for each(var zombie : Zombie in model.zombies) 
 			{

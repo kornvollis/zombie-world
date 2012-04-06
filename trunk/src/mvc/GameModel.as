@@ -20,6 +20,8 @@ package mvc
 		
 		public var myStage : Stage = null;
 		
+		private var _turrets : Vector.<Turret> = new Vector.<Turret>;
+		
 		private var _zombies  : Vector.<Zombie>   = new Vector.<Zombie>();
 		private var _surviors : Vector.<Survivor> = new Vector.<Survivor>();
 		private var _boxes    : Vector.<Box> = new Vector.<Box>();
@@ -68,6 +70,11 @@ package mvc
 		
 		public function update(e: Event) : void
 		{
+			for each(var turret:Turret in _turrets)
+			{
+				turret.update();
+			}
+			
 			for each(var zombie:Zombie in _zombies)
 			{
 				zombie.update();
@@ -151,6 +158,16 @@ package mvc
 			lifeChangedEvent.data = life;
 			dispatchEvent(lifeChangedEvent);
 			
+		}
+		
+		public function get turrets():Vector.<Turret> 
+		{
+			return _turrets;
+		}
+		
+		public function set turrets(value:Vector.<Turret>):void 
+		{
+			_turrets = value;
 		}
 	}
 
