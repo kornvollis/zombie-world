@@ -87,7 +87,7 @@ package mvc
 					
 					life-- ;
 				}
-				
+				/*
 				if (zombie.state == Zombie.Z_IDLE)
 				{
 					var target = getNextTargetFor(zombie.row, zombie.col);
@@ -96,6 +96,7 @@ package mvc
 						zombie.target = target;
 					}
 				}
+				*/
 			}
 			
 			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);

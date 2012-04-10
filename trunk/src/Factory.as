@@ -11,9 +11,9 @@ package
 	 */
 	public class Factory extends EventDispatcher
 	{
-		public static const WALL_BUILDER     = "WALL_BUILDER";
-		public static const ZOMBIE_SPAWNER   = "ZOMBIE_SPAWNER";
-		public static const SURVIVOR_SPAWNER = "SURVIVOR_SPAWNER";
+		public static const WALL_BUILDER   : String  = "WALL_BUILDER";
+		public static const ZOMBIE_SPAWNER : String  = "ZOMBIE_SPAWNER";
+		public static const SURVIVOR_SPAWNER : String= "SURVIVOR_SPAWNER";
 		
 		public var clickState : String = SURVIVOR_SPAWNER;
 		

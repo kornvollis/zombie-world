@@ -12,13 +12,13 @@ package
 	 */
 	public class UI extends MovieClip 
 	{		
-		var addZombieButton   : ZButton = new ZButton();
-		var addWallButton 	  : ZButton = new ZButton();
-		var addSurvivorButton : ZButton = new ZButton();
+		private var addZombieButton   : ZButton = new ZButton();
+		private var addWallButton 	  : ZButton = new ZButton();
+		private var addSurvivorButton : ZButton = new ZButton();
 	
-		var model : GameModel = null;
+		private var model : GameModel = null;
 		
-		var lifeText : ZButton = new ZButton();
+		private var lifeText : ZButton = new ZButton();
 		
 		//var lifeLabel : Label
 		
