@@ -191,6 +191,19 @@ package mvc
 				box.y = box.position.y;
 			}
 			
+			//UPDATE PROJECTILS
+			for each(var projectil : Projectil in model.projectils) 
+			{
+				if (!projectil.onStage)
+				{
+					addChild(projectil);
+					projectil.onStage = true;
+				}
+				
+				projectil.x = projectil.position.x;
+				projectil.y = projectil.position.y;
+			}
+			
 			//DRAW DUBG ARROWS
 			if (model.needPathUpdate)
 			{

@@ -36,10 +36,12 @@ package
 			addSurvivor(3, 3);
 			
 			//TEST ZOMBIE
-			addZombie(3, 10);
+			var z : Zombie =  addZombie(3, 10);
 			
 			//TURRET
-			addTurret(5, 2);
+			var t : Turret = addTurret(5, 2);
+			
+			//createProjectil(5, 50, z);
 			
 			model.pathFinder.addTargetCell(0, 0);
 			
@@ -87,6 +89,12 @@ package
 			}
 		}
 		
+		public function createProjectil(posX:int, posY:int, target : GameObject) : void
+		{
+			var projectil : Projectil = new Projectil(posX, posY, target);
+			model.projectils.push(projectil);
+		}
+		
 		public function addBox(row:int , col :int) : void
 		{
 			if (row <0 || row >= Constants.ROW_NUM ||
@@ -107,7 +115,7 @@ package
 			ZDebug.getInstance().refresh();
 		}
 		
-		public function addTurret(row:int, col:int):void 
+		public function addTurret(row:int, col:int): Turret 
 		{
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
@@ -118,11 +126,15 @@ package
 				{
 					var turret : Turret = new Turret(row, col);
 					model.turrets.push(turret);
+					
+					return turret;
 				}
 			}
+			
+			return null;
 		}
 		
-		public function addZombie(row:int, col:int):void 
+		public function addZombie(row:int, col:int):Zombie 
 		{
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
@@ -133,15 +145,38 @@ package
 				{
 					var zombie : Zombie = new Zombie(row, col);
 					model.zombies.push(zombie);
+					
+					return zombie;
 				}
 			}
+			
+			return null;
 		}
 		
-		public function removeZombie(e : GameEvents):void 
+		public function removeZombie(e : Zombie):void 
 		{
-			var zombie : Zombie = Zombie(e.data);
+			if (e.onStage)
+			{
+				if(view.contains(e)) view.removeChild(e);
+			}
+			
+			var zombie : Zombie = e;
+			zombie.isDeleted = true;
 			var zombieIndex : int = model.zombies.indexOf(zombie);
 			model.zombies.splice(zombieIndex, 1);
+		}
+		
+		public function removeProjectil(e : Projectil):void 
+		{
+			var projectile : Projectil = e;
+			projectile.isDeleted = true;
+			var projIndex : int = model.projectils.indexOf(projectile);
+			model.projectils.splice(projIndex, 1);
+			
+			if (e.onStage)
+			{
+				view.removeChild(e);
+			}
 		}
 	}
 

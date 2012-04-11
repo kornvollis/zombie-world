@@ -25,6 +25,7 @@ package mvc
 		private var _zombies  : Vector.<Zombie>   = new Vector.<Zombie>();
 		private var _surviors : Vector.<Survivor> = new Vector.<Survivor>();
 		private var _boxes    : Vector.<Box> = new Vector.<Box>();
+		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
 		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
@@ -73,6 +74,21 @@ package mvc
 			for each(var turret:Turret in _turrets)
 			{
 				turret.update();
+				
+				if(turret.target == null)
+				{
+					for each(var zombie2 :Zombie in _zombies)
+					{
+						var zpos : Point = zombie2.position;
+						var tpos : Point = turret.position;
+						
+						if (Point.distance(zpos, tpos) < turret.range)
+						{
+							turret.target = zombie2;
+							break;
+						}
+					}
+				}
 			}
 			
 			for each(var zombie:Zombie in _zombies)
@@ -81,27 +97,33 @@ package mvc
 				
 				if (zombieReachedTarget(zombie)) {
 					
-					var event : GameEvents = new GameEvents(GameEvents.ZOMBIE_REACHED_EXIT);
-					event.data = zombie;
-					dispatchEvent(event);
+					//var event : GameEvents = new GameEvents(GameEvents.ZOMBIE_REACHED_EXIT);
+					//event.data = zombie;
+					//dispatchEvent(event);
+					Factory.getInstance().removeZombie(zombie);
 					
 					life-- ;
 				}
-				/*
+				
 				if (zombie.state == Zombie.Z_IDLE)
 				{
-					var target = getNextTargetFor(zombie.row, zombie.col);
+					var target : Point = getNextTargetFor(zombie.row, zombie.col);
 					
 					if (target != null) {
 						zombie.target = target;
 					}
 				}
-				*/
+			}
+			
+			for each(var projectile : Projectil in _projectils)
+			{
+				projectile.update();
 			}
 			
 			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
 			ZDebug.getInstance().watch("Zombik szama", _zombies.length);
 			ZDebug.getInstance().watch("Túlélők szama", _surviors.length);
+			ZDebug.getInstance().watch("Projectil szám", _projectils.length);
 			ZDebug.getInstance().refresh();
 		}
 		
@@ -169,6 +191,16 @@ package mvc
 		public function set turrets(value:Vector.<Turret>):void 
 		{
 			_turrets = value;
+		}
+		
+		public function get projectils():Vector.<Projectil> 
+		{
+			return _projectils;
+		}
+		
+		public function set projectils(value:Vector.<Projectil>):void 
+		{
+			_projectils = value;
 		}
 	}
 

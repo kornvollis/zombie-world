@@ -18,10 +18,10 @@ package
 		
 		//PRIVI
 		private var speed : int = 50;
-		private var life  : int = 3;
 		private var _target : Point = new Point;
 		
 		//PUBI
+		public var life  : int = 1;
 		public var state : String = Z_IDLE;		
 		public var row : int = -1;
 		public var col : int = -1;
@@ -79,6 +79,17 @@ package
 		public function get target():Point 
 		{
 			return _target;
+		}
+		
+		public function sufferDamage(damage:int):void 
+		{
+			life -=damage;
+			
+			if (life < 1)
+			{
+				dispatchEvent(new GameEvents(GameEvents.ZOMBIE_REACHED_EXIT));
+				Factory.getInstance().removeZombie(this); 
+			}
 		}
 		
 		public function set target(value:Point):void 

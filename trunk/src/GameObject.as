@@ -13,6 +13,8 @@ package
 		
 		public var position : Point = new Point();
 		
+		public var isDeleted : Boolean = false;
+		
 		public function GameObject() 
 		{
 			
