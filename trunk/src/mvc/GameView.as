@@ -205,11 +205,13 @@ package mvc
 			}
 			
 			//DRAW DUBG ARROWS
+			/*
 			if (model.needPathUpdate)
 			{
 				drawDebugPath();
 				model.needPathUpdate = false;
 			}
+			*/
 		}
 		
 	}

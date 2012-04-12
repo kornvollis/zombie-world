@@ -32,6 +32,7 @@ package
 					var c : Cell = cellGrid.getCell(i, j);
 					c.distance = 99999;
 					c.next_direction = Cell.NULL_NEXT;
+					c.next_alternate_direction = Cell.NULL_NEXT;
 					//c.state = Cell.OPEN;
 					c.isProcessed = false;
 				}
@@ -84,10 +85,19 @@ package
 			{
 				if (neighbourCell.distance > startingCell.distance + 1)
 				{
-					if (startingCell == null) throw(new Error("kakak"));
+					if (startingCell == null) throw(new Error("Pathfinder process neighbour error"));
 					//neighbourCell.nextCell = pickedCell;
-					neighbourCell.distance = startingCell + 1;
+					neighbourCell.distance = startingCell.distance + 1;
 					neighbourCell.next_direction = direction;
+				}
+				
+				//ZIK ZAK
+				if (neighbourCell.distance == startingCell.distance + 1)
+				{
+					if (neighbourCell.next_direction != direction)
+					{
+						neighbourCell.next_alternate_direction = direction;
+					}
 				}
 				
 				if (!neighbourCell.isProcessed)
@@ -102,20 +112,6 @@ package
 		{
 			var openNodes : Vector.<Cell> = new Vector.<Cell>();
 			
-			// TARGET NODES ARE THE SURVIVORS
-			/*
-			for (var i:int = 0; i < model.surviors.length; i++)
-			{
-				var survivor : Survivor = model.surviors[i];
-				
-				var cell : Cell = this.cellGrid.getCell(survivor.row, survivor.col);
-				cell.distance = 0;
-				
-				openNodes.push(cell);				
-			}
-			*/
-			
-			
 			for (var i:int = 0; i < targetNodes.length; i++)
 			{
 				var cell : Cell = targetNodes[i];
@@ -123,8 +119,6 @@ package
 				openNodes.push(cell);
 			}
 			
-			
-			//return targetNodes;
 			return openNodes;
 		}
 	}

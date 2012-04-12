@@ -39,6 +39,7 @@ package
 		public var isProcessed : Boolean = false;
 		
 		public var next_direction : int = Cell.NULL_NEXT;
+		public var next_alternate_direction : int = Cell.NULL_NEXT;
 		
 		public var size : int = Constants.CELL_SIZE; 
 		

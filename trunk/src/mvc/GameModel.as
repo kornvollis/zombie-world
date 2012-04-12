@@ -43,7 +43,22 @@ package mvc
 			var currentCell : Cell = pathFinder.cellGrid.getCell(row, col);
 			var nextCell : Cell = null;
 			
-			switch (currentCell.next_direction) 
+			var direction : int = currentCell.next_direction;
+			
+			//RANDOM MOVEMENT
+			if(currentCell.next_alternate_direction != Cell.NULL_NEXT && currentCell.next_direction != currentCell.next_alternate_direction)
+			{
+				var begin : int = 0;
+				var end : int = 1;
+				var randomNumber : Number = Math.random();
+				if (randomNumber < 0.5)
+				{
+					direction = currentCell.next_alternate_direction;
+				}
+			}
+			
+			
+			switch (direction) 
 			{
 				case Cell.RIGHT_NEXT : 
 					nextCell = pathFinder.cellGrid.getCell(row, col+1);

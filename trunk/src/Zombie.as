@@ -16,12 +16,16 @@ package
 		public static const CONSTRUCTOR_NULL_ERROR : String = "Zombie's construcotr must be not NULL";
 		
 		
+		
 		//PRIVI
 		private var speed : int = 50;
 		private var _target : Point = new Point;
+		//HEALTH BAR
+		private var healthBar : HealthBar = new HealthBar;
 		
 		//PUBI
-		public var life  : int = 1;
+		public var maxLife : int = 3;
+		public var life  : int = 3;
 		public var state : String = Z_IDLE;		
 		public var row : int = -1;
 		public var col : int = -1;
@@ -38,8 +42,14 @@ package
 			this.position.x = col * Constants.CELL_SIZE + Constants.CELL_SIZE/2;			
 			this.position.y = row * Constants.CELL_SIZE + Constants.CELL_SIZE/2;
 			
+			//TEMP Graphics
 			this.graphics.beginFill(0x009900);
-			this.graphics.drawCircle(0, 0, Constants.CELL_SIZE/2);
+			this.graphics.drawCircle(0, 0, Constants.CELL_SIZE / 2);
+			
+			//Health bar graphics
+			healthBar.x = - Constants.CELL_SIZE * 0.5;
+			healthBar.y = - 6 - Constants.CELL_SIZE * 0.5;
+			addChild(healthBar);
 		}
 		
 		override public function update() : void
@@ -89,6 +99,8 @@ package
 			{
 				dispatchEvent(new GameEvents(GameEvents.ZOMBIE_REACHED_EXIT));
 				Factory.getInstance().removeZombie(this); 
+			} else {
+				healthBar.setSize(life, maxLife);
 			}
 		}
 		
