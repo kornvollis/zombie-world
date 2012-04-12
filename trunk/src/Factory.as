@@ -40,6 +40,7 @@ package
 			
 			//TURRET
 			var t : Turret = addTurret(5, 2);
+			addTurret(10, 2);
 			
 			//createProjectil(5, 50, z);
 			

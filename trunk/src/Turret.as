@@ -16,7 +16,7 @@ package
 		public static const FIRING : String = "firing";
 		
 		public var damage : int = 1;
-		public var range  : int = 150;
+		public var range  : int = 250;
 		public var bulletPerSec : int = 1;	
 		
 		public var state : String = "idle";
