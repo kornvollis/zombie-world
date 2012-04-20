@@ -66,7 +66,7 @@ package
 			rifleGraphics.y = Constants.CELL_SIZE * 0.5;
 			
 			//Add range graphics
-			rangeGraphics.graphics.lineStyle(2, 0xFF0000);
+			rangeGraphics.graphics.lineStyle(2, 0xFF0000, 0.2);
 			rangeGraphics.graphics.drawCircle(0, 0, range);
 			if (showRange)
 			{

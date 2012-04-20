@@ -5,6 +5,7 @@ package mvc
 	import debug.ZDebug;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
+	import levels.LevelLoader;
 
 	/**
 	 * ...
@@ -23,9 +24,10 @@ package mvc
 		private var _turrets : Vector.<Turret> = new Vector.<Turret>;
 		
 		private var _zombies  : Vector.<Zombie>   = new Vector.<Zombie>();
-		private var _surviors : Vector.<Survivor> = new Vector.<Survivor>();
 		private var _boxes    : Vector.<Box> = new Vector.<Box>();
 		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
+		
+		public var levelLoader : LevelLoader;
 		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
@@ -33,7 +35,8 @@ package mvc
 		
 		public function GameModel() 
 		{
-			pathFinder = new PathFinder(this);
+			pathFinder  = new PathFinder(this);
+			levelLoader = new LevelLoader(this);
 		}
 		
 		public function getNextTargetFor(row: int, col : int) : Point
@@ -41,7 +44,7 @@ package mvc
 			var targetPos : Point = null;
 			
 			var currentCell : Cell = pathFinder.cellGrid.getCell(row, col);
-			var nextCell : Cell = null;
+			var nextCell    : Cell = null;
 			
 			var direction : int = currentCell.next_direction;
 			
@@ -137,7 +140,6 @@ package mvc
 			
 			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
 			ZDebug.getInstance().watch("Zombik szama", _zombies.length);
-			ZDebug.getInstance().watch("Túlélők szama", _surviors.length);
 			ZDebug.getInstance().watch("Projectil szám", _projectils.length);
 			ZDebug.getInstance().refresh();
 		}
@@ -161,16 +163,6 @@ package mvc
 		public function set zombies(value:Vector.<Zombie>):void 
 		{
 			_zombies = value;
-		}
-		
-		public function get surviors():Vector.<Survivor> 
-		{
-			return _surviors;
-		}
-		
-		public function set surviors(value:Vector.<Survivor>):void 
-		{
-			_surviors = value;
 		}
 		
 		public function get boxes():Vector.<Box> 

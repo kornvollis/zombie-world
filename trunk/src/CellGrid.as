@@ -33,6 +33,10 @@ package
 			Cell(cells[row][col]).state = Cell.CLOSED;
 		}
 		
+		public function openCell(row: int, col:int) : void
+		{
+			Cell(cells[row][col]).state = Cell.OPEN;
+		}
 		
 		public function isBlocked(row: int, col:int) : Boolean
 		{

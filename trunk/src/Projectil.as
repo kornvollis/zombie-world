@@ -9,7 +9,7 @@ package
 	{
 		private var _target : GameObject = null;
 		
-		public var speed : int = 6;
+		public var speed : int = 10;
 		public var damage : int = 1;
 		private var targetISAlive : Boolean = false;
 		
@@ -26,16 +26,14 @@ package
 			this.targetPosition.x = target.position.x;
 			this.targetPosition.y = target.position.y;
 			//TEMP GRAPHICS
-			this.graphics.beginFill(0xFFFFFF, 1);
-			this.graphics.drawCircle(0, 0, 3);
+			this.graphics.beginFill(0x000000, 1);
+			this.graphics.drawCircle(0, 0, 1.5);
 		}
 		
 		override public function update() : void
 		{
-			//trace("upi");
 			if (isDeleted == false)
 			{
-				//trace("kakas");
 				if (target != null)
 				{
 					targetPosition.x = target.position.x;
@@ -45,14 +43,12 @@ package
 				var velo:Point = new Point;
 				velo.x = targetPosition.x - position.x;
 				velo.y = targetPosition.y - position.y;
-				//velo.x = target.position.x - position.x;
-				//velo.y = target.position.y - position.y;
 				
 				velo.normalize(speed);
 				position.x += velo.x;
 				position.y += velo.y;
 				
-				if (Point.distance(targetPosition, position) < 3)
+				if (Point.distance(targetPosition, position) < 6)
 				{
 					Factory.getInstance().removeProjectil(this);
 					if(!Zombie(target).isDeleted)
@@ -63,7 +59,7 @@ package
 			}
 		}
 		
-		public function get target():GameObject 
+		public function get target():GameObject
 		{
 			return _target;
 		}

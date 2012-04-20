@@ -14,7 +14,7 @@ package
 	{		
 		private var addZombieButton   : ZButton = new ZButton();
 		private var addWallButton 	  : ZButton = new ZButton();
-		private var addSurvivorButton : ZButton = new ZButton();
+		private var addTurretButton : ZButton = new ZButton();
 	
 		private var model : GameModel = null;
 		
@@ -37,19 +37,18 @@ package
 			addWallButton.x = 150;
 			addWallButton.ztext.text = "Create wall";
 			
-			addSurvivorButton.y = 430;
-			addSurvivorButton.x = 300;
-			addSurvivorButton.ztext.text = "Spawn survivor";
+			addTurretButton.y = 430;
+			addTurretButton.x = 300;
+			addTurretButton.ztext.text = "Add turret";
 			
 			addChild(lifeText);
 			addChild(addZombieButton);
-			addChild(addSurvivorButton);
+			addChild(addTurretButton);
 			addChild(addWallButton);
 			
 			//LISTENERS
 			addZombieButton.addEventListener(MouseEvent.CLICK, addZombieClick);
 			addWallButton.addEventListener(MouseEvent.CLICK, addWallClick);
-			addSurvivorButton.addEventListener(MouseEvent.CLICK, addSurvivorClick);
 			this.model.addEventListener(GameEvents.LIFE_LOST, lifeChanged);
 		}
 		
@@ -57,11 +56,6 @@ package
 		{
 			trace("UI: Szevasz");
 			lifeText.ztext.text = "Life: " + e.data;
-		}
-		
-		private function addSurvivorClick(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.SURVIVOR_SPAWNER;
 		}
 		
 		private function addWallClick(e:MouseEvent):void 

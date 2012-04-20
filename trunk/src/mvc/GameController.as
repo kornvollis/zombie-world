@@ -26,14 +26,19 @@ package mvc
 			
 			if (Factory.getInstance().clickState == Factory.WALL_BUILDER)
 			{
-				Factory.getInstance().addBox(row, col);
+				var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+				
+				if (cell.box == null)
+				{
+					Factory.getInstance().addBox(row, col);
+				} else {
+					Factory.getInstance().removeBox(row, col);
+				}
+				
 			} else if (Factory.getInstance().clickState == Factory.ZOMBIE_SPAWNER)
 			{
 				Factory.getInstance().addZombie(row, col);
-			} else if (Factory.getInstance().clickState == Factory.SURVIVOR_SPAWNER)
-			{
-				Factory.getInstance().addSurvivor(row, col);
-			}
+			} 
 		}
 		
 		public function mouseDown(e:MouseEvent):void 
@@ -48,7 +53,12 @@ package mvc
 			
 			if (mousePressed && Factory.getInstance().clickState == Factory.WALL_BUILDER)
 			{
-				Factory.getInstance().addBox(row, col);
+				var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+				
+				if (cell.box == null) 
+				{
+					Factory.getInstance().addBox(row, col);
+				}
 			}
 		}
 		

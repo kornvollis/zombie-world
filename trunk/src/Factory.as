@@ -1,6 +1,7 @@
 package  
 {
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import mvc.GameModel;
@@ -13,14 +14,15 @@ package
 	{
 		public static const WALL_BUILDER   : String  = "WALL_BUILDER";
 		public static const ZOMBIE_SPAWNER : String  = "ZOMBIE_SPAWNER";
-		public static const SURVIVOR_SPAWNER : String= "SURVIVOR_SPAWNER";
 		
-		public var clickState : String = SURVIVOR_SPAWNER;
+		public var clickState : String = ZOMBIE_SPAWNER;
 		
 		private static var model : GameModel = null;
 		private static var view  : GameView  = null;
 		
         private static var instance:Factory = new Factory();
+		
+		
 		
        	public function Factory()
 		{
@@ -32,22 +34,10 @@ package
 		
 		public function init():void 
 		{
-			//TEST SURVIVOR
-			addSurvivor(3, 3);
 			
-			//TEST ZOMBIE
-			var z : Zombie =  addZombie(3, 10);
+			model.levelLoader.loadLevel(1);
+			model.dispatchEvent(new Event(GameEvents.REDRAW_EXIT_POINTS));
 			
-			//TURRET
-			var t : Turret = addTurret(5, 2);
-			addTurret(10, 2);
-			
-			//createProjectil(5, 50, z);
-			
-			model.pathFinder.addTargetCell(0, 0);
-			
-			
-			model.pathFinder.findPath();
 		}	
 		
 		public static function getInstance():Factory
@@ -67,28 +57,6 @@ package
 			Factory.view = view;
 		}
 		
-		public function removeSurvivor(s : Survivor) : void
-		{
-			
-		}
-		
-		public function addSurvivor(row : int , col : int) : void
-		{
-			
-			if (row <0 || row >= Constants.ROW_NUM ||
-			    col <0 || col >= Constants.COL_NUM)
-			{
-				throw(new Error("addSurvivor row, col out of bound"));
-			} else {
-				if (model != null)
-				{
-					var survivor : Survivor = new Survivor(row, col);
-					model.surviors.push(survivor);
-					
-					//model.pathFinder.findPath();
-				}
-			}
-		}
 		
 		public function createProjectil(posX:int, posY:int, target : GameObject) : void
 		{
@@ -96,24 +64,35 @@ package
 			model.projectils.push(projectil);
 		}
 		
+		public function removeBox(row:int, col:int) : void
+		{
+			var boxCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+			var b : Box = boxCell.box;
+			
+			if(view.mapAreaLayer1.contains(b)) view.mapAreaLayer1.removeChild(b);
+			
+			model.pathFinder.cellGrid.openCell(row, col);
+			
+			b.isDeleted = true;
+			var boxIndex : int = model.boxes.indexOf(b);
+			model.boxes.splice(boxIndex, 1);
+			boxCell.box = null;
+			
+			model.pathFinder.findPath();
+			model.needPathUpdate = true;
+		}
+		
 		public function addBox(row:int , col :int) : void
 		{
-			if (row <0 || row >= Constants.ROW_NUM ||
-			    col <0 || col >= Constants.COL_NUM)
-			{
-				//throw(new Error("addBox row, col out of bound"));
-			} else {
-				if (model != null && model.pathFinder.cellGrid.getCell(row,col).state != Cell.CLOSED)
-				{
-					var box : Box = new Box(row, col);
-					model.boxes.push(box);
-					model.pathFinder.cellGrid.blockCell(row, col);
-					
-					model.pathFinder.findPath();
-					model.needPathUpdate = true;
-				}
-			}
+			var box : Box = new Box(row, col);
+			model.boxes.push(box);
+			model.pathFinder.cellGrid.blockCell(row, col);
+			model.pathFinder.cellGrid.getCell(row, col).box = box;
+			model.pathFinder.findPath();
+			model.needPathUpdate = true;
+			
 			ZDebug.getInstance().refresh();
+			
 		}
 		
 		public function addTurret(row:int, col:int): Turret 
@@ -158,7 +137,7 @@ package
 		{
 			if (e.onStage)
 			{
-				if(view.contains(e)) view.removeChild(e);
+				if(view.contains(e)) view.mapAreaLayer2.removeChild(e);
 			}
 			
 			var zombie : Zombie = e;
@@ -176,7 +155,7 @@ package
 			
 			if (e.onStage)
 			{
-				view.removeChild(e);
+				view.mapAreaLayer2.removeChild(e);
 			}
 		}
 	}

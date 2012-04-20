@@ -19,6 +19,9 @@ package
 		
 		public var occupied : Boolean = false;
 		
+		//BOX ON IT
+		public var box : Box = null;
+		
 		//Survivors on it
 		//public var survivors : Vector.<Survivor> = new Vector.<Survivor>();
 		
