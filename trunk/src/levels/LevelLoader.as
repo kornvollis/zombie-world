@@ -4,6 +4,7 @@ package levels
 	import flash.net.FileFilter;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.utils.Timer;
 	import mvc.GameModel;
 	/**
 	 * ...
@@ -20,22 +21,16 @@ package levels
 			<exit row="2" col="0"></exit>
 			<exit row="3" col="0"></exit>
 			
-			<tower row="4" col="4" type="gun" lvl="1"></tower>
-			<tower row="4" col="6" type="gun" lvl="1"></tower>
-			<tower row="4" col="8" type="gun" lvl="1"></tower>
-			
-			<tower row="7" col="4" type="gun" lvl="1"></tower>
-			<tower row="7" col="6" type="gun" lvl="1"></tower>
-			<tower row="7" col="8" type="gun" lvl="1"></tower>
-			
+			<tower row="4" col="4" type="gun" lvl="1"></tower>			
 			
 			<wall row="7" col="10"></wall>
 			
-			<wave begin="4">
-				<enemy type="monster_type" count="4" hp="1" speed="2"></enemy>
-			</wave>
+			<wave begin="4" delay="600" type="monster_type" count="4" hp="1" speed="2" row="19" col="39"></wave>
+			<wave begin="20" delay="200" type="monster_type" count="0" hp="1" speed="2" row="19" col="39"></wave>
 			
 		</level>
+		
+		private var waves : Vector.<Timer> = new Vector.<Timer>;
 		
 		public function LevelLoader(model: GameModel) 
 		{
@@ -51,6 +46,8 @@ package levels
 		
 		public function loadLevel(num : int) : void
 		{
+			waves = new Vector.<Timer>;
+			
 			//LOAD EXIT POINTS
 			for each (var exit : XML in myXML.exit ) 
 			{
@@ -79,6 +76,12 @@ package levels
 				
 				trace("Adding tower: " + row + ", col " +  col);
 				Factory.getInstance().addTurret(row, col);
+			}
+			
+			//LOAD WAVES
+			for each (var wave : XML in myXML.wave) 
+			{
+				var w : Wave = new Wave(wave.attribute("begin"), wave.attribute("count"), wave.attribute("delay"), null, wave.attribute("row"), wave.attribute("col"));
 			}
 			
 			model.pathFinder.findPath();

@@ -49,7 +49,13 @@ package
 			//LISTENERS
 			addZombieButton.addEventListener(MouseEvent.CLICK, addZombieClick);
 			addWallButton.addEventListener(MouseEvent.CLICK, addWallClick);
+			addTurretButton.addEventListener(MouseEvent.CLICK, addTurretClick);
 			this.model.addEventListener(GameEvents.LIFE_LOST, lifeChanged);
+		}
+		
+		private function addTurretClick(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.TURRET_BUILDER;
 		}
 		
 		private function lifeChanged(e: GameEvents):void 

@@ -24,7 +24,7 @@ package mvc
 			var row:int = e.stageY / Constants.CELL_SIZE;
 			var col:int = e.stageX / Constants.CELL_SIZE;
 			
-			if (Factory.getInstance().clickState == Factory.WALL_BUILDER)
+			if (Factory.getInstance().clickState == Factory.WALL_BUILDER && row >=0 && row<Constants.ROW_NUM && col<Constants.COL_NUM)
 			{
 				var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 				
@@ -38,6 +38,9 @@ package mvc
 			} else if (Factory.getInstance().clickState == Factory.ZOMBIE_SPAWNER)
 			{
 				Factory.getInstance().addZombie(row, col);
+			} else if (Factory.getInstance().clickState == Factory.TURRET_BUILDER)
+			{
+				Factory.getInstance().addTurret(row, col);
 			} 
 		}
 		
@@ -51,7 +54,7 @@ package mvc
 			var row:int = e.stageY / Constants.CELL_SIZE;
 			var col:int = e.stageX / Constants.CELL_SIZE;
 			
-			if (mousePressed && Factory.getInstance().clickState == Factory.WALL_BUILDER)
+			if (mousePressed && Factory.getInstance().clickState == Factory.WALL_BUILDER && row >=0 && row<Constants.ROW_NUM && col<Constants.COL_NUM )
 			{
 				var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 				

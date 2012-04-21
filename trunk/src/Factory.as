@@ -4,6 +4,7 @@ package
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
+	import levels.Wave;
 	import mvc.GameModel;
 	import debug.ZDebug;
 	import mvc.GameView;
@@ -14,6 +15,7 @@ package
 	{
 		public static const WALL_BUILDER   : String  = "WALL_BUILDER";
 		public static const ZOMBIE_SPAWNER : String  = "ZOMBIE_SPAWNER";
+		public static const TURRET_BUILDER : String  = "TURRET_BUILDER";
 		
 		public var clickState : String = ZOMBIE_SPAWNER;
 		
@@ -37,6 +39,8 @@ package
 			
 			model.levelLoader.loadLevel(1);
 			model.dispatchEvent(new Event(GameEvents.REDRAW_EXIT_POINTS));
+			
+			
 			
 		}	
 		
