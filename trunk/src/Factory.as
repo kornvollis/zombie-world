@@ -118,7 +118,7 @@ package
 			return null;
 		}
 		
-		public function addZombie(row:int, col:int):Zombie 
+		public function addZombie(row:int, col:int):Enemy 
 		{
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
@@ -127,7 +127,7 @@ package
 			} else {
 				if (model != null)
 				{
-					var zombie : Zombie = new Zombie(row, col);
+					var zombie : Enemy = new Enemy(row, col);
 					model.zombies.push(zombie);
 					
 					return zombie;
@@ -137,14 +137,14 @@ package
 			return null;
 		}
 		
-		public function removeZombie(e : Zombie):void 
+		public function removeZombie(e : Enemy):void 
 		{
 			if (e.onStage)
 			{
 				if(view.contains(e)) view.mapAreaLayer2.removeChild(e);
 			}
 			
-			var zombie : Zombie = e;
+			var zombie : Enemy = e;
 			zombie.isDeleted = true;
 			var zombieIndex : int = model.zombies.indexOf(zombie);
 			model.zombies.splice(zombieIndex, 1);

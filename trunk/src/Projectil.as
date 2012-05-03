@@ -51,9 +51,9 @@ package
 				if (Point.distance(targetPosition, position) < 6)
 				{
 					Factory.getInstance().removeProjectil(this);
-					if(!Zombie(target).isDeleted)
+					if(!Enemy(target).isDeleted)
 					{
-						Zombie(target).sufferDamage(damage);
+						Enemy(target).sufferDamage(damage);
 					}
 				}
 			}

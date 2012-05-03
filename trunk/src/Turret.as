@@ -88,7 +88,7 @@ package
 		{
 			if (target != null)
 			{
-				if (Zombie(target).isDeleted)
+				if (Enemy(target).isDeleted)
 				{
 					target = null;
 					return;

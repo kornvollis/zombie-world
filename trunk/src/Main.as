@@ -1,8 +1,11 @@
 package 
 {
 	import debug.ZDebug;
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.utils.getTimer;
+	
 	import mvc.GameController;
 	import mvc.GameModel;
 	import mvc.GameView;
@@ -59,9 +62,13 @@ package
 
 		private function update(e : Event) : void
 		{
+			var updateStart : Number = getTimer();
 			//trace("update");
 			model.update(e);
 			view.update(e);
+			
+			var updateTime : Number = getTimer() - updateStart;
+			trace("Update time: " + updateTime);
 		}
 	}
 

@@ -19,7 +19,7 @@ package levels
 		private var col : int;
 		
 		
-		public function Wave(startTimeSec : int, num : int, spawnDelayMilliSec: Number, enemy : Zombie, row:int, col:int) 
+		public function Wave(startTimeSec : int, num : int, spawnDelayMilliSec: Number, enemy : Enemy, row:int, col:int) 
 		{
 			this.row = row;
 			this.col = col;

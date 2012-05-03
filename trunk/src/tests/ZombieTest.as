@@ -26,10 +26,10 @@ package tests
 			
 			try 
 			{
-				var zombie : Zombie = new Zombie(cell);
+				var zombie : Enemy = new Enemy(cell);
 			} catch (err : Error)
 			{
-				assertEquals(err.message, Zombie.CONSTRUCTOR_NULL_ERROR);
+				assertEquals(err.message, Enemy.CONSTRUCTOR_NULL_ERROR);
 			}
 		}
 		
@@ -37,7 +37,7 @@ package tests
 		{
 			var c : Cell = new Cell(3, 7);
 			
-			var z : Zombie = new Zombie(c);
+			var z : Enemy = new Enemy(c);
 			
 			assertEquals(3, z.cellY);
 			assertEquals(7, z.cellX);
@@ -47,7 +47,7 @@ package tests
 		{
 			var c : Cell = new Cell(2, 3);
 			
-			var z : Zombie = new Zombie(c);
+			var z : Enemy = new Enemy(c);
 			
 			assertEquals(Constants.CELL_SIZE*2 + Constants.CELL_SIZE/2, z.posY);
 			assertEquals(Constants.CELL_SIZE*3 + Constants.CELL_SIZE/2, z.posX);
@@ -57,7 +57,7 @@ package tests
 		{
 			var c : Cell = new Cell(2, 3);
 			
-			var z : Zombie = new Zombie(c);
+			var z : Enemy = new Enemy(c);
 			
 			assertEquals(z.currentCell, c);
 			assertEquals(z.targetCell, null);
@@ -68,7 +68,7 @@ package tests
 			var c : Cell = new Cell(2, 3);
 			var t : Cell = new Cell(3, 3);
 			
-			var z : Zombie = new Zombie(c);
+			var z : Enemy = new Enemy(c);
 			z.targetCell = t;
 			
 			assertEquals(z.distance(z.targetCell), Constants.CELL_SIZE);

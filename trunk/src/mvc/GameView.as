@@ -60,7 +60,7 @@ package mvc
 		
 		private function removeZombie(e:GameEvents):void 
 		{
-			removeChild(Zombie(e.data));
+			removeChild(Enemy(e.data));
 		}
 		
 		private function drawGrid() : void
@@ -171,7 +171,7 @@ package mvc
 			}
 			
 			//UPDATE ZOMBIES
-			for each(var zombie : Zombie in model.zombies) 
+			for each(var zombie : Enemy in model.zombies) 
 			{
 				if (!zombie.onStage)
 				{

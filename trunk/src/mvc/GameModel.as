@@ -6,6 +6,7 @@ package mvc
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import levels.LevelLoader;
+	import patfinder.PathFinder;
 
 	/**
 	 * ...
@@ -23,7 +24,7 @@ package mvc
 		
 		private var _turrets : Vector.<Turret> = new Vector.<Turret>;
 		
-		private var _zombies  : Vector.<Zombie>   = new Vector.<Zombie>();
+		private var _zombies  : Vector.<Enemy>   = new Vector.<Enemy>();
 		private var _boxes    : Vector.<Box> = new Vector.<Box>();
 		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
 		
@@ -95,7 +96,7 @@ package mvc
 				
 				if(turret.target == null)
 				{
-					for each(var zombie2 :Zombie in _zombies)
+					for each(var zombie2 :Enemy in _zombies)
 					{
 						var zpos : Point = zombie2.position;
 						var tpos : Point = turret.position;
@@ -109,7 +110,7 @@ package mvc
 				}
 			}
 			
-			for each(var zombie:Zombie in _zombies)
+			for each(var zombie:Enemy in _zombies)
 			{
 				zombie.update();
 				
@@ -123,7 +124,7 @@ package mvc
 					life-- ;
 				}
 				
-				if (zombie.state == Zombie.Z_IDLE)
+				if (zombie.state == Enemy.Z_IDLE)
 				{
 					var target : Point = getNextTargetFor(zombie.row, zombie.col);
 					
@@ -144,7 +145,7 @@ package mvc
 			ZDebug.getInstance().refresh();
 		}
 		
-		private function zombieReachedTarget(z : Zombie):Boolean 
+		private function zombieReachedTarget(z : Enemy):Boolean 
 		{
 			for (var i:int = 0; i < pathFinder.targetNodes.length; i++) 
 			{
@@ -155,12 +156,12 @@ package mvc
 			return false;
 		}
 		
-		public function get zombies():Vector.<Zombie> 
+		public function get zombies():Vector.<Enemy> 
 		{
 			return _zombies;
 		}
 		
-		public function set zombies(value:Vector.<Zombie>):void 
+		public function set zombies(value:Vector.<Enemy>):void 
 		{
 			_zombies = value;
 		}
