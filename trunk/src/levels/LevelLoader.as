@@ -6,6 +6,7 @@ package levels
 	import flash.net.URLRequest;
 	import flash.utils.Timer;
 	import mvc.GameModel;
+	import pathfinder.PathFinder;
 	/**
 	 * ...
 	 * @author OML!
@@ -16,6 +17,21 @@ package levels
 		
 		private var myXML : XML =
 		<level num="1">
+			<coins num="500"></coins>
+			<exit row="0" col="0"></exit>
+			<exit row="1" col="0"></exit>
+			<exit row="2" col="0"></exit>
+			<exit row="3" col="0"></exit>
+			
+			<tower row="4" col="4" type="gun" lvl="1"></tower>			
+			
+			<wall row="7" col="10"></wall>
+			
+			
+			
+		</level>
+		/*
+		<level num="2">
 			<exit row="0" col="0"></exit>
 			<exit row="1" col="0"></exit>
 			<exit row="2" col="0"></exit>
@@ -26,10 +42,10 @@ package levels
 			<wall row="7" col="10"></wall>
 			
 			<wave begin="4" delay="600" type="monster_type" count="4" hp="1" speed="2" row="19" col="39"></wave>
-			<wave begin="20" delay="200" type="monster_type" count="0" hp="1" speed="2" row="19" col="39"></wave>
+			<wave begin="20" delay="500" type="monster_type" count="0" hp="1" speed="2" row="19" col="39"></wave>
 			
 		</level>
-		
+		*/
 		private var waves : Vector.<Timer> = new Vector.<Timer>;
 		
 		public function LevelLoader(model: GameModel) 
@@ -48,6 +64,11 @@ package levels
 		{
 			waves = new Vector.<Timer>;
 			
+			//LOAD STARTING COINS
+			var coins : int = myXML.coins.attribute("num");
+			
+			model.coins = coins;
+			
 			//LOAD EXIT POINTS
 			for each (var exit : XML in myXML.exit ) 
 			{
@@ -55,7 +76,7 @@ package levels
 				var col : int = exit.attribute("col");
 				
 				trace("Adding exit row: " + row + ", col " +  col);
-				model.pathFinder.addTargetCell(row, col);
+				PathFinder.getInstance().addTargetCell(row, col);
 			}
 			
 			//LOAD WALLS
@@ -84,7 +105,7 @@ package levels
 				var w : Wave = new Wave(wave.attribute("begin"), wave.attribute("count"), wave.attribute("delay"), null, wave.attribute("row"), wave.attribute("col"));
 			}
 			
-			model.pathFinder.findPath();
+			PathFinder.getInstance().findPath();
 		}
 	}
 

@@ -62,13 +62,13 @@ package
 
 		private function update(e : Event) : void
 		{
-			var updateStart : Number = getTimer();
+			
 			//trace("update");
 			model.update(e);
 			view.update(e);
 			
-			var updateTime : Number = getTimer() - updateStart;
-			trace("Update time: " + updateTime);
+			//var updateTime : int = getTimer() - updateStart;
+			//trace("Update time: " + updateTime);
 		}
 	}
 

@@ -15,6 +15,8 @@ package
 		private var addZombieButton   : ZButton = new ZButton();
 		private var addWallButton 	  : ZButton = new ZButton();
 		private var addTurretButton : ZButton = new ZButton();
+		
+		private var coins : ZButton = new ZButton();
 	
 		private var model : GameModel = null;
 		
@@ -33,6 +35,9 @@ package
 			addZombieButton.y = 430;
 			addZombieButton.ztext.text = "Spawn zombie";
 			
+			coins.y = 500;
+			coins.ztext.text = "Coins: 0";
+			
 			addWallButton.y = 430;
 			addWallButton.x = 150;
 			addWallButton.ztext.text = "Create wall";
@@ -41,16 +46,25 @@ package
 			addTurretButton.x = 300;
 			addTurretButton.ztext.text = "Add turret";
 			
+			
+			addChild(coins);
 			addChild(lifeText);
 			addChild(addZombieButton);
 			addChild(addTurretButton);
 			addChild(addWallButton);
 			
 			//LISTENERS
+			
 			addZombieButton.addEventListener(MouseEvent.CLICK, addZombieClick);
 			addWallButton.addEventListener(MouseEvent.CLICK, addWallClick);
 			addTurretButton.addEventListener(MouseEvent.CLICK, addTurretClick);
 			this.model.addEventListener(GameEvents.LIFE_LOST, lifeChanged);
+			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
+		}
+		
+		private function coinChanged(e:GameEvents):void 
+		{
+			coins.ztext.text = "Coins: " + model.coins;
 		}
 		
 		private function addTurretClick(e:MouseEvent):void 

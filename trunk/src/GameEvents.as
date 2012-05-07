@@ -11,8 +11,9 @@ package
 	{
 		// the event type ON_ADD_CONTACT is used when a contact is added to our list
         public static const LIFE_LOST : String = "lifeLost";
-		static public const ZOMBIE_REACHED_EXIT:String = "zombieReachedExit";
-		static public const REDRAW_EXIT_POINTS:String = "redrawExitPoints";
+		static public const ZOMBIE_REACHED_EXIT : String = "zombieReachedExit";
+		static public const REDRAW_EXIT_POINTS : String = "redrawExitPoints";
+		static public const COIN_CHANGED : String = "COIN_CHANGED";
   
 		public var data : Object;
 		

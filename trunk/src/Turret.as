@@ -18,6 +18,7 @@ package
 		public var damage : int = 1;
 		public var range  : int = 250;
 		public var bulletPerSec : int = 1;	
+		public var cost : int = 50;
 		
 		public var state : String = "idle";
 		
@@ -88,6 +89,14 @@ package
 		{
 			if (target != null)
 			{
+				//IF enemy goes out of range then we looking for another enemy
+				if (Point.distance(target.position, position) > range)
+				{
+					target = null;
+					return;
+				}
+				
+				
 				if (Enemy(target).isDeleted)
 				{
 					target = null;

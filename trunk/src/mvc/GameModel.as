@@ -6,7 +6,7 @@ package mvc
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import levels.LevelLoader;
-	import patfinder.PathFinder;
+	import pathfinder.PathFinder;
 
 	/**
 	 * ...
@@ -18,7 +18,7 @@ package mvc
 		private var lifeChangedEvent : GameEvents;
 		
 		private var _life : int = 10;
-		
+		private var _coins : int = 99999;
 		
 		public var myStage : Stage = null;
 		
@@ -36,8 +36,12 @@ package mvc
 		
 		public function GameModel() 
 		{
-			pathFinder  = new PathFinder(this);
+			//SET PATHFINDER
+			PathFinder.getInstance().model = this;
+			pathFinder = PathFinder.getInstance();
+			//pathFinder  = new PathFinder(this);
 			levelLoader = new LevelLoader(this);
+			_coins = 100;
 		}
 		
 		public function getNextTargetFor(row: int, col : int) : Point
@@ -147,7 +151,7 @@ package mvc
 		
 		private function zombieReachedTarget(z : Enemy):Boolean 
 		{
-			for (var i:int = 0; i < pathFinder.targetNodes.length; i++) 
+			for (var i:int = 0; i < PathFinder.getInstance().targetNodes.length; i++) 
 			{
 				if (pathFinder.targetNodes[i].col == z.col && pathFinder.targetNodes[i].row == z.row) {
 					return true;
@@ -209,6 +213,17 @@ package mvc
 		public function set projectils(value:Vector.<Projectil>):void 
 		{
 			_projectils = value;
+		}
+		
+		public function get coins():int 
+		{
+			return _coins;
+		}
+		
+		public function set coins(value:int):void 
+		{
+			_coins = value;
+			dispatchEvent(new GameEvents(GameEvents.COIN_CHANGED));
 		}
 	}
 

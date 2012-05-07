@@ -8,6 +8,7 @@ package
 	import mvc.GameModel;
 	import debug.ZDebug;
 	import mvc.GameView;
+	import pathfinder.PathFinder;
 	/**
 	 * @author OML!
 	 */
@@ -90,9 +91,9 @@ package
 		{
 			var box : Box = new Box(row, col);
 			model.boxes.push(box);
-			model.pathFinder.cellGrid.blockCell(row, col);
-			model.pathFinder.cellGrid.getCell(row, col).box = box;
-			model.pathFinder.findPath();
+			PathFinder.getInstance().cellGrid.blockCell(row, col);
+			PathFinder.getInstance().cellGrid.getCell(row, col).box = box;
+			PathFinder.getInstance().findPath();
 			model.needPathUpdate = true;
 			
 			ZDebug.getInstance().refresh();
@@ -106,11 +107,11 @@ package
 			{
 				throw(new Error("addTurret row, col out of bound"));
 			} else {
-				if (model != null)
+				var turret : Turret = new Turret(row, col);
+				if(model.coins >= turret.cost)
 				{
-					var turret : Turret = new Turret(row, col);
+					model.coins -= turret.cost;
 					model.turrets.push(turret);
-					
 					return turret;
 				}
 			}
