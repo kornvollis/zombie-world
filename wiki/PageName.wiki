@@ -1,8 +1,6 @@
 #summary One-sentence summary of this page.
 
-= Introduction =
-
-Task list for "zombie" TD
+= Task list for "zombie" TD =
 
 
 = Details =
