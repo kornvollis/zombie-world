@@ -35,7 +35,7 @@ package
 			// entry point
 		
 			//ZDebug
-			ZDebug.getInstance().x = 600;			
+			ZDebug.getInstance().x = 700;			
 			
 			//SET FRAME RATE
 			stage.frameRate = Constants.FRAME_RATE;

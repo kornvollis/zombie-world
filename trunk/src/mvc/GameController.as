@@ -21,8 +21,8 @@ package mvc
 		public function myClick(e:MouseEvent):void 
 		{
 			//Just for the test			
-			var row:int = e.stageY / Constants.CELL_SIZE;
-			var col:int = e.stageX / Constants.CELL_SIZE;
+			var row:int = (e.stageY-Constants.MAP_OFFSET_Y) / Constants.CELL_SIZE;
+			var col:int = (e.stageX-Constants.MAP_OFFSET_X) / Constants.CELL_SIZE;
 			
 			if (Factory.getInstance().clickState == Factory.WALL_BUILDER && row >=0 && row<Constants.ROW_NUM && col<Constants.COL_NUM)
 			{
@@ -67,7 +67,6 @@ package mvc
 		
 		public function mouseUp(e:MouseEvent):void 
 		{
-			trace("Mouse Up");
 			mousePressed = false;
 		}
 		

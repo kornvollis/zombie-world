@@ -1,6 +1,7 @@
 package mvc
 {
 	import flash.display.MovieClip;
+	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -15,6 +16,7 @@ package mvc
 		private var controller : GameController;
 		private var debugArrows : Sprite = new Sprite();
 		
+		public var field : Sprite = new Sprite();
 		public var mapAreaLayer1 : Sprite = new Sprite();
 		public var mapAreaLayer2 : Sprite = new Sprite();
 		
@@ -26,10 +28,12 @@ package mvc
 		
 		public function GameView(model: GameModel, controller : GameController) 
 		{
-			mapAreaLayer1.mouseChildren = false;
-			mapAreaLayer1.graphics.beginFill(0xffffff);
-			mapAreaLayer1.graphics.drawRect(0,0,Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-			mapAreaLayer1.graphics.endFill();
+			field.x = Constants.MAP_OFFSET_X;
+			field.y = Constants.MAP_OFFSET_Y;
+			field.mouseChildren = false;
+			field.graphics.beginFill(0xffffff);
+			field.graphics.drawRect(0,0,Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+			field.graphics.endFill();
 			
 			this.model = model;
 			this.ui = new UI(model);
@@ -43,10 +47,10 @@ package mvc
 			//DRAWING THE GRID
 			drawGrid() 
 			
-			mapAreaLayer1.addEventListener(MouseEvent.CLICK, controller.myClick);
-			mapAreaLayer1.addEventListener(MouseEvent.MOUSE_DOWN, controller.mouseDown);
-			mapAreaLayer1.addEventListener(MouseEvent.MOUSE_UP, controller.mouseUp);
-			mapAreaLayer1.addEventListener(MouseEvent.MOUSE_MOVE, controller.mouseMove);
+			field.addEventListener(MouseEvent.CLICK, controller.myClick);
+			field.addEventListener(MouseEvent.MOUSE_DOWN, controller.mouseDown);
+			field.addEventListener(MouseEvent.MOUSE_UP, controller.mouseUp);
+			field.addEventListener(MouseEvent.MOUSE_MOVE, controller.mouseMove);
 			
 			
 			//ADD LISTENERS
@@ -54,9 +58,10 @@ package mvc
 			model.addEventListener(GameEvents.REDRAW_EXIT_POINTS, drawExitPointsGraphics);
 			
 			addChild(ui);
-			addChild(mapAreaLayer1);
-			addChild(exitPointsGraphics);
-			addChild(mapAreaLayer2);
+			addChild(field);
+			field.addChild(mapAreaLayer1);
+			field.addChild(exitPointsGraphics);
+			field.addChild(mapAreaLayer2);
 		}
 		
 		private function removeZombie(e:GameEvents):void 
@@ -87,7 +92,6 @@ package mvc
 			
 			for (var i:int = 0; i < PathFinder.getInstance().targetNodes.length; i++) 
 			{
-				trace("szopo");
 				var c : Cell = PathFinder.getInstance().targetNodes[i];
 				
 				//TEMP Graphics
