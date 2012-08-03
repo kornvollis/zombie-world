@@ -7,7 +7,7 @@
     <movie path="bin\zombieworld.swf" />
     <movie fps="30" />
     <movie width="800" />
-    <movie height="600" />
+    <movie height="800" />
     <movie version="10" />
     <movie minorVersion="0" />
     <movie platform="Flash Player" />
@@ -52,6 +52,7 @@
   <!-- SWC Libraries -->
   <libraryPaths>
     <element path="assets\zombie_graphics.swc" />
+    <element path="assets\gui_graphics.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

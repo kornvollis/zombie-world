@@ -4,6 +4,7 @@ package
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
+	import flashx.textLayout.events.ModelChange;
 	import levels.Wave;
 	import mvc.GameModel;
 	import debug.ZDebug;
@@ -17,8 +18,9 @@ package
 		public static const WALL_BUILDER   : String  = "WALL_BUILDER";
 		public static const ZOMBIE_SPAWNER : String  = "ZOMBIE_SPAWNER";
 		public static const TURRET_BUILDER : String  = "TURRET_BUILDER";
+		public static const IDLE : String  = "IDLE_FACTORY";
 		
-		public var clickState : String = ZOMBIE_SPAWNER;
+		public var clickState : String = Factory.IDLE;
 		
 		private static var model : GameModel = null;
 		private static var view  : GameView  = null;
@@ -107,7 +109,8 @@ package
 			{
 				throw(new Error("addTurret row, col out of bound"));
 			} else {
-				var turret : Turret = new Turret(row, col);
+				//var turret : Turret = new Turret(row, col);
+				var turret : Turret = new model.buildTowerClass(row, col);
 				if(model.coins >= turret.cost)
 				{
 					model.coins -= turret.cost;
@@ -128,7 +131,7 @@ package
 			} else {
 				if (model != null)
 				{
-					var zombie : Enemy = new Enemy(row, col);
+					var zombie : Enemy = new model.spawnEnemyClass(row, col);
 					model.zombies.push(zombie);
 					
 					return zombie;

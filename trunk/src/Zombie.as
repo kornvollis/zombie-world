@@ -24,7 +24,7 @@ package
 		private var healthBar : HealthBar = new HealthBar;
 		
 		//PUBI
-		public var maxLife : int = 3;
+		public var maxLife : int;
 		public var life  : int = 3;
 		public var state : String = Z_IDLE;		
 		public var row : int = -1;
@@ -47,9 +47,12 @@ package
 			this.graphics.drawCircle(0, 0, Constants.CELL_SIZE / 2);
 			
 			//Health bar graphics
+			maxLife = life;
+			
 			healthBar.x = - Constants.CELL_SIZE * 0.5;
 			healthBar.y = - 6 - Constants.CELL_SIZE * 0.5;
 			addChild(healthBar);
+			
 		}
 		
 		override public function update() : void

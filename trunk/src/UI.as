@@ -12,70 +12,70 @@ package
 	 */
 	public class UI extends MovieClip 
 	{		
-		private var addZombieButton   : ZButton = new ZButton();
-		private var addWallButton 	  : ZButton = new ZButton();
-		private var addTurretButton : ZButton = new ZButton();
-		
-		private var coins : ZButton = new ZButton();
-	
-		private var model : GameModel = null;
-		
-		private var lifeText : ZButton = new ZButton();
-		
-		//var lifeLabel : Label
+		private var model : GameModel;
+		private var creatorGui : MapCreator = new MapCreator();
 		
 		public function UI(model : GameModel) 
 		{
 			this.model = model;
+			creatorGui.y = 600;
+			addChild(creatorGui);
 			
-			lifeText.y = 430;
-			lifeText.x = 450;
-			//lifeText.ztext.text = "Life: " + GameModel.life;
-			
-			addZombieButton.y = 430;
-			addZombieButton.ztext.text = "Spawn zombie";
-			
-			coins.y = 500;
-			coins.ztext.text = "Coins: 0";
-			
-			addWallButton.y = 430;
-			addWallButton.x = 150;
-			addWallButton.ztext.text = "Create wall";
-			
-			addTurretButton.y = 430;
-			addTurretButton.x = 300;
-			addTurretButton.ztext.text = "Add turret";
+			//INTI SELECTION
+			model.buildTowerClass = PointDefense;
+			model.spawnEnemyClass = BasicEnemy;
 			
 			
-			addChild(coins);
-			addChild(lifeText);
-			addChild(addZombieButton);
-			addChild(addTurretButton);
-			addChild(addWallButton);
+			//POPULATE TOWER COMBO BOX
+			creatorGui.add_tower_combo.addItem( { label: "Point defense", data: PointDefense } );
+			creatorGui.add_tower_combo.addItem( { label: "Cannon tower", data: Cannon } );
 			
-			//LISTENERS
+			//POPULATE ENEMY COMBO BOX
+			creatorGui.add_enemy_combo.addItem( { label: "Basic enemy", data: BasicEnemy} );
+			creatorGui.add_enemy_combo.addItem({ label: "Cannon tower", data: Cannon});
 			
+			
+			
+////////////LISTENERS///////////////////////////////////////////////////////////////////////////
+			creatorGui.add_tower.addEventListener(MouseEvent.CLICK, addTowerClick);
+			//Turret combo box change
+			creatorGui.add_tower_combo.addEventListener(Event.CHANGE, towerSelect);
+			
+			//Enemy combo box change
+			creatorGui.add_enemy_combo.addEventListener(Event.CHANGE, enemySelect);
+			
+			//Build block clicked
+			creatorGui.build_block.addEventListener(MouseEvent.CLICK, addWallClick)
+			
+			//Spawn Enemy
+			creatorGui.add_enemy.addEventListener(MouseEvent.CLICK, addEnemy);
+			
+			/*
 			addZombieButton.addEventListener(MouseEvent.CLICK, addZombieClick);
 			addWallButton.addEventListener(MouseEvent.CLICK, addWallClick);
-			addTurretButton.addEventListener(MouseEvent.CLICK, addTurretClick);
 			this.model.addEventListener(GameEvents.LIFE_LOST, lifeChanged);
 			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
+			*/
 		}
 		
-		private function coinChanged(e:GameEvents):void 
+		private function enemySelect(e:Event):void 
 		{
-			coins.ztext.text = "Coins: " + model.coins;
+			model.spawnEnemyClass = Class(creatorGui.add_enemy_combo.selectedItem.data);
 		}
 		
-		private function addTurretClick(e:MouseEvent):void 
+		private function addEnemy(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.ZOMBIE_SPAWNER;
+		}
+		
+		private function towerSelect(e:Event):void 
+		{
+			model.buildTowerClass = Class(creatorGui.add_tower_combo.selectedItem.data);
+		}
+		
+		private function addTowerClick(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.TURRET_BUILDER;
-		}
-		
-		private function lifeChanged(e: GameEvents):void 
-		{
-			trace("UI: Szevasz");
-			lifeText.ztext.text = "Life: " + e.data;
 		}
 		
 		private function addWallClick(e:MouseEvent):void 
@@ -83,9 +83,5 @@ package
 			Factory.getInstance().clickState = Factory.WALL_BUILDER;
 		}
 		
-		private function addZombieClick(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.ZOMBIE_SPAWNER;
-		}
 	}
 }

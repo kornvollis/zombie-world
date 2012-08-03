@@ -34,6 +34,11 @@ package mvc
 		public var needPathUpdate : Boolean = false;
 		
 		
+		//BUILD STUFF///
+		public var buildTowerClass :Class = null;
+		public var spawnEnemyClass :Class = null;
+		
+		
 		public function GameModel() 
 		{
 			//SET PATHFINDER

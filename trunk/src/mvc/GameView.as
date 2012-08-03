@@ -57,11 +57,14 @@ package mvc
 			model.addEventListener(GameEvents.ZOMBIE_REACHED_EXIT, removeZombie);
 			model.addEventListener(GameEvents.REDRAW_EXIT_POINTS, drawExitPointsGraphics);
 			
-			addChild(ui);
+			
 			addChild(field);
 			field.addChild(mapAreaLayer1);
 			field.addChild(exitPointsGraphics);
 			field.addChild(mapAreaLayer2);
+			
+			//ADD THE UI GRAPHICS
+			addChild(ui);
 		}
 		
 		private function removeZombie(e:GameEvents):void 
