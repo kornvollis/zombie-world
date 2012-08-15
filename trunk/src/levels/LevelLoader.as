@@ -67,7 +67,7 @@ package levels
 			//LOAD STARTING COINS
 			var coins : int = myXML.coins.attribute("num");
 			
-			model.coins = coins;
+			model.money = coins;
 			
 			//LOAD EXIT POINTS
 			for each (var exit : XML in myXML.exit ) 
@@ -96,7 +96,7 @@ package levels
 				col  = tower.attribute("col");
 				
 				trace("Adding tower: " + row + ", col " +  col);
-				Factory.getInstance().addTurret(row, col);
+				Factory.getInstance().addTower(row, col);
 			}
 			
 			//LOAD WAVES

@@ -1,5 +1,6 @@
 package  
 {
+	import flash.events.MouseEvent;
 	/**
 	 * ...
 	 * @author OML!
@@ -19,7 +20,14 @@ package
 			
 			this.graphics.beginFill(0xB35900);
 			this.graphics.drawRect(0, 0, Constants.CELL_SIZE, Constants.CELL_SIZE);
+			
+			addEventListener(MouseEvent.CLICK, onClick);
 		}			
+		
+		private function onClick(e:MouseEvent):void 
+		{
+			trace("BOX click");
+		}
 	}
 
 }

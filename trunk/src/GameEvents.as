@@ -15,6 +15,11 @@ package
 		static public const REDRAW_EXIT_POINTS : String = "redrawExitPoints";
 		static public const COIN_CHANGED : String = "COIN_CHANGED";
   
+		
+		// TURRET SELL CLICK
+		static public const TURRET_SELL_EVENT : String = "TURRET_SELL_EVENT";
+		static public const UI_MESSAGE:String = "uiMessage";
+		
 		public var data : Object;
 		
 		public function GameEvents(type:String, bubbles:Boolean=false, cancelable:Boolean=false):void

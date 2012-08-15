@@ -30,7 +30,8 @@ package mvc
 		{
 			field.x = Constants.MAP_OFFSET_X;
 			field.y = Constants.MAP_OFFSET_Y;
-			field.mouseChildren = false;
+			//field.mouseChildren = false;
+			
 			field.graphics.beginFill(0xffffff);
 			field.graphics.drawRect(0,0,Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 			field.graphics.endFill();

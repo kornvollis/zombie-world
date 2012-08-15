@@ -18,7 +18,7 @@ package mvc
 		private var lifeChangedEvent : GameEvents;
 		
 		private var _life : int = 10;
-		private var _coins : int = 99999;
+		private var _money : int = 99999;
 		
 		public var myStage : Stage = null;
 		
@@ -35,8 +35,8 @@ package mvc
 		
 		
 		//BUILD STUFF///
-		public var buildTowerClass :Class = null;
-		public var spawnEnemyClass :Class = null;
+		public var buildTowerClass : Class = null;
+		public var spawnEnemyClass : Class = null;
 		
 		
 		public function GameModel() 
@@ -46,7 +46,7 @@ package mvc
 			pathFinder = PathFinder.getInstance();
 			//pathFinder  = new PathFinder(this);
 			levelLoader = new LevelLoader(this);
-			_coins = 100;
+			money = 100;
 		}
 		
 		public function getNextTargetFor(row: int, col : int) : Point
@@ -222,14 +222,20 @@ package mvc
 		
 		public function get coins():int 
 		{
-			return _coins;
+			return money;
 		}
 		
-		public function set coins(value:int):void 
+		public function get money():int 
 		{
-			_coins = value;
+			return _money;
+		}
+		
+		public function set money(value:int):void 
+		{
+			_money = value;
 			dispatchEvent(new GameEvents(GameEvents.COIN_CHANGED));
 		}
+		
 	}
 
 }

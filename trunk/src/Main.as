@@ -21,8 +21,6 @@ package
 		private var view  : GameView;
 		private var controller : GameController;
 		
-		private var zdebug : ZDebug;
-		
 		public function Main():void 
 		{			
 			if (stage) init();
@@ -33,9 +31,6 @@ package
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
-		
-			//ZDebug
-			ZDebug.getInstance().x = 700;			
 			
 			//SET FRAME RATE
 			stage.frameRate = Constants.FRAME_RATE;
@@ -54,10 +49,8 @@ package
 			Factory.getInstance().init();
 			
 			addChild(view);
-			addChild(ZDebug.getInstance());
 			
-			ZDebug.getInstance().watch("satge width", stage.width);
-			ZDebug.getInstance().refresh();
+			dispatchEvent(new GameEvents(GameEvents.TURRET_SELL_EVENT));
 		}
 
 		private function update(e : Event) : void

@@ -1,5 +1,6 @@
 package  
 {
+	import flash.events.MouseEvent;
 	/**
 	 * ...
 	 * @author OML!
@@ -18,6 +19,7 @@ package
 			
 			this.graphics.beginFill(0x711911);
 			this.graphics.drawRect(0, 0, Constants.CELL_SIZE, Constants.CELL_SIZE);
+			
 		}
 		
 	}

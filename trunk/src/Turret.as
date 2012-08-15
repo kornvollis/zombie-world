@@ -2,6 +2,7 @@ package
 {
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.utils.Timer;
@@ -78,6 +79,15 @@ package
 			
 			addChild(rifleGraphics);
 			addChild(rangeGraphics);
+			
+			
+			//CLICK LISTENER
+			this.addEventListener(MouseEvent.CLICK, onClick);
+		}
+		
+		public function onClick(e:MouseEvent):void 
+		{
+			Factory.getInstance().sellTower(this);
 		}
 		
 		private function reload(e:TimerEvent):void 

@@ -15,11 +15,16 @@ package
 	 */
 	public class Factory extends EventDispatcher
 	{
+		
+		//TODO: REFACTORING THIS TO THE GAMECONTROLLER
 		public static const WALL_BUILDER   : String  = "WALL_BUILDER";
 		public static const ZOMBIE_SPAWNER : String  = "ZOMBIE_SPAWNER";
 		public static const TURRET_BUILDER : String  = "TURRET_BUILDER";
-		public static const IDLE : String  = "IDLE_FACTORY";
+		public static const IDLE 		   : String  = "IDLE_FACTORY";
+		public static const REMOVE_BLOCK   : String  = "REMOVE_BLOCK";
+		static public const SELL_TOWER     : String  = "sellTower";
 		
+		//TODO: REFACTOR THIS TOO TO THEEEEEE TO THE GAMECONTROLLER
 		public var clickState : String = Factory.IDLE;
 		
 		private static var model : GameModel = null;
@@ -39,12 +44,8 @@ package
 		
 		public function init():void 
 		{
-			
 			model.levelLoader.loadLevel(1);
 			model.dispatchEvent(new Event(GameEvents.REDRAW_EXIT_POINTS));
-			
-			
-			
 		}	
 		
 		public static function getInstance():Factory
@@ -71,22 +72,45 @@ package
 			model.projectils.push(projectil);
 		}
 		
+		public function sellTower(tower: Turret) : void
+		{
+			if (Factory.getInstance().clickState == Factory.SELL_TOWER)
+			{
+				if (tower.onStage)
+				{
+					if(view.contains(tower)) view.mapAreaLayer2.removeChild(tower);
+				}
+				
+				model.money += tower.cost;
+				
+				var towerIndex : int = model.turrets.indexOf(tower);			
+				model.turrets.splice(towerIndex, 1);	
+				
+				//CELL fix
+				var cell : Cell = model.pathFinder.cellGrid.getCell(tower.row, tower.col);
+				cell.tower = null;
+			}
+		}
+		
 		public function removeBox(row:int, col:int) : void
 		{
 			var boxCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 			var b : Box = boxCell.box;
 			
-			if(view.mapAreaLayer1.contains(b)) view.mapAreaLayer1.removeChild(b);
-			
-			model.pathFinder.cellGrid.openCell(row, col);
-			
-			b.isDeleted = true;
-			var boxIndex : int = model.boxes.indexOf(b);
-			model.boxes.splice(boxIndex, 1);
-			boxCell.box = null;
-			
-			model.pathFinder.findPath();
-			model.needPathUpdate = true;
+			if (b != null)
+			{			
+				if(view.mapAreaLayer1.contains(b)) view.mapAreaLayer1.removeChild(b);
+				
+				model.pathFinder.cellGrid.openCell(row, col);
+				
+				b.isDeleted = true;
+				var boxIndex : int = model.boxes.indexOf(b);
+				model.boxes.splice(boxIndex, 1);
+				boxCell.box = null;
+				
+				model.pathFinder.findPath();
+				model.needPathUpdate = true;
+			}
 		}
 		
 		public function addBox(row:int , col :int) : void
@@ -102,7 +126,7 @@ package
 			
 		}
 		
-		public function addTurret(row:int, col:int): Turret 
+		public function addTower(row:int, col:int): Turret 
 		{
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
@@ -110,12 +134,20 @@ package
 				throw(new Error("addTurret row, col out of bound"));
 			} else {
 				//var turret : Turret = new Turret(row, col);
-				var turret : Turret = new model.buildTowerClass(row, col);
-				if(model.coins >= turret.cost)
+				var tower : Turret = new model.buildTowerClass(row, col);
+				var buildCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+				buildCell.tower = tower;
+				if(model.coins >= tower.cost)
 				{
-					model.coins -= turret.cost;
-					model.turrets.push(turret);
-					return turret;
+					model.money -= tower.cost;
+					model.turrets.push(tower);
+					
+					
+					var gameEvent : GameEvents =  new GameEvents(GameEvents.UI_MESSAGE);
+					gameEvent.data = "Tower built";
+					dispatchEvent(gameEvent);
+					
+					return tower;
 				}
 			}
 			

@@ -21,6 +21,9 @@ package
 		
 		//BOX ON IT
 		public var box : Box = null;
+		public var tower : Turret = null;
+		
+		
 		
 		//Survivors on it
 		//public var survivors : Vector.<Survivor> = new Vector.<Survivor>();
