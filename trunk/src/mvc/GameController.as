@@ -15,14 +15,6 @@ package mvc
 		{
 			this.model = model;
 			//model.myStage.addEventListener(MouseEvent.CLICK, myClick);
-			
-			
-			//LISTENERS 
-			addEventListener(GameEvents.TURRET_SELL_EVENT, turretSellClick);
-		}
-		
-		private function turretSellClick(e:GameEvents):void 
-		{
 		}
 		
 		public function myClick(e:MouseEvent):void 

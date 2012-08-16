@@ -89,6 +89,8 @@ package mvc
 			}
 		}
 		
+		
+		
 		public function drawExitPointsGraphics(e : Event) : void
 		{
 			trace("drawing exit points");

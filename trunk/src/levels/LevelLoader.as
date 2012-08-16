@@ -48,6 +48,8 @@ package levels
 		*/
 		private var waves : Vector.<Timer> = new Vector.<Timer>;
 		
+		//private var levels : Vector.<Level> = Vector.<Level>;
+		
 		public function LevelLoader(model: GameModel) 
 		{
 			this.model = model;

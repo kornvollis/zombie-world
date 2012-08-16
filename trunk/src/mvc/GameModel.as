@@ -28,7 +28,10 @@ package mvc
 		private var _boxes    : Vector.<Box> = new Vector.<Box>();
 		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
 		
+		//TODO KISZEDNI
 		public var levelLoader : LevelLoader;
+		
+		
 		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;

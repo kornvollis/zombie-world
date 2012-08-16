@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="bin\zombieworld.swf" />
     <movie fps="30" />
-    <movie width="800" />
-    <movie height="800" />
+    <movie width="1000" />
+    <movie height="820" />
     <movie version="10" />
     <movie minorVersion="0" />
     <movie platform="Flash Player" />

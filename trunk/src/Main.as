@@ -1,6 +1,7 @@
 package 
 {
 	import debug.ZDebug;
+	import levels.NewWave;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -29,6 +30,9 @@ package
 
 		private function init(e:Event = null):void 
 		{
+			var wave : NewWave = new NewWave(null, 2, null, 60, 3);
+			wave.startWave();
+			
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 			
