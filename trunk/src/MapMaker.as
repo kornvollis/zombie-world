@@ -1,8 +1,11 @@
 package  
 {
+	import fl.controls.Slider;
 	import fl.data.SimpleCollectionItem;
+	import fl.events.SliderEvent;
 	import fl.motion.Motion;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import levels.SpawnPoint;
 	import mvc.GameModel;
@@ -12,6 +15,10 @@ package
 	 */
 	public class MapMaker extends GameObject 
 	{
+		static public const IDLE : String = "idle";
+		static public const SPAWN_POINT_CREATOR:String = "spawnPointCreator";
+		
+		static private var _state : String = IDLE;
 		private var creatorGui : MapCreator = new MapCreator();
 		private var mapMakerPanel : MapMakerPanel = new MapMakerPanel();
 		private var model : GameModel;
@@ -28,11 +35,18 @@ package
 			addChild(creatorGui);
 			addChild(mapMakerPanel);
 			
+		
+			//TEMP STUFF
+			addNewSpawnPoint(20, 20);
+			
 			
 			//INTI SELECTION
 			model.buildTowerClass = PointDefense;
 			model.spawnEnemyClass = BasicEnemy;
 			
+			
+			//DENSITY
+			mapMakerPanel.density_input.text =  mapMakerPanel.spawn_density.value.toString();
 			
 			//POPULATE TOWER COMBO BOX
 			creatorGui.add_tower_combo.addItem( { label: "Point defense", data: PointDefense } );
@@ -42,7 +56,17 @@ package
 			creatorGui.add_enemy_combo.addItem( { label: "Basic enemy", data: BasicEnemy} );
 			creatorGui.add_enemy_combo.addItem({ label: "Cannon tower", data: Cannon});
 			
+			mapMakerPanel.enemy_type.addItem( { label: "Basic enemy", data: BasicEnemy } );
+			
+			
 ////////////LISTENERS///////////////////////////////////////////////////////////////////////////
+			//STAGE CLICK
+			model.myStage.addEventListener(MouseEvent.CLICK, onStageClick);
+
+			//DENSITY
+			mapMakerPanel.spawn_density.addEventListener(SliderEvent.CHANGE, onDenistySliderChange);
+			mapMakerPanel.density_input.addEventListener(KeyboardEvent.KEY_DOWN, onDensityInputKeyDown);
+			
 			creatorGui.add_tower.addEventListener(MouseEvent.CLICK, addTowerClick);
 			//Turret combo box change
 			creatorGui.add_tower_combo.addEventListener(Event.CHANGE, towerSelect);
@@ -67,11 +91,85 @@ package
 			mapMakerPanel.add_wave.addEventListener(MouseEvent.CLICK, addWave);
 			mapMakerPanel.remove_wave.addEventListener(MouseEvent.CLICK, removeWave);
 			
+			mapMakerPanel.new_spawn.addEventListener(MouseEvent.CLICK, onNewSpawnPointButton);
 			
 			//EVENT LISTENERS
 			//COIN CHANGED
 			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
 			Factory.getInstance().addEventListener(GameEvents.UI_MESSAGE, messageArrived);
+		}
+		
+		private function onDensityInputKeyDown(e:KeyboardEvent):void 
+		{
+			// if the key is ENTER
+		   if (e.charCode == 13) {
+				var denisity : int  = int(mapMakerPanel.density_input.text);
+				
+				if (denisity > 200) {
+					denisity = 200;
+					mapMakerPanel.density_input.text = "200";
+				}
+			    
+				mapMakerPanel.spawn_density.value = int(mapMakerPanel.density_input.text);
+		   }
+		}
+		
+		private function onDenistySliderChange(e:SliderEvent):void 
+		{
+			mapMakerPanel.density_input.text = e.value.toString();
+		}
+		
+		private function onNewSpawnPointButton(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.IDLE;
+			
+			MapMaker.state = SPAWN_POINT_CREATOR;
+		}
+		
+		private function onStageClick(e:MouseEvent):void 
+		{
+			var row : int = e.stageY / Constants.CELL_SIZE;
+			var col : int = e.stageX / Constants.CELL_SIZE;
+			
+			if (row >= 0 && row < Constants.ROW_NUM && col >= 0 && col < Constants.COL_NUM)
+			{
+				if(MapMaker.state == SPAWN_POINT_CREATOR)
+				{
+					//trace("row: " + row + " col: " + col);
+					addNewSpawnPoint(row, col);
+					MapMaker.state = IDLE;
+				}
+			}
+		}
+		
+		private function addNewSpawnPoint(row:Number, col:Number):void 
+		{
+			var newSpawnPoint : SpawnPoint = new SpawnPoint(row, col);
+			
+			if (!isExsistingSpawnPoint(newSpawnPoint))
+			{
+				spawnPoints.push(newSpawnPoint);
+				addChildAt(newSpawnPoint,0);
+				addChildAt(newSpawnPoint.label,1);
+				
+				mapMakerPanel.spawn_points.addItem({ label: "R/C: "  + row + "/" + col, data: newSpawnPoint })
+			}
+		}
+		
+		private function isExsistingSpawnPoint(newSpawnPoint:SpawnPoint):Boolean
+		{
+			var isExsisting : Boolean = false;
+			
+			for each (var item: SpawnPoint in spawnPoints) 
+			{
+				if (item.row == newSpawnPoint.row && item.col == newSpawnPoint.col)
+				{
+					isExsisting = true;
+					break;
+				}
+			}
+			
+			return isExsisting;
 		}
 		
 		private function removeWave(e:MouseEvent):void 
@@ -90,10 +188,12 @@ package
 			//var startMoney : int = int(mapMakerPanel.money.text);
 			var spawnTime : int = int(mapMakerPanel.spawn_start.text);
 			var numOfEnemies : int = int(mapMakerPanel.spawn_num.text);
+			var denisty : int = int(mapMakerPanel.density_input.text);
+			var spawnPoint : SpawnPoint = SpawnPoint(mapMakerPanel.spawn_points.selectedItem.data);
 			
-			if (spawnTime >= 0 && numOfEnemies > 0)
+			if (spawnTime >= 0 && numOfEnemies > 0 && spawnPoint != null)
 			{
-				mapMakerPanel.waves.addItem( { label: "S.Time: " + spawnTime + " NoE: " + numOfEnemies, data: "kókusz" } );
+				mapMakerPanel.waves.addItem( { label: "S.Time: " + spawnTime + " NoE: " + numOfEnemies + " D: " + denisty +   " SP: " + spawnPoint.toString() , data: "kókusz" } );
 				waveNum++;
 			}
 		}
@@ -141,6 +241,16 @@ package
 		private function addWallClick(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.WALL_BUILDER;
+		}
+		
+		static public function get state():String 
+		{
+			return _state;
+		}
+		
+		static public function set state(value:String):void 
+		{
+			_state = value;
 		}
 		
 	}
