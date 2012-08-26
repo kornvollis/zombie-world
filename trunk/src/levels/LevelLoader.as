@@ -78,7 +78,7 @@ package levels
 				var col : int = exit.attribute("col");
 				
 				trace("Adding exit row: " + row + ", col " +  col);
-				PathFinder.getInstance().addTargetCell(row, col);
+				model.pathFinder.addTargetCell(row, col);
 			}
 			
 			//LOAD WALLS
@@ -107,7 +107,7 @@ package levels
 				var w : Wave = new Wave(wave.attribute("begin"), wave.attribute("count"), wave.attribute("delay"), null, wave.attribute("row"), wave.attribute("col"));
 			}
 			
-			PathFinder.getInstance().findPath();
+			model.pathFinder.findPath();
 		}
 	}
 

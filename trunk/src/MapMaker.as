@@ -4,11 +4,16 @@ package
 	import fl.data.SimpleCollectionItem;
 	import fl.events.SliderEvent;
 	import fl.motion.Motion;
+	
+	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	
 	import levels.SpawnPoint;
+	
 	import mvc.GameModel;
+
 	/**
 	 * ...
 	 * @author OML!
@@ -17,6 +22,7 @@ package
 	{
 		static public const IDLE : String = "idle";
 		static public const SPAWN_POINT_CREATOR:String = "spawnPointCreator";
+		static public const SPAWN_POINT_REMOVER:String = "spawnPointRemover";
 		
 		static private var _state : String = IDLE;
 		private var creatorGui : MapCreator = new MapCreator();
@@ -37,7 +43,8 @@ package
 			
 		
 			//TEMP STUFF
-			addNewSpawnPoint(20, 20);
+			addSpawnPoint(20, 20);
+			addSpawnPoint(20, 10);
 			
 			
 			//INTI SELECTION
@@ -90,7 +97,7 @@ package
 			//RIGHT COLUMN
 			mapMakerPanel.add_wave.addEventListener(MouseEvent.CLICK, addWave);
 			mapMakerPanel.remove_wave.addEventListener(MouseEvent.CLICK, removeWave);
-			
+			mapMakerPanel.remove_spawn.addEventListener(MouseEvent.CLICK, onRemoveSpawnPointClick);
 			mapMakerPanel.new_spawn.addEventListener(MouseEvent.CLICK, onNewSpawnPointButton);
 			
 			//EVENT LISTENERS
@@ -98,6 +105,43 @@ package
 			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
 			Factory.getInstance().addEventListener(GameEvents.UI_MESSAGE, messageArrived);
 		}
+		
+		
+		private function onRemoveSpawnPointClick(e:MouseEvent): void
+		{
+			Factory.getInstance().clickState = Factory.IDLE;
+			
+			MapMaker.state = SPAWN_POINT_REMOVER;
+		}		
+		
+		private function removeSpawnPoint(e: MouseEvent):void
+		{
+			var spawnPoint : SpawnPoint = SpawnPoint(e.target);
+			removeChild(spawnPoint.labelIconText);
+			removeChild(spawnPoint);
+			var spawnIndex : int = spawnPoints.indexOf(spawnPoint);
+			spawnPoints.splice(spawnIndex, 1);
+			
+			
+			mapMakerPanel.spawn_points.removeItem(spawnPoint);		
+		}
+		
+		private function addSpawnPoint(row:Number, col:Number):void 
+		{
+			var newSpawnPoint : SpawnPoint = new SpawnPoint(row, col);
+			
+			if (!isExsistingSpawnPoint(newSpawnPoint))
+			{
+				spawnPoints.push(newSpawnPoint);
+				addChildAt(newSpawnPoint,0);
+				addChildAt(newSpawnPoint.labelIconText,1);
+				
+				//mapMakerPanel.spawn_points.addItem({label : "R/C: "  + row + "/" + col, data : null});
+				mapMakerPanel.spawn_points.addItem(newSpawnPoint);
+				//newSpawnPoint.addEventListener(MouseEvent.CLICK, removeSpawnPoint);
+			}
+		}
+		
 		
 		private function onDensityInputKeyDown(e:KeyboardEvent):void 
 		{
@@ -136,25 +180,12 @@ package
 				if(MapMaker.state == SPAWN_POINT_CREATOR)
 				{
 					//trace("row: " + row + " col: " + col);
-					addNewSpawnPoint(row, col);
+					addSpawnPoint(row, col);
 					MapMaker.state = IDLE;
 				}
 			}
 		}
 		
-		private function addNewSpawnPoint(row:Number, col:Number):void 
-		{
-			var newSpawnPoint : SpawnPoint = new SpawnPoint(row, col);
-			
-			if (!isExsistingSpawnPoint(newSpawnPoint))
-			{
-				spawnPoints.push(newSpawnPoint);
-				addChildAt(newSpawnPoint,0);
-				addChildAt(newSpawnPoint.label,1);
-				
-				mapMakerPanel.spawn_points.addItem({ label: "R/C: "  + row + "/" + col, data: newSpawnPoint })
-			}
-		}
 		
 		private function isExsistingSpawnPoint(newSpawnPoint:SpawnPoint):Boolean
 		{

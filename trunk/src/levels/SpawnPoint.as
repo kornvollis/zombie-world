@@ -9,11 +9,19 @@ package levels
 	{
 		public var row: int;
 		public var col: int;
-		public var label : Label = new Label();
+		public var labelIconText : Label = new Label();
+		
+		//FOR COMBO BOX
+		public var data : SpawnPoint;
+		public var label : String;
+		
 		public function SpawnPoint(row : int , col : int) 
 		{
 			this.col = col;
 			this.row = row;
+			
+			data = this;
+			label = "R/C: "  + row + "/" + col;
 			
 			position.x = col * Constants.CELL_SIZE + Constants.CELL_SIZE / 2;
 			position.y = row * Constants.CELL_SIZE + Constants.CELL_SIZE / 2;
@@ -29,10 +37,10 @@ package levels
 			this.graphics.drawCircle(0, 0, 4);
 				
 			
-			label.x = position.x - 15;
-			label.y = position.y + 9;
+			labelIconText.x = position.x - 15;
+			labelIconText.y = position.y + 9;
 			
-			label.text = row + "/" + col ;			
+			labelIconText.text = row + "/" + col ;			
 		}
 		
 		override public function toString():String {

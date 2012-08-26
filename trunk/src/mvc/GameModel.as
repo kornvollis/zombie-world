@@ -152,10 +152,6 @@ package mvc
 				projectile.update();
 			}
 			
-			ZDebug.getInstance().watch("Dobozok szama", _boxes.length);
-			ZDebug.getInstance().watch("Zombik szama", _zombies.length);
-			ZDebug.getInstance().watch("Projectil szám", _projectils.length);
-			ZDebug.getInstance().refresh();
 		}
 		
 		private function zombieReachedTarget(z : Enemy):Boolean 
