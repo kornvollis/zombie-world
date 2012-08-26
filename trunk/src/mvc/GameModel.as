@@ -1,11 +1,13 @@
 package mvc
 {
+	
 	import flash.display.Stage;
 	import flash.events.Event;
-	import debug.ZDebug;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
+	
 	import levels.LevelLoader;
+	
 	import pathfinder.PathFinder;
 
 	/**
@@ -45,8 +47,7 @@ package mvc
 		public function GameModel() 
 		{
 			//SET PATHFINDER
-			PathFinder.getInstance().model = this;
-			pathFinder = PathFinder.getInstance();
+			pathFinder = new PathFinder(this);
 			//pathFinder  = new PathFinder(this);
 			levelLoader = new LevelLoader(this);
 			money = 100;
@@ -159,7 +160,7 @@ package mvc
 		
 		private function zombieReachedTarget(z : Enemy):Boolean 
 		{
-			for (var i:int = 0; i < PathFinder.getInstance().targetNodes.length; i++) 
+			for (var i:int = 0; i < pathFinder.targetNodes.length; i++) 
 			{
 				if (pathFinder.targetNodes[i].col == z.col && pathFinder.targetNodes[i].row == z.row) {
 					return true;

@@ -117,9 +117,9 @@ package
 		{
 			var box : Box = new Box(row, col);
 			model.boxes.push(box);
-			PathFinder.getInstance().cellGrid.blockCell(row, col);
-			PathFinder.getInstance().cellGrid.getCell(row, col).box = box;
-			PathFinder.getInstance().findPath();
+			model.pathFinder.cellGrid.blockCell(row, col);
+			model.pathFinder.cellGrid.getCell(row, col).box = box;
+			model.pathFinder.findPath();
 			model.needPathUpdate = true;
 			
 			ZDebug.getInstance().refresh();

@@ -96,9 +96,9 @@ package mvc
 			trace("drawing exit points");
 			exitPointsGraphics.graphics.beginFill(0x0000FF, 0.2);
 			
-			for (var i:int = 0; i < PathFinder.getInstance().targetNodes.length; i++) 
+			for (var i:int = 0; i < model.pathFinder.targetNodes.length; i++) 
 			{
-				var c : Cell = PathFinder.getInstance().targetNodes[i];
+				var c : Cell = model.pathFinder.targetNodes[i];
 				
 				//TEMP Graphics
 				exitPointsGraphics.graphics.drawRect(c.col*Constants.CELL_SIZE, c.row*Constants.CELL_SIZE, Constants.CELL_SIZE, Constants.CELL_SIZE);
