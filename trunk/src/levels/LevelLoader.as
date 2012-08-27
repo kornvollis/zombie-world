@@ -104,7 +104,7 @@ package levels
 			//LOAD WAVES
 			for each (var wave : XML in myXML.wave) 
 			{
-				var w : Wave = new Wave(wave.attribute("begin"), wave.attribute("count"), wave.attribute("delay"), null, wave.attribute("row"), wave.attribute("col"));
+				//var w : Wave = new Wave(wave.attribute("begin"), wave.attribute("count"), wave.attribute("delay"), null, wave.attribute("row"), wave.attribute("col"));
 			}
 			
 			model.pathFinder.findPath();

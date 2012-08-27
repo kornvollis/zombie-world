@@ -14,6 +14,7 @@ package levels
 		//FOR COMBO BOX
 		public var data : SpawnPoint;
 		public var label : String;
+		public var icon ;
 		
 		public function SpawnPoint(row : int , col : int) 
 		{
