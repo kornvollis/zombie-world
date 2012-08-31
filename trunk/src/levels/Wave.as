@@ -8,31 +8,36 @@ package levels
 	 * @author OML!
 	 */
 	public class Wave 
-	{
-		public var startTime : int = 0;
+	{		
+		public var spawnTimer : Timer;
+		public var spawnTimerTrigger : Timer;
+		public var spawnPoint : SpawnPoint;		
+		public var startTimeSec:int = 0;
+		public var spawnDelayMilliSec : Number;
 		
-		private var _spawnTimer : Timer;
-		private var _spawnTimerTrigger : Timer;
-		private var _spawnPoint : SpawnPoint;		
-		
-		private var _row : int;
-		private var _col : int;
+		public var row : int;
+		public var col : int;
+		public var numOfEnemies:int;
 		public var enemy : Class;
 		
 		//FOR COMBOBOX
 		public var label : String;
 		public var data  : Wave;
-		public var icon ;
+		public var icon : Object;
+		
 		
 		public function Wave(spawnPoint : SpawnPoint, startTimeSec : int, num : int, spawnDelayMilliSec: Number, enemy : Class) 
 		{
+			this.startTimeSec = startTimeSec;
+			this.spawnDelayMilliSec = spawnDelayMilliSec;
+			this.numOfEnemies = num;
 			this.enemy = enemy;
 			this.spawnPoint = spawnPoint;
 			this.row = spawnPoint.row;
 			this.col = spawnPoint.col;
 			
 			this.data = this;
-			this.label = "S: " + startTimeSec + " | " + "#: " + num + " | " + "D: " + spawnDelayMilliSec + "T: " + enemy;
+			this.label = "S: " + startTimeSec + " | " + "#: " + num + " | " + "D: " + spawnDelayMilliSec + " T: " + enemy;
 			
 			spawnTimerTrigger = new Timer(startTimeSec * 1000,1);
 			spawnTimerTrigger.addEventListener(TimerEvent.TIMER, startWave);
@@ -40,17 +45,32 @@ package levels
 			spawnTimer = new Timer(spawnDelayMilliSec, num);
 			spawnTimer.addEventListener(TimerEvent.TIMER, spawnUnit);
 			
+			//spawnTimerTrigger.start();
+		}
+		
+		public function start() : void
+		{
+			spawnTimerTrigger.reset();
+			spawnTimer.reset();
+			
 			spawnTimerTrigger.start();
 		}
 		
 		public function setStartTime(sec : int):void 
 		{
-			_spawnTimerTrigger.delay = sec;
+			startTimeSec = sec;
+			spawnTimerTrigger.delay = sec;
 		}
 		
 		public function setDelay(delay:int):void 
 		{
+			this.spawnDelayMilliSec = delay;
 			spawnTimer.delay = delay;
+		}
+		
+		public function refreshLabel():void 
+		{
+			this.label = "S: " + startTimeSec + " | " + "#: " + numOfEnemies + " | " + "D: " + spawnDelayMilliSec + "T: " + enemy;
 		}
 		
 		private function spawnUnit(e:TimerEvent):void 
@@ -63,55 +83,7 @@ package levels
 			spawnTimer.start();
 		}
 		
-		public function get spawnTimer():Timer 
-		{
-			return _spawnTimer;
-		}
 		
-		public function set spawnTimer(value:Timer):void 
-		{
-			_spawnTimer = value;
-		}
-		
-		public function get spawnTimerTrigger():Timer 
-		{
-			return _spawnTimerTrigger;
-		}
-		
-		public function set spawnTimerTrigger(value:Timer):void 
-		{
-			_spawnTimerTrigger = value;
-		}
-		
-		public function get spawnPoint():SpawnPoint 
-		{
-			return _spawnPoint;
-		}
-		
-		public function set spawnPoint(value:SpawnPoint):void 
-		{
-			_spawnPoint = value;
-		}
-		
-		public function get row():int 
-		{
-			return _row;
-		}
-		
-		public function set row(value:int):void 
-		{
-			_row = value;
-		}
-		
-		public function get col():int 
-		{
-			return _col;
-		}
-		
-		public function set col(value:int):void 
-		{
-			_col = value;
-		}
 		
 	}
 

@@ -22,8 +22,10 @@ package
 	public class MapMaker extends GameObject 
 	{
 		static public const IDLE : String = "idle";
-		static public const SPAWN_POINT_CREATOR:String = "spawnPointCreator";
-		static public const SPAWN_POINT_REMOVER:String = "spawnPointRemover";
+		static public const SPAWN_POINT_CREATOR : String = "spawnPointCreator";
+		static public const SPAWN_POINT_REMOVER : String = "spawnPointRemover";
+		static public const ADD_EXIT : String = "ADD_EXIT";
+		static public const REMOVE_EXIT : String = "REMOVE_EXIT";
 		
 		static private var _state : String = IDLE;
 		private var creatorGui : MapCreator = new MapCreator();
@@ -33,6 +35,7 @@ package
 		private var waveNum : int = 0;
 		
 		private var spawnPoints : Vector.<SpawnPoint> = new Vector.<SpawnPoint>();
+		private var waves : Vector.<Wave> = new Vector.<Wave>();
 		
 		public function MapMaker(model : GameModel) 
 		{
@@ -41,12 +44,6 @@ package
 			mapMakerPanel.x = 730;
 			addChild(creatorGui);
 			addChild(mapMakerPanel);
-			
-		
-			//TEMP STUFF
-			addSpawnPoint(20, 20);
-			addSpawnPoint(20, 10);
-			
 			
 			//INTI SELECTION
 			model.buildTowerClass = PointDefense;
@@ -66,6 +63,10 @@ package
 			
 			mapMakerPanel.enemy_type.addItem( { label: "Basic enemy", data: BasicEnemy } );
 			
+			
+			//TEMP STUFF DELETE IT
+			addSpawnPoint(20, 20);
+			addSpawnPoint(20, 10);
 			
 ////////////LISTENERS///////////////////////////////////////////////////////////////////////////
 			//STAGE CLICK
@@ -94,6 +95,9 @@ package
 			//Sell tower
 			creatorGui.sell_tower.addEventListener(MouseEvent.CLICK, sellTowerClick);
 			
+			//START BUTTON CLICK
+			mapMakerPanel.startMap_button.addEventListener(MouseEvent.CLICK, onStartMapClick);
+			
 			
 			//RIGHT COLUMN
 			mapMakerPanel.add_wave.addEventListener(MouseEvent.CLICK, addWave);
@@ -101,6 +105,8 @@ package
 			mapMakerPanel.remove_spawn.addEventListener(MouseEvent.CLICK, onRemoveSpawnPointClick);
 			mapMakerPanel.new_spawn.addEventListener(MouseEvent.CLICK, onNewSpawnPointButton);
 			mapMakerPanel.edit_button.addEventListener(MouseEvent.CLICK, onEditClick);
+			mapMakerPanel.addExit_button.addEventListener(MouseEvent.CLICK, onAddExit);
+			mapMakerPanel.removeExit_button.addEventListener(MouseEvent.CLICK, onRemoveExit);
 			
 			//EVENT LISTENERS
 			//COIN CHANGED
@@ -108,11 +114,33 @@ package
 			Factory.getInstance().addEventListener(GameEvents.UI_MESSAGE, messageArrived);
 		}
 		
+		private function onRemoveExit(e:MouseEvent):void 
+		{
+			MapMaker.state = REMOVE_EXIT;
+		}
+		
+		private function onAddExit(e:MouseEvent):void 
+		{
+			MapMaker.state = ADD_EXIT;
+		}
+		
+		private function onStartMapClick(e:MouseEvent):void 
+		{
+			//START ALL WAVE TIMERS
+			for each (var wave: Wave in  waves) 
+			{			
+				wave.start();
+			}
+			
+		}
+		
 		private function onEditClick(e:MouseEvent):void 
 		{
+
 			var selectedWave : Wave = Wave(mapMakerPanel.waves.selectedItem);
 			if (selectedWave != null)
 			{
+				
 				var spawnTime : int = int(mapMakerPanel.spawn_start.text);
 				var numOfEnemies : int = int(mapMakerPanel.spawn_num.text);
 				var delay : int = int(mapMakerPanel.delay_input.text);
@@ -121,11 +149,24 @@ package
 				
 				if(spawnTime > 0 && numOfEnemies > 0 && delay > 0 && enemy != null && spawnPoint != null)
 				{
+					trace("edit click: ");
 					selectedWave.row = spawnPoint.row;
 					selectedWave.col = spawnPoint.col;
 					selectedWave.setStartTime(spawnTime);
 					selectedWave.setDelay(delay);
-					selectedWave.enemy = mapMakerPanel.enemy_type.selectedItem.data;
+					selectedWave.enemy = mapMakerPanel.enemy_type.selectedItem.data;					
+					selectedWave.numOfEnemies = numOfEnemies;
+					
+					
+					selectedWave.refreshLabel();
+					
+					trace(selectedWave.label);
+					
+					var index : int  =  mapMakerPanel.waves.selectedIndex;
+					
+					mapMakerPanel.waves.removeItem(selectedWave);
+					mapMakerPanel.waves.addItemAt(selectedWave, index);
+					//mapMakerPanel.waves.selectedItem = selectedWave;
 				}
 			}
 		}
@@ -161,22 +202,6 @@ package
 				}
 			}
 		}
-		
-		private function addSpawnPoint(row:Number, col:Number):void 
-		{
-			var newSpawnPoint : SpawnPoint = new SpawnPoint(row, col);
-			
-			if (!isExsistingSpawnPoint(newSpawnPoint))
-			{
-				spawnPoints.push(newSpawnPoint);
-				addChildAt(newSpawnPoint,0);
-				addChildAt(newSpawnPoint.labelIconText,1);
-				
-				mapMakerPanel.spawn_points.addItem(newSpawnPoint);
-				newSpawnPoint.addEventListener(MouseEvent.CLICK, removeSpawnPoint);
-			}
-		}
-		
 		
 		private function onDensityInputKeyDown(e:KeyboardEvent):void 
 		{
@@ -217,10 +242,88 @@ package
 					//trace("row: " + row + " col: " + col);
 					addSpawnPoint(row, col);
 					MapMaker.state = IDLE;
+				} else if (MapMaker.state == ADD_EXIT) {
+					trace("Add exit");
+					var exitPoint : ExitPoint = new ExitPoint(row, col);
+					model.pathFinder.addExitPoint(exitPoint);
+					dispatchEvent(new GameEvents(GameEvents.REDRAW_EXIT_POINTS));
+					model.pathFinder.findPath();
 				}
 			}
 		}
 		
+		//ADD
+		
+		private function addWave(e:MouseEvent):void 
+		{
+			var spawnTime : int = int(mapMakerPanel.spawn_start.text);
+			var numOfEnemies : int = int(mapMakerPanel.spawn_num.text);
+			var delay : int = int(mapMakerPanel.delay_input.text);
+			var enemy : Class = Enemy;
+			var spawnPoint : SpawnPoint = SpawnPoint(mapMakerPanel.spawn_points.selectedItem);
+			
+			if (spawnTime >= 0 && numOfEnemies > 0 && spawnPoint != null)
+			{
+				var wave : Wave = new Wave(spawnPoint, spawnTime, numOfEnemies, delay, enemy);
+				
+				//ADDING TO THE MAPMAKER ARRAY
+				waves.push(wave);
+				
+				//ADDING TO THE COMBO BOX
+				mapMakerPanel.waves.addItem(wave);
+				waveNum++;
+			}
+		}
+		
+		private function addSpawnPoint(row:Number, col:Number):void 
+		{
+			var newSpawnPoint : SpawnPoint = new SpawnPoint(row, col);
+			
+			if (!isExsistingSpawnPoint(newSpawnPoint))
+			{
+				spawnPoints.push(newSpawnPoint);
+				addChildAt(newSpawnPoint,0);
+				addChildAt(newSpawnPoint.labelIconText,1);
+				
+				mapMakerPanel.spawn_points.addItem(newSpawnPoint);
+				newSpawnPoint.addEventListener(MouseEvent.CLICK, removeSpawnPoint);
+			}
+		}
+		
+		private function addTowerClick(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.TURRET_BUILDER;
+		}
+		
+		private function addEnemy(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.ZOMBIE_SPAWNER;
+			MapMaker._state = IDLE;
+		}
+		
+		private function addWallClick(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.WALL_BUILDER;
+		}
+		//ADD END
+		
+		//REMOVE
+		private function removeBlockKick(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.REMOVE_BLOCK;
+		}
+		
+		private function removeWave(e:MouseEvent):void 
+		{
+			var selectedItem : Object = mapMakerPanel.waves.selectedItem;
+			if (selectedItem != null)
+			{				
+				mapMakerPanel.waves.removeItem(selectedItem);
+				mapMakerPanel.waves.selectedItem = null;
+				waveNum--;
+			}
+		}
+		//REMOVE END
 		
 		private function isExsistingSpawnPoint(newSpawnPoint:SpawnPoint):Boolean
 		{
@@ -238,34 +341,6 @@ package
 			return isExsisting;
 		}
 		
-		private function removeWave(e:MouseEvent):void 
-		{
-			var selectedItem : Object = mapMakerPanel.waves.selectedItem;
-			if (selectedItem != null)
-			{				
-				mapMakerPanel.waves.removeItem(selectedItem);
-				mapMakerPanel.waves.selectedItem = null;
-				waveNum--;
-			}
-		}
-		
-		private function addWave(e:MouseEvent):void 
-		{
-			var spawnTime : int = int(mapMakerPanel.spawn_start.text);
-			var numOfEnemies : int = int(mapMakerPanel.spawn_num.text);
-			var delay : int = int(mapMakerPanel.delay_input.text);
-			var enemy : Class = Enemy;
-			var spawnPoint : SpawnPoint = SpawnPoint(mapMakerPanel.spawn_points.selectedItem);
-			
-			if (spawnTime >= 0 && numOfEnemies > 0 && spawnPoint != null)
-			{
-				var wave : Wave = new Wave(spawnPoint, spawnTime, numOfEnemies, delay, enemy);
-				
-				mapMakerPanel.waves.addItem(wave);
-				waveNum++;
-			}
-		}
-		
 		private function messageArrived(e:GameEvents):void 
 		{
 			creatorGui.events_area.textField.text = creatorGui.events_area.textField.text + e.data + "\n";
@@ -281,34 +356,16 @@ package
 			Factory.getInstance().clickState = Factory.SELL_TOWER;
 		}
 		
-		private function removeBlockKick(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.REMOVE_BLOCK;
-		}
-		
 		private function enemySelect(e:Event):void 
 		{
 			model.spawnEnemyClass = Class(creatorGui.add_enemy_combo.selectedItem.data);
 		}
 		
-		private function addEnemy(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.ZOMBIE_SPAWNER;
-		}
+		
 		
 		private function towerSelect(e:Event):void 
 		{
 			model.buildTowerClass = Class(creatorGui.add_tower_combo.selectedItem.data);
-		}
-		
-		private function addTowerClick(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.TURRET_BUILDER;
-		}
-		
-		private function addWallClick(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.WALL_BUILDER;
 		}
 		
 		static public function get state():String 

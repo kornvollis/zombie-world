@@ -44,7 +44,10 @@ package
 		
 		public function init():void 
 		{
-			model.levelLoader.loadLevel(1);
+			//model.levelLoader.loadLevel(1);
+			//TEMP STUFF
+			model.pathFinder.findPath();
+			
 			model.dispatchEvent(new Event(GameEvents.REDRAW_EXIT_POINTS));
 		}	
 		
@@ -64,7 +67,6 @@ package
 		{
 			Factory.view = view;
 		}
-		
 		
 		public function createProjectil(posX:int, posY:int, target : GameObject) : void
 		{

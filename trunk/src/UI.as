@@ -14,7 +14,7 @@ package
 	{		
 		private var model : GameModel;
 		
-		private var mapMaker : MapMaker;
+		public var mapMaker : MapMaker;
 		
 		public function UI(model : GameModel) 
 		{

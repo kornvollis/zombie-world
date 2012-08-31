@@ -57,7 +57,7 @@ package mvc
 			//ADD LISTENERS
 			model.addEventListener(GameEvents.ZOMBIE_REACHED_EXIT, removeZombie);
 			model.addEventListener(GameEvents.REDRAW_EXIT_POINTS, drawExitPointsGraphics);
-			
+			ui.mapMaker.addEventListener(GameEvents.REDRAW_EXIT_POINTS , drawExitPointsGraphics);
 			
 			addChild(field);
 			field.addChild(mapAreaLayer1);
@@ -93,16 +93,30 @@ package mvc
 		
 		public function drawExitPointsGraphics(e : Event) : void
 		{
+			for each (var exitPoint : ExitPoint in model.pathFinder.exitPoints) 
+			{
+				if (!exitPoint.onStage)
+				{
+					mapAreaLayer1.addChild(exitPoint);
+					exitPoint.onStage = true;
+				}
+				
+				exitPoint.x = exitPoint.position.x;
+				exitPoint.y = exitPoint.position.y;
+			}
+			
+			/*
 			trace("drawing exit points");
 			exitPointsGraphics.graphics.beginFill(0x0000FF, 0.2);
 			
-			for (var i:int = 0; i < model.pathFinder.targetNodes.length; i++) 
+			for (var i:int = 0; i < model.pathFinder.exitPoints.length; i++) 
 			{
-				var c : Cell = model.pathFinder.targetNodes[i];
+				var c : Cell = model.pathFinder.exitPoints[i];
 				
 				//TEMP Graphics
 				exitPointsGraphics.graphics.drawRect(c.col*Constants.CELL_SIZE, c.row*Constants.CELL_SIZE, Constants.CELL_SIZE, Constants.CELL_SIZE);
 			}
+			*/
 		}
 		
 		public function drawDebugPath() : void

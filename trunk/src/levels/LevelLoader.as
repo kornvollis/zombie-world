@@ -25,10 +25,7 @@ package levels
 			
 			<tower row="4" col="4" type="gun" lvl="1"></tower>			
 			
-			<wall row="7" col="10"></wall>
-			
-			
-			
+			<wall row="7" col="10"></wall>	
 		</level>
 		/*
 		<level num="2">
@@ -78,7 +75,7 @@ package levels
 				var col : int = exit.attribute("col");
 				
 				trace("Adding exit row: " + row + ", col " +  col);
-				model.pathFinder.addTargetCell(row, col);
+				//model.pathFinder.addExitPoint(row, col);
 			}
 			
 			//LOAD WALLS

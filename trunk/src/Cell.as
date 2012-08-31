@@ -17,16 +17,12 @@ package
 		public static const TOP_NEXT    : int = 2;
 		public static const BOTTOM_NEXT : int = 3;
 		
-		public var occupied : Boolean = false;
-		
+		//
+		public var blocked : Boolean = false;
+		public var exit : Boolean = false;
 		//BOX ON IT
 		public var box : Box = null;
 		public var tower : Turret = null;
-		
-		
-		
-		//Survivors on it
-		//public var survivors : Vector.<Survivor> = new Vector.<Survivor>();
 		
 		//CELL STATUS
 		public var state : String = Cell.OPEN;
@@ -52,6 +48,16 @@ package
 		public function Cell() 
 		{
 			super();
+		}
+		
+		public function isBlocked() : Boolean
+		{
+			return blocked;
+		}
+		
+		public function isExit() : Boolean
+		{
+			return exit;
 		}
 		
 		public function get row():int 

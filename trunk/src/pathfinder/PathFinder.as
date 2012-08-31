@@ -11,16 +11,22 @@ package pathfinder
 		private var model : GameModel;
 		private var openNodes:Vector.<Cell> = null;
 		
-		public var targetNodes : Vector.<Cell> = new Vector.<Cell>;
+		public var exitPoints : Vector.<ExitPoint> = new Vector.<ExitPoint>;
 		
 		public function PathFinder(gameModel : GameModel) : void
 		{
 			this.model = gameModel;
 		}
 		
-		public function addTargetCell(row: int, col:int) : void
+		public function addExitPoint(exitPoint : ExitPoint) : void
 		{
-			targetNodes.push( cellGrid.getCell(row, col) );
+			var cell : Cell = cellGrid.getCell(exitPoint.row, exitPoint.col);
+			if (!cell.isExit())
+			{
+				trace("kaka");
+				exitPoints.push( exitPoint );
+				cell.exit = true;
+			}
 		}
 		
 		private function ResetCells() : void
@@ -30,6 +36,7 @@ package pathfinder
 				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
 				{
 					var c : Cell = cellGrid.getCell(i, j);
+					c.exit = false;
 					c.distance = 99999;
 					c.next_direction = Cell.NULL_NEXT;
 					c.next_alternate_direction = Cell.NULL_NEXT;
@@ -108,14 +115,21 @@ package pathfinder
 			}
 		}
 		
+		private function exitPointToCell(exitPoint: ExitPoint) : Cell
+		{
+			var cell : Cell = cellGrid.getCell(exitPoint.row, exitPoint.col);
+			return cell;
+		}
+		
 		private function getStartNodes():Vector.<Cell> 
 		{
 			var openNodes : Vector.<Cell> = new Vector.<Cell>();
 			
-			for (var i:int = 0; i < targetNodes.length; i++)
+			for (var i:int = 0; i < exitPoints.length; i++)
 			{
-				var cell : Cell = targetNodes[i];
+				var cell : Cell = exitPointToCell(exitPoints[i]);
 				cell.distance = 0;
+				cell.exit = true;
 				openNodes.push(cell);
 			}
 			

@@ -8,7 +8,7 @@
     <movie fps="30" />
     <movie width="1000" />
     <movie height="820" />
-    <movie version="10" />
+    <movie version="11" />
     <movie minorVersion="0" />
     <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
@@ -85,7 +85,8 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
-    <option testMovie="Default" />
+    <option testMovie="OpenDocument" />
+    <option testMovieCommand="bin/zombieworld.swf" />
   </options>
   <!-- Plugin storage -->
   <storage />

@@ -156,9 +156,9 @@ package mvc
 		
 		private function zombieReachedTarget(z : Enemy):Boolean 
 		{
-			for (var i:int = 0; i < pathFinder.targetNodes.length; i++) 
+			for (var i:int = 0; i < pathFinder.exitPoints.length; i++) 
 			{
-				if (pathFinder.targetNodes[i].col == z.col && pathFinder.targetNodes[i].row == z.row) {
+				if (pathFinder.exitPoints[i].col == z.col && pathFinder.exitPoints[i].row == z.row) {
 					return true;
 				}
 			}
