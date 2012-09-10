@@ -101,7 +101,7 @@ package
 			if (life < 1)
 			{
 				dispatchEvent(new GameEvents(GameEvents.ZOMBIE_REACHED_EXIT));
-				Factory.getInstance().removeZombie(this); 
+				Factory.getInstance().removeEnemy(this); 
 			} else {
 				healthBar.setSize(life, maxLife);
 			}

@@ -22,8 +22,6 @@ package mvc
 		
 		public var exitPointsGraphics: Sprite = new Sprite();
 		
-		
-		
 		private var ui : UI;
 		
 		public function GameView(model: GameModel, controller : GameController) 
@@ -57,7 +55,11 @@ package mvc
 			//ADD LISTENERS
 			model.addEventListener(GameEvents.ZOMBIE_REACHED_EXIT, removeZombie);
 			model.addEventListener(GameEvents.REDRAW_EXIT_POINTS, drawExitPointsGraphics);
-			ui.mapMaker.addEventListener(GameEvents.REDRAW_EXIT_POINTS , drawExitPointsGraphics);
+			UI.mapMaker.addEventListener(GameEvents.REDRAW_EXIT_POINTS , drawExitPointsGraphics);
+			
+			//PATH
+			model.pathFinder.addEventListener(GameEvents.PATH_ADD_EXIT_POINT, drawExitPointsGraphics);
+			model.pathFinder.addEventListener(GameEvents.PATH_REMOVE_EXIT_POINT, drawExitPointsGraphics);
 			
 			addChild(field);
 			field.addChild(mapAreaLayer1);
@@ -91,8 +93,13 @@ package mvc
 		
 		
 		
-		public function drawExitPointsGraphics(e : Event) : void
+		public function drawExitPointsGraphics(e : GameEvents) : void
 		{
+			if (e.data != null)
+			{
+				mapAreaLayer1.removeChild(ExitPoint(e.data));
+			}
+			
 			for each (var exitPoint : ExitPoint in model.pathFinder.exitPoints) 
 			{
 				if (!exitPoint.onStage)
@@ -196,16 +203,16 @@ package mvc
 			}
 			
 			//UPDATE ZOMBIES
-			for each(var zombie : Enemy in model.zombies) 
+			for each(var enemy : Enemy in model.enemies) 
 			{
-				if (!zombie.onStage)
+				if (!enemy.onStage)
 				{
-					mapAreaLayer2.addChild(zombie);
-					zombie.onStage = true;
+					mapAreaLayer2.addChild(enemy);
+					enemy.onStage = true;
 				}
 				
-				zombie.x = zombie.position.x;
-				zombie.y = zombie.position.y;
+				enemy.x = enemy.position.x;
+				enemy.y = enemy.position.y;
 			}
 			
 			//UPDATE BOXES

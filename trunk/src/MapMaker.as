@@ -108,6 +108,7 @@ package
 			mapMakerPanel.addExit_button.addEventListener(MouseEvent.CLICK, onAddExit);
 			mapMakerPanel.removeExit_button.addEventListener(MouseEvent.CLICK, onRemoveExit);
 			
+			
 			//EVENT LISTENERS
 			//COIN CHANGED
 			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
@@ -116,16 +117,20 @@ package
 		
 		private function onRemoveExit(e:MouseEvent):void 
 		{
+			Factory.getInstance().clickState = Factory.IDLE;
 			MapMaker.state = REMOVE_EXIT;
 		}
 		
 		private function onAddExit(e:MouseEvent):void 
 		{
+			Factory.getInstance().clickState = Factory.IDLE;
 			MapMaker.state = ADD_EXIT;
 		}
 		
 		private function onStartMapClick(e:MouseEvent):void 
 		{
+			UI.state = UI.GAME_PLAY;
+			
 			//START ALL WAVE TIMERS
 			for each (var wave: Wave in  waves) 
 			{			
@@ -226,7 +231,6 @@ package
 		private function onNewSpawnPointButton(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.IDLE;
-			
 			MapMaker.state = SPAWN_POINT_CREATOR;
 		}
 		
@@ -243,16 +247,13 @@ package
 					addSpawnPoint(row, col);
 					MapMaker.state = IDLE;
 				} else if (MapMaker.state == ADD_EXIT) {
-					trace("Add exit");
 					var exitPoint : ExitPoint = new ExitPoint(row, col);
 					model.pathFinder.addExitPoint(exitPoint);
-					dispatchEvent(new GameEvents(GameEvents.REDRAW_EXIT_POINTS));
-					model.pathFinder.findPath();
+				} else if (MapMaker.state == REMOVE_EXIT) {
+					model.pathFinder.removeExitPoint(row, col);
 				}
 			}
 		}
-		
-		//ADD
 		
 		private function addWave(e:MouseEvent):void 
 		{
@@ -287,6 +288,7 @@ package
 				
 				mapMakerPanel.spawn_points.addItem(newSpawnPoint);
 				newSpawnPoint.addEventListener(MouseEvent.CLICK, removeSpawnPoint);
+				Factory.getInstance().clickState = Factory.IDLE;
 			}
 		}
 		

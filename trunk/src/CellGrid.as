@@ -8,7 +8,7 @@ package
 	{			
 		public var cells : Vector.<Vector.<Cell>> = new Vector.<Vector.<Cell>>();
 		
-		public function CellGrid() 
+		public function CellGrid()
 		{
 			for (var  i:int  = 0; i < Constants.ROW_NUM; i++)
 			{

@@ -11,15 +11,59 @@ package
 	 * @author OML!
 	 */
 	public class UI extends MovieClip 
-	{		
-		private var model : GameModel;
+	{			
+		public static const MAP_MAKER : String = "mapmaker";
+		public static const GAME_PLAY : String = "GAME_PLAY";
+		public static var mapMaker : MapMaker;
+		private static var hammerButton : HammerButton = new HammerButton();
+		private static var _state : String = GAME_PLAY;
 		
-		public var mapMaker : MapMaker;
+		private var model : GameModel;
 		
 		public function UI(model : GameModel) 
 		{
+			hammerButton.y = 3;
+			hammerButton.x = 725;
+			
 			mapMaker = new MapMaker(model);
+			
+			if (_state == MAP_MAKER)
+			{
+				hammerButton.visible = false;
+			} else if (_state == GAME_PLAY)
+			{
+				mapMaker.visible = false;
+				hammerButton.visible = true;
+			}
+			
+			UI.hammerButton.addEventListener(MouseEvent.CLICK, onHammerClick);
+			
 			addChild(mapMaker);
+			addChild(hammerButton);
+		}
+		
+		private function onHammerClick(e:MouseEvent):void 
+		{
+			state = MAP_MAKER;
+		}
+		
+		static public function get state():String 
+		{
+			return _state;
+		}
+		
+		static public function set state(value:String):void 
+		{
+			if (value == MAP_MAKER && _state == GAME_PLAY) {
+				Factory.getInstance().removeAllEnemy();
+				hammerButton.visible = false;
+				mapMaker.visible = true;
+			} else if (value == GAME_PLAY && _state == MAP_MAKER) {
+				mapMaker.visible = false;
+				hammerButton.visible = true;
+			}
+			
+			_state = value;
 		}
 		/*
 		private function messageArrived(e:GameEvents):void 

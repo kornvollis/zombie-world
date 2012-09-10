@@ -26,7 +26,7 @@ package mvc
 		
 		private var _turrets : Vector.<Turret> = new Vector.<Turret>;
 		
-		private var _zombies  : Vector.<Enemy>   = new Vector.<Enemy>();
+		private var _enemies  : Vector.<Enemy>   = new Vector.<Enemy>();
 		private var _boxes    : Vector.<Box> = new Vector.<Box>();
 		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
 		
@@ -109,7 +109,7 @@ package mvc
 				
 				if(turret.target == null)
 				{
-					for each(var zombie2 :Enemy in _zombies)
+					for each(var zombie2 :Enemy in enemies)
 					{
 						var zpos : Point = zombie2.position;
 						var tpos : Point = turret.position;
@@ -123,26 +123,24 @@ package mvc
 				}
 			}
 			
-			for each(var zombie:Enemy in _zombies)
+			for each(var enemy:Enemy in _enemies)
 			{
-				zombie.update();
+				enemy.update();
 				
-				if (zombieReachedTarget(zombie)) {
+				if (enemyReachedExit(enemy)) {
 					
-					//var event : GameEvents = new GameEvents(GameEvents.ZOMBIE_REACHED_EXIT);
-					//event.data = zombie;
-					//dispatchEvent(event);
-					Factory.getInstance().removeZombie(zombie);
+					Factory.getInstance().removeEnemy(enemy);
+					//pathFinder.removeExitPoint(new ExitPoint(enemy.row, enemy.col));
 					
 					life-- ;
 				}
 				
-				if (zombie.state == Enemy.Z_IDLE)
+				if (enemy.state == Enemy.Z_IDLE)
 				{
-					var target : Point = getNextTargetFor(zombie.row, zombie.col);
+					var target : Point = getNextTargetFor(enemy.row, enemy.col);
 					
 					if (target != null) {
-						zombie.target = target;
+						enemy.target = target;
 					}
 				}
 			}
@@ -154,7 +152,7 @@ package mvc
 			
 		}
 		
-		private function zombieReachedTarget(z : Enemy):Boolean 
+		private function enemyReachedExit(z : Enemy):Boolean 
 		{
 			for (var i:int = 0; i < pathFinder.exitPoints.length; i++) 
 			{
@@ -163,16 +161,6 @@ package mvc
 				}
 			}
 			return false;
-		}
-		
-		public function get zombies():Vector.<Enemy> 
-		{
-			return _zombies;
-		}
-		
-		public function set zombies(value:Vector.<Enemy>):void 
-		{
-			_zombies = value;
 		}
 		
 		public function get boxes():Vector.<Box> 
@@ -234,6 +222,16 @@ package mvc
 		{
 			_money = value;
 			dispatchEvent(new GameEvents(GameEvents.COIN_CHANGED));
+		}
+		
+		public function get enemies():Vector.<Enemy> 
+		{
+			return _enemies;
+		}
+		
+		public function set enemies(value:Vector.<Enemy>):void 
+		{
+			_enemies = value;
 		}
 		
 	}

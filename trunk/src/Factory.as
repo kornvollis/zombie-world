@@ -15,7 +15,6 @@ package
 	 */
 	public class Factory extends EventDispatcher
 	{
-		
 		//TODO: REFACTORING THIS TO THE GAMECONTROLLER
 		public static const WALL_BUILDER   : String  = "WALL_BUILDER";
 		public static const ZOMBIE_SPAWNER : String  = "ZOMBIE_SPAWNER";
@@ -46,9 +45,9 @@ package
 		{
 			//model.levelLoader.loadLevel(1);
 			//TEMP STUFF
-			model.pathFinder.findPath();
+			//model.pathFinder.findPath();
 			
-			model.dispatchEvent(new Event(GameEvents.REDRAW_EXIT_POINTS));
+			//model.dispatchEvent(new Event(GameEvents.REDRAW_EXIT_POINTS));
 		}	
 		
 		public static function getInstance():Factory
@@ -60,7 +59,7 @@ package
 		{
 			Factory.model = model;
 			
-			Factory.model.addEventListener(GameEvents.ZOMBIE_REACHED_EXIT, removeZombie);
+			Factory.model.addEventListener(GameEvents.ZOMBIE_REACHED_EXIT, removeEnemy);
 		}
 		
 		public function setView(view: GameView) :void
@@ -122,10 +121,7 @@ package
 			model.pathFinder.cellGrid.blockCell(row, col);
 			model.pathFinder.cellGrid.getCell(row, col).box = box;
 			model.pathFinder.findPath();
-			model.needPathUpdate = true;
-			
-			ZDebug.getInstance().refresh();
-			
+			model.needPathUpdate = true;			
 		}
 		
 		public function addTower(row:int, col:int): Turret 
@@ -166,7 +162,7 @@ package
 				if (model != null)
 				{
 					var zombie : Enemy = new model.spawnEnemyClass(row, col);
-					model.zombies.push(zombie);
+					model.enemies.push(zombie);
 					
 					return zombie;
 				}
@@ -175,17 +171,30 @@ package
 			return null;
 		}
 		
-		public function removeZombie(e : Enemy):void 
+		public function removeAllEnemy():void 
+		{
+			for each (var e: Enemy in model.enemies) 
+			{
+				if (view.contains(e)) view.mapAreaLayer2.removeChild(e);
+			}
+			
+			for (var i:int = 0; i < model.enemies.length; i++) 
+			{
+				model.enemies.pop();
+			}
+		}
+		
+		public function removeEnemy(e : Enemy):void 
 		{
 			if (e.onStage)
 			{
 				if(view.contains(e)) view.mapAreaLayer2.removeChild(e);
 			}
 			
-			var zombie : Enemy = e;
-			zombie.isDeleted = true;
-			var zombieIndex : int = model.zombies.indexOf(zombie);
-			model.zombies.splice(zombieIndex, 1);
+			var enemy : Enemy = e;
+			enemy.isDeleted = true;
+			var enemyIndex : int = model.enemies.indexOf(enemy);
+			model.enemies.splice(enemyIndex, 1);
 		}
 		
 		public function removeProjectil(e : Projectil):void 

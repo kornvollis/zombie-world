@@ -1,32 +1,25 @@
 package pathfinder  
 {
+	import flash.events.EventDispatcher;
 	import mvc.GameModel;
 	/**
 	 * ...
 	 * @author OML!
 	 */
-	public class PathFinder 
+	public class PathFinder extends EventDispatcher
 	{
+		//PUBLIC
 		public var cellGrid : CellGrid = new CellGrid(); 
-		private var model : GameModel;
-		private var openNodes:Vector.<Cell> = null;
-		
 		public var exitPoints : Vector.<ExitPoint> = new Vector.<ExitPoint>;
 		
+		//PRIVATE
+		private var model : GameModel;
+		private var openNodes : Vector.<Cell> = null;
+		
+		//CONSTRUCTOR
 		public function PathFinder(gameModel : GameModel) : void
 		{
 			this.model = gameModel;
-		}
-		
-		public function addExitPoint(exitPoint : ExitPoint) : void
-		{
-			var cell : Cell = cellGrid.getCell(exitPoint.row, exitPoint.col);
-			if (!cell.isExit())
-			{
-				trace("kaka");
-				exitPoints.push( exitPoint );
-				cell.exit = true;
-			}
 		}
 		
 		private function ResetCells() : void
@@ -36,11 +29,10 @@ package pathfinder
 				for (var  j:int  = 0; j < Constants.COL_NUM; j++)
 				{
 					var c : Cell = cellGrid.getCell(i, j);
-					c.exit = false;
+					//c.exit = false;
 					c.distance = 99999;
 					c.next_direction = Cell.NULL_NEXT;
 					c.next_alternate_direction = Cell.NULL_NEXT;
-					//c.state = Cell.OPEN;
 					c.isProcessed = false;
 				}
 			}
@@ -58,7 +50,7 @@ package pathfinder
 			// If there is no survivor
 			if (openNodes.length == 0) 
 			{
-				trace("Pathfinder: no more survivor");
+				trace("Pathfinder: there is no exit point");
 				
 				return;
 			}
@@ -85,6 +77,51 @@ package pathfinder
 			//REDRAW THE DEBUG ARROWS
 			model.needPathUpdate = true;
 		}	
+		
+		public function addExitPoint(exitPoint : ExitPoint) : void
+		{
+			var cell : Cell = cellGrid.getCell(exitPoint.row, exitPoint.col);
+			
+			//trace("cell before: " + cell.exit + " isExit" );
+			
+			if (!cell.isExit())
+			{
+				exitPoints.push( exitPoint );
+				cell.exit = true;
+				
+				dispatchEvent(new GameEvents(GameEvents.PATH_ADD_EXIT_POINT));
+				//trace("cell in: " + cellGrid.getCell(exitPoint.row, exitPoint.col).exit + " isExit" );
+				findPath();
+			}
+		}
+		
+		public function removeExitPoint(row: int, col: int):void 
+		{
+			var cell  : Cell = cellGrid.getCell(row, col);
+			
+			if (cell.isExit())
+			{
+				var exitPoint : ExitPoint = null;
+				for each (var e: ExitPoint in  exitPoints) 
+				{
+					if (e.row == row && e.col == col)
+					{
+						exitPoint = e;
+						break;
+					}
+				}
+				
+				
+				exitPoints.splice(exitPoints.lastIndexOf(exitPoint), 1);	
+				cell.exit = false;
+				
+				var ge : GameEvents = new GameEvents(GameEvents.PATH_REMOVE_EXIT_POINT);
+				ge.data = exitPoint;
+				
+				dispatchEvent(ge);
+				findPath();
+			}
+		}
 		
 		private function processNeighbour(neighbourCell:Cell, startingCell:Cell, direction:int):void 
 		{			
