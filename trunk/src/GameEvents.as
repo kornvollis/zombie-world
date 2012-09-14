@@ -15,6 +15,7 @@ package
 		static public const REDRAW_EXIT_POINTS : String = "redrawExitPoints";
 		static public const COIN_CHANGED : String = "COIN_CHANGED";
 		static public const EXIT_POINT_CLICK:String = "exitPointClick";
+		static public const BLOCKS_CHANGED:String = "blocksChanged";
 		
 		// TURRET SELL CLICK
 		static public const TURRET_SELL_EVENT : String = "TURRET_SELL_EVENT";
@@ -24,7 +25,7 @@ package
 		//PATHFINDER
 		static public const PATH_ADD_EXIT_POINT    : String = "PATH_ADD_EXIT_POINT";
 		static public const PATH_REMOVE_EXIT_POINT : String = "PATH_REMOVE_EXIT_POINT";
-		
+
 		public var data : Object;
 		
 		public function GameEvents(type:String, bubbles:Boolean=false, cancelable:Boolean=false):void

@@ -1,10 +1,12 @@
-package  
+package ui
 {
 	import flash.display.FrameLabel;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;	
 	import mvc.GameModel;
+	import ui.GameInterface;
+	import ui.MapMaker;
 	
 	/**
 	 * ...
@@ -15,31 +17,50 @@ package
 		public static const MAP_MAKER : String = "mapmaker";
 		public static const GAME_PLAY : String = "GAME_PLAY";
 		public static var mapMaker : MapMaker;
+		
+		public static var gameInterface : GameInterface;
 		private static var hammerButton : HammerButton = new HammerButton();
 		private static var _state : String = GAME_PLAY;
 		
-		private var model : GameModel;
+		private static var model : GameModel;
 		
 		public function UI(model : GameModel) 
 		{
-			hammerButton.y = 3;
-			hammerButton.x = 725;
-			
+			UI.model = model;
+			gameInterface = new GameInterface(model);
 			mapMaker = new MapMaker(model);
+			
+			hammerButton.y = 3;
+			hammerButton.x = 725;			
+			//GAMEPANEL
+			gameInterface.y = 605;
+			gameInterface.x = 5;
+			gameInterface.block_button.label = "Box (" + model.blockers + ")";
+			
 			
 			if (_state == MAP_MAKER)
 			{
 				hammerButton.visible = false;
+				gameInterface.visible = false;
 			} else if (_state == GAME_PLAY)
 			{
 				mapMaker.visible = false;
 				hammerButton.visible = true;
+				gameInterface.visible = true;
 			}
 			
+			//EVENT LISTENERS
 			UI.hammerButton.addEventListener(MouseEvent.CLICK, onHammerClick);
+			model.addEventListener(GameEvents.COIN_CHANGED, updateMoney);
 			
 			addChild(mapMaker);
 			addChild(hammerButton);
+			addChild(gameInterface);
+		}
+		
+		private function updateMoney(e:GameEvents):void 
+		{
+			UI.gameInterface.cash_label.text = "Cash: " + model.money;
 		}
 		
 		private function onHammerClick(e:MouseEvent):void 
@@ -57,59 +78,16 @@ package
 			if (value == MAP_MAKER && _state == GAME_PLAY) {
 				Factory.getInstance().removeAllEnemy();
 				hammerButton.visible = false;
+				gameInterface.visible = false;
 				mapMaker.visible = true;
 			} else if (value == GAME_PLAY && _state == MAP_MAKER) {
 				mapMaker.visible = false;
 				hammerButton.visible = true;
+				gameInterface.visible = true;
 			}
 			
 			_state = value;
 		}
-		/*
-		private function messageArrived(e:GameEvents):void 
-		{
-			creatorGui.events_area.textField.text = creatorGui.events_area.textField.text + e.data + "\n";
-		}
 		
-		private function coinChanged(e:GameEvents):void 
-		{
-			creatorGui.money_text.text = "Money: " + model.money.toString();
-		}
-		
-		private function sellTowerClick(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.SELL_TOWER;
-		}
-		
-		private function removeBlockKick(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.REMOVE_BLOCK;
-		}
-		
-		private function enemySelect(e:Event):void 
-		{
-			model.spawnEnemyClass = Class(creatorGui.add_enemy_combo.selectedItem.data);
-		}
-		
-		private function addEnemy(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.ZOMBIE_SPAWNER;
-		}
-		
-		private function towerSelect(e:Event):void 
-		{
-			model.buildTowerClass = Class(creatorGui.add_tower_combo.selectedItem.data);
-		}
-		
-		private function addTowerClick(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.TURRET_BUILDER;
-		}
-		
-		private function addWallClick(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.WALL_BUILDER;
-		}
-		*/
 	}
 }

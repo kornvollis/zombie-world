@@ -1,10 +1,11 @@
-package  
+package ui
 {
 	import fl.controls.Slider;
 	import fl.data.SimpleCollectionItem;
 	import fl.events.SliderEvent;
 	import fl.motion.Motion;
 	import levels.Wave;
+	import units.Enemy;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -130,6 +131,8 @@ package
 		private function onStartMapClick(e:MouseEvent):void 
 		{
 			UI.state = UI.GAME_PLAY;
+			
+			model.money = int(mapMakerPanel.money.text);
 			
 			//START ALL WAVE TIMERS
 			for each (var wave: Wave in  waves) 

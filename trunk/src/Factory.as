@@ -10,6 +10,10 @@ package
 	import debug.ZDebug;
 	import mvc.GameView;
 	import pathfinder.PathFinder;
+	import units.Box;
+	import units.Enemy;
+	import units.Projectil;
+	import units.Turret;
 	/**
 	 * @author OML!
 	 */
@@ -116,12 +120,16 @@ package
 		
 		public function addBox(row:int , col :int) : void
 		{
-			var box : Box = new Box(row, col);
-			model.boxes.push(box);
-			model.pathFinder.cellGrid.blockCell(row, col);
-			model.pathFinder.cellGrid.getCell(row, col).box = box;
-			model.pathFinder.findPath();
-			model.needPathUpdate = true;			
+			if(model.blockers > 0)
+			{
+				var box : Box = new Box(row, col);
+				model.boxes.push(box);
+				model.pathFinder.cellGrid.blockCell(row, col);
+				model.pathFinder.cellGrid.getCell(row, col).box = box;
+				model.pathFinder.findPath();
+				model.needPathUpdate = true;	
+				model.blockers = model.blockers-1;
+			}
 		}
 		
 		public function addTower(row:int, col:int): Turret 

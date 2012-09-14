@@ -5,6 +5,10 @@ package mvc
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
+	import units.Box;
+	import units.Enemy;
+	import units.Projectil;
+	import units.Turret;
 	
 	import levels.LevelLoader;
 	
@@ -20,12 +24,14 @@ package mvc
 		private var lifeChangedEvent : GameEvents;
 		
 		private var _life : int = 10;
-		private var _money : int = 99999;
+		private var _money : int = 0;
+		private var _blockers : int = 10;
+		
 		
 		public var myStage : Stage = null;
 		
-		private var _turrets : Vector.<Turret> = new Vector.<Turret>;
 		
+		private var _turrets : Vector.<Turret> = new Vector.<Turret>;
 		private var _enemies  : Vector.<Enemy>   = new Vector.<Enemy>();
 		private var _boxes    : Vector.<Box> = new Vector.<Box>();
 		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
@@ -232,6 +238,17 @@ package mvc
 		public function set enemies(value:Vector.<Enemy>):void 
 		{
 			_enemies = value;
+		}
+		
+		public function get blockers():int 
+		{
+			return _blockers;
+		}
+		
+		public function set blockers(value:int):void 
+		{
+			_blockers = value;
+			dispatchEvent(new GameEvents(GameEvents.BLOCKS_CHANGED));
 		}
 		
 	}
