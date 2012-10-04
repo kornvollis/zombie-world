@@ -4,6 +4,8 @@ package ui
 	import fl.data.SimpleCollectionItem;
 	import fl.events.SliderEvent;
 	import fl.motion.Motion;
+	import flash.net.FileReference;
+	import levels.LevelData;
 	import levels.Wave;
 	import units.Enemy;
 	
@@ -21,14 +23,7 @@ package ui
 	 * @author OML!
 	 */
 	public class MapMaker extends GameObject 
-	{
-		static public const IDLE : String = "idle";
-		static public const SPAWN_POINT_CREATOR : String = "spawnPointCreator";
-		static public const SPAWN_POINT_REMOVER : String = "spawnPointRemover";
-		static public const ADD_EXIT : String = "ADD_EXIT";
-		static public const REMOVE_EXIT : String = "REMOVE_EXIT";
-		
-		static private var _state : String = IDLE;
+	{		
 		private var creatorGui : MapCreator = new MapCreator();
 		private var mapMakerPanel : MapMakerPanel = new MapMakerPanel();
 		private var model : GameModel;
@@ -38,8 +33,34 @@ package ui
 		private var spawnPoints : Vector.<SpawnPoint> = new Vector.<SpawnPoint>();
 		private var waves : Vector.<Wave> = new Vector.<Wave>();
 		
+		private var xmlMap : XML = 
+			<map> 
+				<turrets> 
+					
+				</turrets> 
+				<blocks> 
+					<menuName>fries</menuName> 
+					<price>1.45</price> 
+				</blocks> 
+			</map>
+		
+			private var myData : LevelData = new LevelData();
+		
 		public function MapMaker(model : GameModel) 
 		{
+			
+			myData.addBlock(5,1);
+			trace(myData.toXMLString());
+			
+			loadMap(myData);
+			
+			// saving out a file
+			//var f:FileReference = new FileReference;
+			//f.save( xmlMap, "myXML.xml" ); 
+			
+			
+			
+			
 			this.model = model;
 			creatorGui.y = 600;
 			mapMakerPanel.x = 730;
@@ -116,16 +137,28 @@ package ui
 			Factory.getInstance().addEventListener(GameEvents.UI_MESSAGE, messageArrived);
 		}
 		
+		private function loadMap(myData:LevelData):void 
+		{
+			//LOOP BLOCKS
+			/*
+			for each (var block : XML in myData.blocks) 
+			{
+				row  = block.attribute("row");
+				col  = block.attribute("col");
+				
+				Factory.getInstance().addBox(row, col);
+			}
+			*/
+		}
+		
 		private function onRemoveExit(e:MouseEvent):void 
 		{
-			Factory.getInstance().clickState = Factory.IDLE;
-			MapMaker.state = REMOVE_EXIT;
+			Factory.getInstance().clickState = Factory.REMOVE_EXIT;
 		}
 		
 		private function onAddExit(e:MouseEvent):void 
 		{
-			Factory.getInstance().clickState = Factory.IDLE;
-			MapMaker.state = ADD_EXIT;
+			Factory.getInstance().clickState = Factory.ADD_EXIT;
 		}
 		
 		private function onStartMapClick(e:MouseEvent):void 
@@ -181,33 +214,22 @@ package ui
 		
 		private function onRemoveSpawnPointClick(e:MouseEvent): void
 		{
-			Factory.getInstance().clickState = Factory.IDLE;
-			
-			if (MapMaker.state == SPAWN_POINT_REMOVER)
-			{
-				MapMaker.state = IDLE;
-			} else {
-				MapMaker.state = SPAWN_POINT_REMOVER;
-			}
+			Factory.getInstance().clickState = Factory.SPAWN_POINT_REMOVER;
 		}		
 		
-		private function removeSpawnPoint(e: MouseEvent):void
+		private function removeSpawnPoint(spawnPoint:SpawnPoint):void
 		{
-			if (MapMaker._state == MapMaker.SPAWN_POINT_REMOVER)
-			{
-				var spawnPoint : SpawnPoint = SpawnPoint(e.target);
-				removeChild(spawnPoint.labelIconText);
-				removeChild(spawnPoint);
-				var spawnIndex : int = spawnPoints.indexOf(spawnPoint);
-				spawnPoints.splice(spawnIndex, 1);
-				
-				
-				mapMakerPanel.spawn_points.removeItem(spawnPoint);
-				if(mapMakerPanel.spawn_points.length > 0) {
-					mapMakerPanel.spawn_points.selectedItem = mapMakerPanel.spawn_points.getItemAt(0);
-				} else {
-					mapMakerPanel.spawn_points.selectedItem = null;
-				}
+			removeChild(spawnPoint.labelIconText);
+			removeChild(spawnPoint);
+			var spawnIndex : int = spawnPoints.indexOf(spawnPoint);
+			spawnPoints.splice(spawnIndex, 1);
+			
+			
+			mapMakerPanel.spawn_points.removeItem(spawnPoint);
+			if(mapMakerPanel.spawn_points.length > 0) {
+				mapMakerPanel.spawn_points.selectedItem = mapMakerPanel.spawn_points.getItemAt(0);
+			} else {
+				mapMakerPanel.spawn_points.selectedItem = null;
 			}
 		}
 		
@@ -233,8 +255,7 @@ package ui
 		
 		private function onNewSpawnPointButton(e:MouseEvent):void 
 		{
-			Factory.getInstance().clickState = Factory.IDLE;
-			MapMaker.state = SPAWN_POINT_CREATOR;
+			Factory.getInstance().clickState = Factory.SPAWN_POINT_CREATOR;
 		}
 		
 		private function onStageClick(e:MouseEvent):void 
@@ -244,16 +265,32 @@ package ui
 			
 			if (row >= 0 && row < Constants.ROW_NUM && col >= 0 && col < Constants.COL_NUM)
 			{
-				if(MapMaker.state == SPAWN_POINT_CREATOR)
+				var clickedCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+				switch (Factory.getInstance().clickState) 
 				{
-					//trace("row: " + row + " col: " + col);
-					addSpawnPoint(row, col);
-					MapMaker.state = IDLE;
-				} else if (MapMaker.state == ADD_EXIT) {
-					var exitPoint : ExitPoint = new ExitPoint(row, col);
-					model.pathFinder.addExitPoint(exitPoint);
-				} else if (MapMaker.state == REMOVE_EXIT) {
-					model.pathFinder.removeExitPoint(row, col);
+					case Factory.SPAWN_POINT_CREATOR:
+						if(!clickedCell.blocked && !clickedCell.isExit())
+						{	
+							addSpawnPoint(row, col);
+						}
+					break;
+					case Factory.SPAWN_POINT_REMOVER:
+						if(!clickedCell.blocked && !clickedCell.isExit() && clickedCell.isSpawnPoint())
+						{	
+							removeSpawnPoint(clickedCell.spawnPoint);
+						}
+					break;
+					case Factory.ADD_EXIT:
+						if(!clickedCell.blocked && !clickedCell.isSpawnPoint())
+						{
+							var exitPoint : ExitPoint = new ExitPoint(row, col);
+							model.pathFinder.addExitPoint(exitPoint);
+							dispatchEvent(new GameEvents(GameEvents.REDRAW_EXIT_POINTS));
+						}
+					break;
+					case Factory.REMOVE_EXIT:
+						if(clickedCell.isExit()) { model.pathFinder.removeExitPoint(row, col); }
+					break;
 				}
 			}
 		}
@@ -280,19 +317,23 @@ package ui
 		}
 		
 		private function addSpawnPoint(row:Number, col:Number):void 
-		{
+		{			
+			//Create
 			var newSpawnPoint : SpawnPoint = new SpawnPoint(row, col);
+			spawnPoints.push(newSpawnPoint);
+			//Display
+			addChildAt(newSpawnPoint,0);
+			addChildAt(newSpawnPoint.labelIconText,1);
 			
-			if (!isExsistingSpawnPoint(newSpawnPoint))
-			{
-				spawnPoints.push(newSpawnPoint);
-				addChildAt(newSpawnPoint,0);
-				addChildAt(newSpawnPoint.labelIconText,1);
-				
-				mapMakerPanel.spawn_points.addItem(newSpawnPoint);
-				newSpawnPoint.addEventListener(MouseEvent.CLICK, removeSpawnPoint);
-				Factory.getInstance().clickState = Factory.IDLE;
-			}
+			//Set cell
+			model.pathFinder.cellGrid.getCell(row, col).spawnPoint = newSpawnPoint;
+			
+			//Add to the drop down menu
+			mapMakerPanel.spawn_points.addItem(newSpawnPoint);
+			
+			//newSpawnPoint.addEventListener(MouseEvent.CLICK, removeSpawnPoint);
+			Factory.getInstance().clickState = Factory.IDLE;
+			
 		}
 		
 		private function addTowerClick(e:MouseEvent):void 
@@ -303,7 +344,6 @@ package ui
 		private function addEnemy(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.ZOMBIE_SPAWNER;
-			MapMaker._state = IDLE;
 		}
 		
 		private function addWallClick(e:MouseEvent):void 
@@ -371,16 +411,6 @@ package ui
 		private function towerSelect(e:Event):void 
 		{
 			model.buildTowerClass = Class(creatorGui.add_tower_combo.selectedItem.data);
-		}
-		
-		static public function get state():String 
-		{
-			return _state;
-		}
-		
-		static public function set state(value:String):void 
-		{
-			_state = value;
 		}
 		
 	}

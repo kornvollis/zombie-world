@@ -28,7 +28,7 @@ package mvc
 			switch (Factory.getInstance().clickState) 
 			{
 				case Factory.WALL_BUILDER:				
-					if (cell.box == null)
+					if (cell.boxOnIt == null)
 					{
 						Factory.getInstance().addBox(row, col);
 					} else {
@@ -67,7 +67,7 @@ package mvc
 			{
 				var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 				
-				if (cell.box == null) 
+				if (cell.boxOnIt == null) 
 				{
 					Factory.getInstance().addBox(row, col);
 				}

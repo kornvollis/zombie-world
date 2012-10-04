@@ -1,6 +1,7 @@
 package  
 {
 	import flash.geom.Point;
+	import levels.SpawnPoint;
 	import units.Box;
 	import units.Turret;
 	/**
@@ -19,12 +20,19 @@ package
 		public static const TOP_NEXT    : int = 2;
 		public static const BOTTOM_NEXT : int = 3;
 		
-		//
+		/////////////////////////////////////////////////
+		//This is for the pathfinder
 		public var blocked : Boolean = false;
-		public var exit : Boolean = false;
+		
+		public var exitPoint : ExitPoint = null;
+		public var spawnPoint : SpawnPoint = null;
+		
 		//BOX ON IT
-		public var box : Box = null;
-		public var tower : Turret = null;
+		public var boxOnIt   : Box = null;
+		public var towerOnIt : Turret = null;
+		
+		
+		
 		
 		//CELL STATUS
 		public var state : String = Cell.OPEN;
@@ -52,14 +60,27 @@ package
 			super();
 		}
 		
-		public function isBlocked() : Boolean
+		public function isSpawnPoint() : Boolean
 		{
-			return blocked;
+			if (spawnPoint == null) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 		
 		public function isExit() : Boolean
 		{
-			return exit;
+			if (exitPoint == null) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		public function isBlocked() : Boolean
+		{
+			return blocked;
 		}
 		
 		public function get row():int 

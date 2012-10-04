@@ -27,6 +27,13 @@ package
 		public static const REMOVE_BLOCK   : String  = "REMOVE_BLOCK";
 		static public const SELL_TOWER     : String  = "sellTower";
 		
+		//MAP MAKER
+		public static const SPAWN_POINT_CREATOR : String = "spawnPointCreator";
+		public static const SPAWN_POINT_REMOVER : String = "spawnPointRemover";
+		public static const ADD_EXIT : String = "ADD_EXIT";
+		public static const REMOVE_EXIT : String = "REMOVE_EXIT";
+		
+		
 		//TODO: REFACTOR THIS TOO TO THEEEEEE TO THE GAMECONTROLLER
 		public var clickState : String = Factory.IDLE;
 		
@@ -93,14 +100,14 @@ package
 				
 				//CELL fix
 				var cell : Cell = model.pathFinder.cellGrid.getCell(tower.row, tower.col);
-				cell.tower = null;
+				cell.towerOnIt = null;
 			}
 		}
 		
 		public function removeBox(row:int, col:int) : void
 		{
 			var boxCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
-			var b : Box = boxCell.box;
+			var b : Box = boxCell.boxOnIt;
 			
 			if (b != null)
 			{			
@@ -111,7 +118,7 @@ package
 				b.isDeleted = true;
 				var boxIndex : int = model.boxes.indexOf(b);
 				model.boxes.splice(boxIndex, 1);
-				boxCell.box = null;
+				boxCell.boxOnIt = null;
 				
 				model.pathFinder.findPath();
 				model.needPathUpdate = true;
@@ -125,7 +132,7 @@ package
 				var box : Box = new Box(row, col);
 				model.boxes.push(box);
 				model.pathFinder.cellGrid.blockCell(row, col);
-				model.pathFinder.cellGrid.getCell(row, col).box = box;
+				model.pathFinder.cellGrid.getCell(row, col).boxOnIt = box;
 				model.pathFinder.findPath();
 				model.needPathUpdate = true;	
 				model.blockers = model.blockers-1;
@@ -142,7 +149,7 @@ package
 				//var turret : Turret = new Turret(row, col);
 				var tower : Turret = new model.buildTowerClass(row, col);
 				var buildCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
-				buildCell.tower = tower;
+				buildCell.towerOnIt = tower;
 				if(model.coins >= tower.cost)
 				{
 					model.money -= tower.cost;

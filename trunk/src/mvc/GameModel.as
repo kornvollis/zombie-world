@@ -25,7 +25,7 @@ package mvc
 		
 		private var _life : int = 10;
 		private var _money : int = 0;
-		private var _blockers : int = 10;
+		private var _blockers : int = 1000;
 		
 		
 		public var myStage : Stage = null;
