@@ -49,7 +49,8 @@ package ui
 		public function MapMaker(model : GameModel) 
 		{
 			
-			myData.addBlock(5,1);
+			myData.addBlock(5, 1);
+			myData.addTower(5, 3, "Cannon");
 			trace(myData.toXMLString());
 			
 			loadMap(myData);
