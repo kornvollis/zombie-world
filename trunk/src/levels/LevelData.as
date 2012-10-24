@@ -42,12 +42,13 @@ package levels
 			data.towers.appendChild(towerNode);
 		}
 		
-		public function addWave(row:int, col:int, type:String):void
+		public function addWave(start:int, density:int, row:int, col:int, type:String):void
 		{
 			var waveNode : XML = <wave row='' col='' start='' density='40' type='BasicEnemy' />;
 			waveNode.@row = row;
 			waveNode.@col = col;
 			waveNode.@start = start;
+			waveNode.@density = density;
 			waveNode.@type = type;
 		}
 		

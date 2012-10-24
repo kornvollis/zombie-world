@@ -4,6 +4,7 @@ package ui
 	import fl.data.SimpleCollectionItem;
 	import fl.events.SliderEvent;
 	import fl.motion.Motion;
+	import flash.net.FileFilter;
 	import flash.net.FileReference;
 	import levels.LevelData;
 	import levels.Wave;
@@ -49,11 +50,13 @@ package ui
 		public function MapMaker(model : GameModel) 
 		{
 			
-			myData.addBlock(5, 1);
-			myData.addTower(5, 3, "Cannon");
-			trace(myData.toXMLString());
+			//myData.addBlock(5, 1);
+			//myData.addTower(5, 3, "Cannon");
+			//trace(myData.toXMLString());
 			
-			loadMap(myData);
+			loadMapFromFile("map1.xml");
+			
+			//loadMap(myData);
 			
 			// saving out a file
 			//var f:FileReference = new FileReference;
@@ -136,6 +139,19 @@ package ui
 			//COIN CHANGED
 			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
 			Factory.getInstance().addEventListener(GameEvents.UI_MESSAGE, messageArrived);
+		}
+		
+		private function loadMapFromFile(fname:String):void 
+		{
+			var file : FileReference= new FileReference();
+ 
+			var fileTypes:FileFilter = new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png");
+			 
+			var fr : FileReference = new FileReference();
+			fr.browse();
+			
+			//file.browse();
+			//file.addEventListener(Event.SELECT, selectFile);
 		}
 		
 		private function loadMap(myData:LevelData):void 
