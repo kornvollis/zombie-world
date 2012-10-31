@@ -19,7 +19,7 @@ package ui
 		public static var mapMaker : MapMaker;
 		
 		public static var gameInterface : GameInterface;
-		private static var hammerButton : HammerButton = new HammerButton();
+		private static var hammerButton :  HammerButton = new HammerButton();
 		private static var _state : String = GAME_PLAY;
 		
 		private static var model : GameModel;
@@ -35,8 +35,8 @@ package ui
 			//GAMEPANEL
 			gameInterface.y = 605;
 			gameInterface.x = 5;
-			gameInterface.block_button.label = "Box (" + model.blockers + ")";
-			
+			//gameInterface.block_button.label = "Box (" + model.blockers + ")";
+
 			
 			if (_state == MAP_MAKER)
 			{
@@ -55,7 +55,7 @@ package ui
 			
 			addChild(mapMaker);
 			addChild(hammerButton);
-			addChild(gameInterface);
+			//addChild(gameInterface);
 		}
 		
 		private function updateMoney(e:GameEvents):void 

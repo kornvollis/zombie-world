@@ -4,10 +4,13 @@ package ui
 	import fl.data.SimpleCollectionItem;
 	import fl.events.SliderEvent;
 	import fl.motion.Motion;
+	import flash.display.Loader;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
+	import flash.utils.ByteArray;
 	import levels.LevelData;
 	import levels.Wave;
+	import mapMaker.FileManager;
 	import units.Enemy;
 	
 	import flash.display.DisplayObject;
@@ -33,38 +36,15 @@ package ui
 		
 		private var spawnPoints : Vector.<SpawnPoint> = new Vector.<SpawnPoint>();
 		private var waves : Vector.<Wave> = new Vector.<Wave>();
+			
+		private var levelData : LevelData = new LevelData();
+		private var fileReader:FileReference = new FileReference();
 		
-		private var xmlMap : XML = 
-			<map> 
-				<turrets> 
-					
-				</turrets> 
-				<blocks> 
-					<menuName>fries</menuName> 
-					<price>1.45</price> 
-				</blocks> 
-			</map>
-		
-			private var myData : LevelData = new LevelData();
-		
+		private	var fileManager:FileManager = new FileManager();
+			
+			
 		public function MapMaker(model : GameModel) 
-		{
-			
-			//myData.addBlock(5, 1);
-			//myData.addTower(5, 3, "Cannon");
-			//trace(myData.toXMLString());
-			
-			loadMapFromFile("map1.xml");
-			
-			//loadMap(myData);
-			
-			// saving out a file
-			//var f:FileReference = new FileReference;
-			//f.save( xmlMap, "myXML.xml" ); 
-			
-			
-			
-			
+		{			
 			this.model = model;
 			creatorGui.y = 600;
 			mapMakerPanel.x = 730;
@@ -88,11 +68,6 @@ package ui
 			creatorGui.add_enemy_combo.addItem({ label: "Cannon tower", data: Cannon});
 			
 			mapMakerPanel.enemy_type.addItem( { label: "Basic enemy", data: BasicEnemy } );
-			
-			
-			//TEMP STUFF DELETE IT
-			addSpawnPoint(20, 20);
-			addSpawnPoint(20, 10);
 			
 ////////////LISTENERS///////////////////////////////////////////////////////////////////////////
 			//STAGE CLICK
@@ -124,6 +99,11 @@ package ui
 			//START BUTTON CLICK
 			mapMakerPanel.startMap_button.addEventListener(MouseEvent.CLICK, onStartMapClick);
 			
+			//LOAD BUTTON CLICK
+			mapMakerPanel.load_button.addEventListener(MouseEvent.CLICK, onLoadClick);
+			
+			//SAVE BUTTON CLICK
+			mapMakerPanel.save_button.addEventListener(MouseEvent.CLICK, onSaveClick);
 			
 			//RIGHT COLUMN
 			mapMakerPanel.add_wave.addEventListener(MouseEvent.CLICK, addWave);
@@ -134,6 +114,8 @@ package ui
 			mapMakerPanel.addExit_button.addEventListener(MouseEvent.CLICK, onAddExit);
 			mapMakerPanel.removeExit_button.addEventListener(MouseEvent.CLICK, onRemoveExit);
 			
+			//FILE MANAGER
+			fileManager.addEventListener(Event.COMPLETE, mapLoaded);
 			
 			//EVENT LISTENERS
 			//COIN CHANGED
@@ -141,31 +123,44 @@ package ui
 			Factory.getInstance().addEventListener(GameEvents.UI_MESSAGE, messageArrived);
 		}
 		
-		private function loadMapFromFile(fname:String):void 
-		{
-			var file : FileReference= new FileReference();
- 
-			var fileTypes:FileFilter = new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png");
-			 
-			var fr : FileReference = new FileReference();
-			fr.browse();
+		private function processLevelData(levelData : LevelData) : void
+		{			
 			
-			//file.browse();
-			//file.addEventListener(Event.SELECT, selectFile);
-		}
-		
-		private function loadMap(myData:LevelData):void 
-		{
-			//LOOP BLOCKS
-			/*
-			for each (var block : XML in myData.blocks) 
+			
+			//LOAD WALLS
+			for each (var wall : XML in myXML.wall ) 
 			{
-				row  = block.attribute("row");
-				col  = block.attribute("col");
+				row  = wall.attribute("row");
+				col  = wall.attribute("col");
 				
+				trace("Adding wall: " + row + ", col " +  col);
 				Factory.getInstance().addBox(row, col);
 			}
-			*/
+			
+			//LOAD TOWERS
+			for each (var tower : XML in myXML.tower ) 
+			{
+				row  = tower.attribute("row");
+				col  = tower.attribute("col");
+				
+				trace("Adding tower: " + row + ", col " +  col);
+				Factory.getInstance().addTower(row, col);
+			}
+		}
+		
+		private function onSaveClick(e:MouseEvent):void 
+		{
+			fileManager.saveFile();
+		}
+		
+		private function onLoadClick(e:MouseEvent):void 
+		{
+			fileManager.loadFile();
+		}
+		
+		private function mapLoaded(e:Event):void 
+		{
+			var levelData : LevelData = fileManager.getLevel();
 		}
 		
 		private function onRemoveExit(e:MouseEvent):void 

@@ -39,8 +39,6 @@ package mvc
 		//TODO KISZEDNI
 		public var levelLoader : LevelLoader;
 		
-		
-		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
 		
@@ -49,6 +47,8 @@ package mvc
 		public var buildTowerClass : Class = null;
 		public var spawnEnemyClass : Class = null;
 		
+		//GAME SCREENS
+			
 		
 		public function GameModel() 
 		{

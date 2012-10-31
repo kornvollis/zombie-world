@@ -13,14 +13,14 @@ package ui
 		public function GameInterface(model : GameModel) 
 		{
 			this.model = model;
-			this.block_button.addEventListener(MouseEvent.CLICK, onBlockBuildClick);
+			//this.block_button.addEventListener(MouseEvent.CLICK, onBlockBuildClick);
 			
 			model.addEventListener(GameEvents.BLOCKS_CHANGED, updateBlocks);
 		}
 		
 		private function updateBlocks(e:GameEvents):void 
 		{
-			block_button.label = "Box (" + model.blockers + ")";
+			//block_button.label = "Box (" + model.blockers + ")";
 		}
 		
 		private function onBlockBuildClick(e:MouseEvent):void 

@@ -31,6 +31,11 @@ package levels
 			</map>;
 		}
 		
+		public function loadMapData(xmlData : XML) : void
+		{
+			this.data = xmlData;
+		}
+		
 		public function addTower(row:int, col:int, type:String):void
 		{
 			var towerNode : XML = <tower row='' col='' type='' />;
