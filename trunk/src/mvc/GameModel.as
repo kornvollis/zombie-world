@@ -1,10 +1,15 @@
 package mvc
 {
 	
+	import fl.events.ScrollEvent;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
+	import org.as3commons.collections.ArrayList;
+	import org.as3commons.collections.framework.IOrderedListIterator;
+	import screens.GameScreen;
+	import screens.Screen;
 	import units.Box;
 	import units.Enemy;
 	import units.Projectil;
@@ -30,14 +35,12 @@ package mvc
 		
 		public var myStage : Stage = null;
 		
-		
-		private var _turrets : Vector.<Turret> = new Vector.<Turret>;
-		private var _enemies  : Vector.<Enemy>   = new Vector.<Enemy>();
-		private var _boxes    : Vector.<Box> = new Vector.<Box>();
+		//public var arraylist : ArrayList = new ArrayList();
+		public var towers       : ArrayList = new ArrayList();
+		private var _enemies    : Vector.<Enemy>   = new Vector.<Enemy>();
+		private var _boxes      : Vector.<Box> = new Vector.<Box>();
 		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
 		
-		//TODO KISZEDNI
-		public var levelLoader : LevelLoader;
 		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
@@ -48,15 +51,27 @@ package mvc
 		public var spawnEnemyClass : Class = null;
 		
 		//GAME SCREENS
-			
+		public var gameScreen : GameScreen = new GameScreen();
 		
 		public function GameModel() 
 		{
 			//SET PATHFINDER
 			pathFinder = new PathFinder(this);
 			//pathFinder  = new PathFinder(this);
-			levelLoader = new LevelLoader(this);
-			money = 100;
+			
+		}
+		
+		public function removeTowers() : void 
+		{
+			var iterator : IOrderedListIterator = towers.iterator() as IOrderedListIterator;
+			trace("hello");
+            while (iterator.hasNext()) 
+			{
+				trace("maki");
+				var t: Turret = iterator.next();
+				gameScreen.removeChild(t);
+				towers.remove(t);
+			}
 		}
 		
 		public function getNextTargetFor(row: int, col : int) : Point
@@ -109,7 +124,7 @@ package mvc
 		
 		public function update(e: Event) : void
 		{
-			for each(var turret:Turret in _turrets)
+			for each(var turret:Turret in towers)
 			{
 				turret.update();
 				
@@ -192,16 +207,6 @@ package mvc
 			lifeChangedEvent.data = life;
 			dispatchEvent(lifeChangedEvent);
 			
-		}
-		
-		public function get turrets():Vector.<Turret> 
-		{
-			return _turrets;
-		}
-		
-		public function set turrets(value:Vector.<Turret>):void 
-		{
-			_turrets = value;
 		}
 		
 		public function get projectils():Vector.<Projectil> 

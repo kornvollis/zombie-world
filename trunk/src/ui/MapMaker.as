@@ -126,26 +126,6 @@ package ui
 		private function processLevelData(levelData : LevelData) : void
 		{			
 			
-			
-			//LOAD WALLS
-			for each (var wall : XML in myXML.wall ) 
-			{
-				row  = wall.attribute("row");
-				col  = wall.attribute("col");
-				
-				trace("Adding wall: " + row + ", col " +  col);
-				Factory.getInstance().addBox(row, col);
-			}
-			
-			//LOAD TOWERS
-			for each (var tower : XML in myXML.tower ) 
-			{
-				row  = tower.attribute("row");
-				col  = tower.attribute("col");
-				
-				trace("Adding tower: " + row + ", col " +  col);
-				Factory.getInstance().addTower(row, col);
-			}
 		}
 		
 		private function onSaveClick(e:MouseEvent):void 

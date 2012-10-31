@@ -42,6 +42,8 @@ package
 			//GAME MODEL
 			model = new GameModel();
 			model.myStage = stage;
+			
+			//DEPRI
 			controller = new GameController(model);
 			view = new GameView(model, controller);
 			
@@ -49,7 +51,10 @@ package
 			Factory.getInstance().setView(view);
 			Factory.getInstance().init();
 			
-			addChild(view);
+			//addChild(view);
+			
+			//TEMP
+			addChild(model.gameScreen);
 			
 			dispatchEvent(new GameEvents(GameEvents.TURRET_SELL_EVENT));
 		}

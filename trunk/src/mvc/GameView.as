@@ -193,6 +193,7 @@ package mvc
 		
 		public function update(e:Event) : void
 		{
+			/*
 			//UPDATE TURRETS
 			for each(var turret : Turret in model.turrets) 
 			{
@@ -206,6 +207,7 @@ package mvc
 				
 				
 			}
+			*/
 			
 			//UPDATE ZOMBIES
 			for each(var enemy : Enemy in model.enemies) 

@@ -56,9 +56,10 @@ package
 		{
 			//model.levelLoader.loadLevel(1);
 			//TEMP STUFF
-			//model.pathFinder.findPath();
 			
-			//model.dispatchEvent(new Event(GameEvents.REDRAW_EXIT_POINTS));
+			Factory.getInstance().addTower2(5, 5);
+			
+			model.removeTowers();
 		}	
 		
 		public static function getInstance():Factory
@@ -86,6 +87,7 @@ package
 		
 		public function sellTower(tower: Turret) : void
 		{
+			/*
 			if (Factory.getInstance().clickState == Factory.SELL_TOWER)
 			{
 				if (tower.onStage)
@@ -102,6 +104,7 @@ package
 				var cell : Cell = model.pathFinder.cellGrid.getCell(tower.row, tower.col);
 				cell.towerOnIt = null;
 			}
+			*/
 		}
 		
 		public function removeBox(row:int, col:int) : void
@@ -139,8 +142,18 @@ package
 			}
 		}
 		
+		public function addTower2(row:int, col:int): void 
+		{
+			var t : Turret = new Turret(row, col);
+			
+			model.towers.add(t);
+			
+			model.gameScreen.addChild(t);
+		}
+			
 		public function addTower(row:int, col:int): Turret 
 		{
+			/*
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
 			{
@@ -163,7 +176,7 @@ package
 					return tower;
 				}
 			}
-			
+			*/
 			return null;
 		}
 		
