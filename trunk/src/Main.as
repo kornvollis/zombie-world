@@ -19,8 +19,8 @@ package
 	public class Main extends Sprite 
 	{
 		private var model : GameModel;
-		private var view  : GameView;
-		private var controller : GameController;
+		//private var view  : GameView;
+		//private var controller : GameController;
 		
 		public function Main():void 
 		{			
@@ -44,17 +44,17 @@ package
 			model.myStage = stage;
 			
 			//DEPRI
-			controller = new GameController(model);
-			view = new GameView(model, controller);
+			//controller = new GameController(model);
+			//view = new GameView(model, controller);
 			
 			Factory.getInstance().setModel(model);
-			Factory.getInstance().setView(view);
+			//Factory.getInstance().setView(view);
 			Factory.getInstance().init();
 			
 			//addChild(view);
 			
 			//TEMP
-			addChild(model.gameScreen);
+			addChild(model);
 			
 			dispatchEvent(new GameEvents(GameEvents.TURRET_SELL_EVENT));
 		}
@@ -64,7 +64,7 @@ package
 			
 			//trace("update");
 			model.update(e);
-			view.update(e);
+			//view.update(e);
 			
 			//var updateTime : int = getTimer() - updateStart;
 			//trace("Update time: " + updateTime);

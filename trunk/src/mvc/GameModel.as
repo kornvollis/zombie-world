@@ -2,6 +2,7 @@ package mvc
 {
 	
 	import fl.events.ScrollEvent;
+	import flash.display.MovieClip;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -23,7 +24,7 @@ package mvc
 	 * ...
 	 * @author OML!
 	 */
-	public class GameModel extends EventDispatcher
+	public class GameModel extends MovieClip
 	{
 		// EVENTS //***********************************************************//		
 		private var lifeChangedEvent : GameEvents;
@@ -51,14 +52,16 @@ package mvc
 		public var spawnEnemyClass : Class = null;
 		
 		//GAME SCREENS
-		public var gameScreen : GameScreen = new GameScreen();
+		public var gameScreen : GameScreen;
 		
 		public function GameModel() 
 		{
 			//SET PATHFINDER
 			pathFinder = new PathFinder(this);
 			//pathFinder  = new PathFinder(this);
+			gameScreen = new GameScreen(this);
 			
+			addChild(gameScreen);
 		}
 		
 		public function removeTowers() : void 

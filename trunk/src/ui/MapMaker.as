@@ -11,6 +11,7 @@ package ui
 	import levels.LevelData;
 	import levels.Wave;
 	import mapMaker.FileManager;
+	import screens.GameScreen;
 	import units.Enemy;
 	
 	import flash.display.DisplayObject;
@@ -31,6 +32,8 @@ package ui
 		private var creatorGui : MapCreator = new MapCreator();
 		private var mapMakerPanel : MapMakerPanel = new MapMakerPanel();
 		private var model : GameModel;
+		private var gameScreen : GameScreen;
+		
 		
 		private var waveNum : int = 0;
 		
@@ -43,8 +46,9 @@ package ui
 		private	var fileManager:FileManager = new FileManager();
 			
 			
-		public function MapMaker(model : GameModel) 
+		public function MapMaker(model : GameModel, gameScreen : GameScreen) 
 		{			
+			this.gameScreen = gameScreen;
 			this.model = model;
 			creatorGui.y = 600;
 			mapMakerPanel.x = 730;
@@ -54,7 +58,6 @@ package ui
 			//INTI SELECTION
 			model.buildTowerClass = PointDefense;
 			model.spawnEnemyClass = BasicEnemy;
-			
 			
 			//DENSITY
 			mapMakerPanel.delay_input.text =  mapMakerPanel.spawn_density.value.toString();
@@ -70,9 +73,14 @@ package ui
 			mapMakerPanel.enemy_type.addItem( { label: "Basic enemy", data: BasicEnemy } );
 			
 ////////////LISTENERS///////////////////////////////////////////////////////////////////////////
+			addEventlisteners();
+		}
+		
+		private function addEventlisteners():void 
+		{
 			//STAGE CLICK
-			model.myStage.addEventListener(MouseEvent.CLICK, onStageClick);
-
+			gameScreen.addEventListener(MouseEvent.CLICK, onGameScreenClick);
+			
 			//DENSITY
 			mapMakerPanel.spawn_density.addEventListener(SliderEvent.CHANGE, onDenistySliderChange);
 			mapMakerPanel.delay_input.addEventListener(KeyboardEvent.KEY_DOWN, onDensityInputKeyDown);
@@ -120,7 +128,6 @@ package ui
 			//EVENT LISTENERS
 			//COIN CHANGED
 			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
-			Factory.getInstance().addEventListener(GameEvents.UI_MESSAGE, messageArrived);
 		}
 		
 		private function processLevelData(levelData : LevelData) : void
@@ -250,7 +257,7 @@ package ui
 			Factory.getInstance().clickState = Factory.SPAWN_POINT_CREATOR;
 		}
 		
-		private function onStageClick(e:MouseEvent):void 
+		private function onGameScreenClick(e:MouseEvent):void 
 		{
 			var row : int = e.stageY / Constants.CELL_SIZE;
 			var col : int = e.stageX / Constants.CELL_SIZE;

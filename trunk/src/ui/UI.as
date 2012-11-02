@@ -28,7 +28,8 @@ package ui
 		{
 			UI.model = model;
 			gameInterface = new GameInterface(model);
-			mapMaker = new MapMaker(model);
+			//TODOOO
+			//mapMaker = new MapMaker(model);
 			
 			hammerButton.y = 3;
 			hammerButton.x = 725;			

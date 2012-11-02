@@ -1,18 +1,27 @@
 package screens 
 {
+	import mvc.GameModel;
+	import ui.MapMaker;
 	/**
 	 * ...
 	 * @author OML!
 	 */
 	public class GameScreen extends Screen 
 	{
+		private var model : GameModel;
+		private var mapMaker : MapMaker;
 		
-		public function GameScreen() 
+		
+		public function GameScreen(model : GameModel) 
 		{
+			this.model = model;
 			//GRID GRPHICS
 			drawGrid();
 			
+			//MAP MAKER
+			mapMaker = new MapMaker(model, this);
 			
+			addChild(mapMaker);
 		}
 		
 		private function drawGrid() : void
