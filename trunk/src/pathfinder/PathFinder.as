@@ -78,7 +78,7 @@ package pathfinder
 			model.needPathUpdate = true;
 		}	
 		
-		public function addExitPoint(exitPoint : ExitPoint) : void
+		public function addExitPoint(exitPoint : ExitPoint) : Boolean
 		{
 			var cell : Cell = cellGrid.getCell(exitPoint.row, exitPoint.col);
 			
@@ -92,7 +92,11 @@ package pathfinder
 				dispatchEvent(new GameEvents(GameEvents.PATH_ADD_EXIT_POINT));
 				//trace("cell in: " + cellGrid.getCell(exitPoint.row, exitPoint.col).exit + " isExit" );
 				findPath();
+				
+				return true;
 			}
+			
+			return false;
 		}
 		
 		public function removeExitPoint(row: int, col: int):void 

@@ -11,20 +11,28 @@ package
 		public var row : int;
 		public var col : int;
 		
+		public var clickCallBack : Function = null;
+		
 		public function ExitPoint(row:int, col:int) 
 		{
 			this.col = col;
 			this.row = row;
 			//TEMP Graphics
-			graphics.beginFill(0x0000FF, 0.2);
-			graphics.drawRect(col * Constants.CELL_SIZE, row * Constants.CELL_SIZE, Constants.CELL_SIZE, Constants.CELL_SIZE);
+			graphics.beginFill(0x0000FF, 1);
+			graphics.drawRect(0,0, Constants.CELL_SIZE, Constants.CELL_SIZE);
+			
+			this.x = col * Constants.CELL_SIZE;
+			this.y = row  * Constants.CELL_SIZE;
 			
 			addEventListener(MouseEvent.CLICK, onClick);
 		}
 		
 		private function onClick(e:MouseEvent):void 
 		{
-			dispatchEvent(new GameEvents(GameEvents.EXIT_POINT_CLICK));
+			if (clickCallBack != null && Factory.getInstance().clickState == Factory.REMOVE_EXIT)
+			{
+				clickCallBack();
+			}
 		}
 	}
 }

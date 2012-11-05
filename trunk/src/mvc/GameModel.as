@@ -26,7 +26,7 @@ package mvc
 	 */
 	public class GameModel extends MovieClip
 	{
-		// EVENTS //***********************************************************//		
+		// EVENTS //***********************************//		
 		private var lifeChangedEvent : GameEvents;
 		
 		private var _life : int = 10;
@@ -38,18 +38,13 @@ package mvc
 		
 		//public var arraylist : ArrayList = new ArrayList();
 		public var towers       : ArrayList = new ArrayList();
-		private var _enemies    : Vector.<Enemy>   = new Vector.<Enemy>();
+		public var enemies      : ArrayList = new ArrayList();
 		private var _boxes      : Vector.<Box> = new Vector.<Box>();
 		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
 		
 		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
-		
-		
-		//BUILD STUFF///
-		public var buildTowerClass : Class = null;
-		public var spawnEnemyClass : Class = null;
 		
 		//GAME SCREENS
 		public var gameScreen : GameScreen;
@@ -62,19 +57,6 @@ package mvc
 			gameScreen = new GameScreen(this);
 			
 			addChild(gameScreen);
-		}
-		
-		public function removeTowers() : void 
-		{
-			var iterator : IOrderedListIterator = towers.iterator() as IOrderedListIterator;
-			trace("hello");
-            while (iterator.hasNext()) 
-			{
-				trace("maki");
-				var t: Turret = iterator.next();
-				gameScreen.removeChild(t);
-				towers.remove(t);
-			}
 		}
 		
 		public function getNextTargetFor(row: int, col : int) : Point
@@ -147,7 +129,7 @@ package mvc
 				}
 			}
 			
-			for each(var enemy:Enemy in _enemies)
+			for each(var enemy:Enemy in enemies)
 			{
 				enemy.update();
 				
@@ -236,16 +218,6 @@ package mvc
 		{
 			_money = value;
 			dispatchEvent(new GameEvents(GameEvents.COIN_CHANGED));
-		}
-		
-		public function get enemies():Vector.<Enemy> 
-		{
-			return _enemies;
-		}
-		
-		public function set enemies(value:Vector.<Enemy>):void 
-		{
-			_enemies = value;
 		}
 		
 		public function get blockers():int 

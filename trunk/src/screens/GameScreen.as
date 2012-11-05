@@ -14,12 +14,17 @@ package screens
 		
 		public function GameScreen(model : GameModel) 
 		{
-			this.model = model;
-			//GRID GRPHICS
-			drawGrid();
-			
+			this.model = model;			
 			//MAP MAKER
 			mapMaker = new MapMaker(model, this);
+			
+			
+			//TEMP GRAPHICS
+			graphics.beginFill(0x116601);
+			graphics.drawRect(0, 0, 720, 600);
+			
+			//GRID GRPHICS
+			drawGrid();
 			
 			addChild(mapMaker);
 		}

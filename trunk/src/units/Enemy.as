@@ -30,10 +30,6 @@ package units
 		public var row : int = -1;
 		public var col : int = -1;
 		
-		/*
-		public var currentCell : Cell = null;
-		public var targetCell : Cell = null;
-		*/
 		public function Enemy(row: int, col :int) 
 		{
 			this.row = row;
@@ -41,6 +37,9 @@ package units
 			
 			this.position.x = col * Constants.CELL_SIZE + Constants.CELL_SIZE/2;			
 			this.position.y = row * Constants.CELL_SIZE + Constants.CELL_SIZE/2;
+			this.x = position.x;
+			this.y = position.y;
+			
 			
 			//TEMP Graphics
 			this.graphics.beginFill(0x009900);

@@ -44,8 +44,9 @@ package ui
 		private var fileReader:FileReference = new FileReference();
 		
 		private	var fileManager:FileManager = new FileManager();
-			
-			
+		
+		private var buildTowerClass : Class = PointDefense;
+		private var	spawnEnemyClass : Class = BasicEnemy;
 		public function MapMaker(model : GameModel, gameScreen : GameScreen) 
 		{			
 			this.gameScreen = gameScreen;
@@ -54,10 +55,6 @@ package ui
 			mapMakerPanel.x = 730;
 			addChild(creatorGui);
 			addChild(mapMakerPanel);
-			
-			//INTI SELECTION
-			model.buildTowerClass = PointDefense;
-			model.spawnEnemyClass = BasicEnemy;
 			
 			//DENSITY
 			mapMakerPanel.delay_input.text =  mapMakerPanel.spawn_density.value.toString();
@@ -72,7 +69,7 @@ package ui
 			
 			mapMakerPanel.enemy_type.addItem( { label: "Basic enemy", data: BasicEnemy } );
 			
-////////////LISTENERS///////////////////////////////////////////////////////////////////////////
+			//LISTENERS///////////////////////////////////////////////////////////////////////////
 			addEventlisteners();
 		}
 		
@@ -194,7 +191,7 @@ package ui
 					selectedWave.col = spawnPoint.col;
 					selectedWave.setStartTime(spawnTime);
 					selectedWave.setDelay(delay);
-					selectedWave.enemy = mapMakerPanel.enemy_type.selectedItem.data;					
+					selectedWave.TypeOfEnemy = mapMakerPanel.enemy_type.selectedItem.data;					
 					selectedWave.numOfEnemies = numOfEnemies;
 					
 					
@@ -267,6 +264,18 @@ package ui
 				var clickedCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 				switch (Factory.getInstance().clickState) 
 				{
+					case Factory.ENEMY_SPAWNER:
+						if(!clickedCell.blocked && !clickedCell.isExit())
+						{	
+							Factory.getInstance().addEnemy(row, col, this.spawnEnemyClass);
+						}
+					break;
+					case Factory.TOWER_BUILDER:
+						if(!clickedCell.blocked && !clickedCell.isExit())
+						{	
+							Factory.getInstance().addTower(row, col, this.buildTowerClass, true);
+						}
+					break;
 					case Factory.SPAWN_POINT_CREATOR:
 						if(!clickedCell.blocked && !clickedCell.isExit())
 						{	
@@ -283,12 +292,15 @@ package ui
 						if(!clickedCell.blocked && !clickedCell.isSpawnPoint())
 						{
 							var exitPoint : ExitPoint = new ExitPoint(row, col);
-							model.pathFinder.addExitPoint(exitPoint);
-							dispatchEvent(new GameEvents(GameEvents.REDRAW_EXIT_POINTS));
+							
+							Factory.getInstance().addExitPoint(exitPoint);
 						}
 					break;
 					case Factory.REMOVE_EXIT:
-						if(clickedCell.isExit()) { model.pathFinder.removeExitPoint(row, col); }
+						if (clickedCell.isExit()) { 
+							model.pathFinder.removeExitPoint(row, col); 
+							model.gameScreen.removeChild(clickedCell.exitPoint);
+						}
 					break;
 				}
 			}
@@ -337,12 +349,12 @@ package ui
 		
 		private function addTowerClick(e:MouseEvent):void 
 		{
-			Factory.getInstance().clickState = Factory.TURRET_BUILDER;
+			Factory.getInstance().clickState = Factory.TOWER_BUILDER;
 		}
 		
 		private function addEnemy(e:MouseEvent):void 
 		{
-			Factory.getInstance().clickState = Factory.ZOMBIE_SPAWNER;
+			Factory.getInstance().clickState = Factory.ENEMY_SPAWNER;
 		}
 		
 		private function addWallClick(e:MouseEvent):void 
@@ -402,14 +414,14 @@ package ui
 		
 		private function enemySelect(e:Event):void 
 		{
-			model.spawnEnemyClass = Class(creatorGui.add_enemy_combo.selectedItem.data);
+			spawnEnemyClass = Class(creatorGui.add_enemy_combo.selectedItem.data);
 		}
 		
 		
 		
 		private function towerSelect(e:Event):void 
 		{
-			model.buildTowerClass = Class(creatorGui.add_tower_combo.selectedItem.data);
+			buildTowerClass = Class(creatorGui.add_tower_combo.selectedItem.data);
 		}
 		
 	}

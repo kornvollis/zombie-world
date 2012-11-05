@@ -19,6 +19,7 @@ package mvc
 		
 		public function myClick(e:MouseEvent):void 
 		{
+			/*
 			//Just for the test			
 			var row:int = (e.stageY-Constants.MAP_OFFSET_Y) / Constants.CELL_SIZE;
 			var col:int = (e.stageX-Constants.MAP_OFFSET_X) / Constants.CELL_SIZE;	
@@ -35,22 +36,23 @@ package mvc
 						Factory.getInstance().removeBox(row, col);
 					}
 				break;
-				case Factory.ZOMBIE_SPAWNER:
-					Factory.getInstance().addZombie(row, col);
+				case Factory.ENEMY_SPAWNER:
+					//Factory.getInstance().addEnemy(row, col, this.);
 				break;
-				case Factory.TURRET_BUILDER:
-					Factory.getInstance().addTower(row, col);
+				case Factory.TOWER_BUILDER:
+					Factory.getInstance().addTower(row, col, null);
 				break;
 				case Factory.REMOVE_BLOCK:
 					Factory.getInstance().removeBox(row, col);
 				break;
 				case Factory.SELL_TOWER:
-					/*if (cell.tower != null) {
+					if (cell.tower != null) {
 						Factory.getInstance().sellTower(cell.tower);
-					}*/
+					}
 				break;
 				default:
 			}
+			*/
 		}
 		
 		public function mouseDown(e:MouseEvent):void 

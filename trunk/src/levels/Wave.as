@@ -18,7 +18,7 @@ package levels
 		public var row : int;
 		public var col : int;
 		public var numOfEnemies:int;
-		public var enemy : Class;
+		public var TypeOfEnemy : Class;
 		
 		//FOR COMBOBOX
 		public var label : String;
@@ -31,7 +31,7 @@ package levels
 			this.startTimeSec = startTimeSec;
 			this.spawnDelayMilliSec = spawnDelayMilliSec;
 			this.numOfEnemies = num;
-			this.enemy = enemy;
+			this.TypeOfEnemy = enemy;
 			this.spawnPoint = spawnPoint;
 			this.row = spawnPoint.row;
 			this.col = spawnPoint.col;
@@ -70,12 +70,12 @@ package levels
 		
 		public function refreshLabel():void 
 		{
-			this.label = "S: " + startTimeSec + " | " + "#: " + numOfEnemies + " | " + "D: " + spawnDelayMilliSec + "T: " + enemy;
+			this.label = "S: " + startTimeSec + " | " + "#: " + numOfEnemies + " | " + "D: " + spawnDelayMilliSec + "T: " + TypeOfEnemy;
 		}
 		
 		private function spawnUnit(e:TimerEvent):void 
 		{
-			Factory.getInstance().addZombie(row, col);
+			Factory.getInstance().addEnemy(row, col, TypeOfEnemy);
 		}
 		
 		private function startWave(e:TimerEvent):void 

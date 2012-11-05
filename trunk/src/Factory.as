@@ -9,6 +9,7 @@ package
 	import mvc.GameModel;
 	import debug.ZDebug;
 	import mvc.GameView;
+	import org.as3commons.collections.framework.IOrderedListIterator;
 	import pathfinder.PathFinder;
 	import units.Box;
 	import units.Enemy;
@@ -21,8 +22,8 @@ package
 	{
 		//TODO: REFACTORING THIS TO THE GAMECONTROLLER
 		public static const WALL_BUILDER   : String  = "WALL_BUILDER";
-		public static const ZOMBIE_SPAWNER : String  = "ZOMBIE_SPAWNER";
-		public static const TURRET_BUILDER : String  = "TURRET_BUILDER";
+		public static const ENEMY_SPAWNER : String  = "ZOMBIE_SPAWNER";
+		public static const TOWER_BUILDER : String  = "TURRET_BUILDER";
 		public static const IDLE 		   : String  = "IDLE_FACTORY";
 		public static const REMOVE_BLOCK   : String  = "REMOVE_BLOCK";
 		static public const SELL_TOWER     : String  = "sellTower";
@@ -57,9 +58,9 @@ package
 			//model.levelLoader.loadLevel(1);
 			//TEMP STUFF
 			
-			Factory.getInstance().addTower2(5, 5);
+			//Factory.getInstance().addTower2(5, 5);
 			
-			model.removeTowers();
+			//removeTowers();
 		}	
 		
 		public static function getInstance():Factory
@@ -77,6 +78,19 @@ package
 		public function setView(view: GameView) :void
 		{
 			Factory.view = view;
+		}
+		
+		public function removeTowers() : void 
+		{
+			var iterator : IOrderedListIterator = model.towers.iterator() as IOrderedListIterator;
+			trace("hello");
+            while (iterator.hasNext()) 
+			{
+				trace("maki");
+				var t: Turret = iterator.next();
+				model.gameScreen.removeChild(t);
+				model.towers.remove(t);
+			}
 		}
 		
 		public function createProjectil(posX:int, posY:int, target : GameObject) : void
@@ -141,79 +155,53 @@ package
 				model.blockers = model.blockers-1;
 			}
 		}
-		
-		public function addTower2(row:int, col:int): void 
+			
+		public function addTower(row:int, col:int, TowerType : Class, isFree: Boolean = false ): void 
 		{
-			var t : Turret = new Turret(row, col);
-			
-			model.towers.add(t);
-			
-			model.gameScreen.addChild(t);
-		}
-			
-		public function addTower(row:int, col:int): Turret 
-		{
-			/*
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
 			{
 				throw(new Error("addTurret row, col out of bound"));
 			} else {
 				//var turret : Turret = new Turret(row, col);
-				var tower : Turret = new model.buildTowerClass(row, col);
+				var tower : Turret = new TowerType(row, col);
 				var buildCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 				buildCell.towerOnIt = tower;
-				if(model.coins >= tower.cost)
+				if (model.coins >= tower.cost || isFree == true )
 				{
 					model.money -= tower.cost;
-					model.turrets.push(tower);
-					
-					
-					var gameEvent : GameEvents =  new GameEvents(GameEvents.UI_MESSAGE);
-					gameEvent.data = "Tower built";
-					dispatchEvent(gameEvent);
-					
-					return tower;
+					model.towers.add(tower);
+					model.gameScreen.addChild(tower);
 				}
 			}
-			*/
-			return null;
 		}
 		
-		public function addZombie(row:int, col:int):Enemy 
+		public function addEnemy(row:int, col:int, TypeOfEnemy: Class):void
 		{
+			trace("enemiiii");
+			
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
 			{
-				throw(new Error("addZombie row, col out of bound"));
+				throw(new Error("addEnemy row, col out of bound"));
 			} else {
 				if (model != null)
 				{
-					var zombie : Enemy = new model.spawnEnemyClass(row, col);
-					model.enemies.push(zombie);
-					
-					return zombie;
+					var enemy : Enemy = new TypeOfEnemy(row, col);
+					model.enemies.add(enemy);
+					model.gameScreen.addChild(enemy);
 				}
 			}
-			
-			return null;
 		}
 		
 		public function removeAllEnemy():void 
 		{
-			for each (var e: Enemy in model.enemies) 
-			{
-				if (view.contains(e)) view.mapAreaLayer2.removeChild(e);
-			}
 			
-			for (var i:int = 0; i < model.enemies.length; i++) 
-			{
-				model.enemies.pop();
-			}
 		}
 		
 		public function removeEnemy(e : Enemy):void 
 		{
+			/*
 			if (e.onStage)
 			{
 				if(view.contains(e)) view.mapAreaLayer2.removeChild(e);
@@ -223,6 +211,7 @@ package
 			enemy.isDeleted = true;
 			var enemyIndex : int = model.enemies.indexOf(enemy);
 			model.enemies.splice(enemyIndex, 1);
+			*/
 		}
 		
 		public function removeProjectil(e : Projectil):void 
@@ -235,6 +224,25 @@ package
 			if (e.onStage)
 			{
 				view.mapAreaLayer2.removeChild(e);
+			}
+		}
+		
+		public function removeExitPoint(exitPoint:ExitPoint):void 
+		{
+			model.pathFinder.removeExitPoint(exitPoint.row, exitPoint.col);
+		}
+		
+		public function addExitPoint(exitPoint: ExitPoint):void 
+		{
+			if (model.pathFinder.addExitPoint(exitPoint))
+			{
+				model.gameScreen.addChild(exitPoint);
+				
+				exitPoint.clickCallBack = function removeExitCallBack():void {
+					trace("karvaj");
+					Factory.getInstance().removeExitPoint(exitPoint);
+					model.gameScreen.removeChild(exitPoint); 
+				};
 			}
 		}
 	}

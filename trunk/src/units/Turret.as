@@ -57,6 +57,8 @@ package units
 			
 			position.x = col * Constants.CELL_SIZE;
 			position.y = row * Constants.CELL_SIZE;
+			this.x = position.x;
+			this.y = position.y;
 			
 			this.graphics.beginFill(0x759933);
 			this.graphics.drawRect(0, 0, Constants.CELL_SIZE, Constants.CELL_SIZE);
