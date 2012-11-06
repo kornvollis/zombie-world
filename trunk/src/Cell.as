@@ -53,15 +53,15 @@ package
 		public var next_direction : int = Cell.NULL_NEXT;
 		public var next_alternate_direction : int = Cell.NULL_NEXT;
 		
+		public var next_cell : Cell = null;
+		
 		public var size : int = Constants.CELL_SIZE; 
 		
-		public function Cell() 
-		{
+		public function Cell() {
 			super();
 		}
 		
-		public function isSpawnPoint() : Boolean
-		{
+		public function isSpawnPoint() : Boolean {
 			if (spawnPoint == null) {
 				return false;
 			} else {

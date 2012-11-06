@@ -8,9 +8,12 @@ package ui
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
 	import flash.utils.ByteArray;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
 	import levels.LevelData;
 	import levels.Wave;
 	import mapMaker.FileManager;
+	import org.as3commons.collections.ArrayList;
 	import screens.GameScreen;
 	import units.Enemy;
 	
@@ -31,12 +34,17 @@ package ui
 	{		
 		private var creatorGui : MapCreator = new MapCreator();
 		private var mapMakerPanel : MapMakerPanel = new MapMakerPanel();
+		private var hammerButton : HammerButton = new HammerButton();
+		
+		
 		private var model : GameModel;
 		private var gameScreen : GameScreen;
 		
-		
 		private var waveNum : int = 0;
 		
+		private var enemies : ArrayList = new ArrayList();
+		private var towers  : ArrayList = new ArrayList();
+		private var blocks  : ArrayList = new ArrayList();
 		private var spawnPoints : Vector.<SpawnPoint> = new Vector.<SpawnPoint>();
 		private var waves : Vector.<Wave> = new Vector.<Wave>();
 			
@@ -47,14 +55,18 @@ package ui
 		
 		private var buildTowerClass : Class = PointDefense;
 		private var	spawnEnemyClass : Class = BasicEnemy;
+		
 		public function MapMaker(model : GameModel, gameScreen : GameScreen) 
 		{			
 			this.gameScreen = gameScreen;
 			this.model = model;
 			creatorGui.y = 600;
 			mapMakerPanel.x = 730;
+			hammerButton.x = 730;
+			hammerButton.visible = false;
 			addChild(creatorGui);
 			addChild(mapMakerPanel);
+			addChild(hammerButton);
 			
 			//DENSITY
 			mapMakerPanel.delay_input.text =  mapMakerPanel.spawn_density.value.toString();
@@ -71,6 +83,9 @@ package ui
 			
 			//LISTENERS///////////////////////////////////////////////////////////////////////////
 			addEventlisteners();
+			
+			//PAUSE THE GAME
+			model.pause = true;
 		}
 		
 		private function addEventlisteners():void 
@@ -83,34 +98,16 @@ package ui
 			mapMakerPanel.delay_input.addEventListener(KeyboardEvent.KEY_DOWN, onDensityInputKeyDown);
 			
 			creatorGui.add_tower.addEventListener(MouseEvent.CLICK, addTowerClick);
-			//Turret combo box change
 			creatorGui.add_tower_combo.addEventListener(Event.CHANGE, towerSelect);
-			
-			//Enemy combo box change
 			creatorGui.add_enemy_combo.addEventListener(Event.CHANGE, enemySelect);
-			
-			//Build block clicked
 			creatorGui.build_block.addEventListener(MouseEvent.CLICK, addWallClick)
-			
-			//Spawn Enemy
 			creatorGui.add_enemy.addEventListener(MouseEvent.CLICK, addEnemy);
-			
-			//Remove block 
 			creatorGui.remove_block.addEventListener(MouseEvent.CLICK, removeBlockKick);
-			
-			//Sell tower
 			creatorGui.sell_tower.addEventListener(MouseEvent.CLICK, sellTowerClick);
 			
-			//START BUTTON CLICK
 			mapMakerPanel.startMap_button.addEventListener(MouseEvent.CLICK, onStartMapClick);
-			
-			//LOAD BUTTON CLICK
 			mapMakerPanel.load_button.addEventListener(MouseEvent.CLICK, onLoadClick);
-			
-			//SAVE BUTTON CLICK
 			mapMakerPanel.save_button.addEventListener(MouseEvent.CLICK, onSaveClick);
-			
-			//RIGHT COLUMN
 			mapMakerPanel.add_wave.addEventListener(MouseEvent.CLICK, addWave);
 			mapMakerPanel.remove_wave.addEventListener(MouseEvent.CLICK, removeWave);
 			mapMakerPanel.remove_spawn.addEventListener(MouseEvent.CLICK, onRemoveSpawnPointClick);
@@ -119,12 +116,33 @@ package ui
 			mapMakerPanel.addExit_button.addEventListener(MouseEvent.CLICK, onAddExit);
 			mapMakerPanel.removeExit_button.addEventListener(MouseEvent.CLICK, onRemoveExit);
 			
+			hammerButton.addEventListener(MouseEvent.CLICK, onHammerClick);
 			//FILE MANAGER
 			fileManager.addEventListener(Event.COMPLETE, mapLoaded);
 			
 			//EVENT LISTENERS
 			//COIN CHANGED
 			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
+		}
+		
+		private function onHammerClick(e:MouseEvent):void 
+		{
+			model.pause = true;
+			
+			hammerButton.visible = false;
+			creatorGui.visible = true;
+			mapMakerPanel.visible = true;
+			
+			//CLEEAR THE GAME SCREEN
+			Factory.getInstance().removeAllEnemy();
+			
+			//REPOPPULATE
+			/*
+			for (var i : int = 0; i < enemies.size; i++ ) {
+				//var enemy = enemies.itemAt(i);
+				Factory.getInstance().addEnemy(enemy.row, enemy.col, );
+			}
+			*/
 		}
 		
 		private function processLevelData(levelData : LevelData) : void
@@ -159,7 +177,7 @@ package ui
 		
 		private function onStartMapClick(e:MouseEvent):void 
 		{
-			UI.state = UI.GAME_PLAY;
+			model.pause = false;
 			
 			model.money = int(mapMakerPanel.money.text);
 			
@@ -169,6 +187,9 @@ package ui
 				wave.start();
 			}
 			
+			this.mapMakerPanel.visible = false;
+			this.creatorGui.visible = false;
+			this.hammerButton.visible = true;
 		}
 		
 		private function onEditClick(e:MouseEvent):void 
@@ -262,29 +283,30 @@ package ui
 			if (row >= 0 && row < Constants.ROW_NUM && col >= 0 && col < Constants.COL_NUM)
 			{
 				var clickedCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
-				switch (Factory.getInstance().clickState) 
+				switch (Factory.getInstance().clickState)
 				{
 					case Factory.ENEMY_SPAWNER:
 						if(!clickedCell.blocked && !clickedCell.isExit())
-						{	
+						{
 							Factory.getInstance().addEnemy(row, col, this.spawnEnemyClass);
+							//enemies.add(enemy);
 						}
 					break;
 					case Factory.TOWER_BUILDER:
 						if(!clickedCell.blocked && !clickedCell.isExit())
-						{	
+						{
 							Factory.getInstance().addTower(row, col, this.buildTowerClass, true);
 						}
 					break;
 					case Factory.SPAWN_POINT_CREATOR:
 						if(!clickedCell.blocked && !clickedCell.isExit())
-						{	
+						{
 							addSpawnPoint(row, col);
 						}
 					break;
 					case Factory.SPAWN_POINT_REMOVER:
 						if(!clickedCell.blocked && !clickedCell.isExit() && clickedCell.isSpawnPoint())
-						{	
+						{
 							removeSpawnPoint(clickedCell.spawnPoint);
 						}
 					break;

@@ -27,6 +27,8 @@ package mvc
 	public class GameModel extends MovieClip
 	{
 		// EVENTS //***********************************//		
+		public var pause : Boolean = false;
+		
 		private var lifeChangedEvent : GameEvents;
 		
 		private var _life : int = 10;
@@ -109,54 +111,59 @@ package mvc
 		
 		public function update(e: Event) : void
 		{
-			for each(var turret:Turret in towers)
+			if (!pause)
 			{
-				turret.update();
-				
-				if(turret.target == null)
+				for each(var turret:Turret in towers)
 				{
-					for each(var zombie2 :Enemy in enemies)
+					turret.update();
+					
+					if(turret.target == null)
 					{
-						var zpos : Point = zombie2.position;
-						var tpos : Point = turret.position;
-						
-						if (Point.distance(zpos, tpos) < turret.range)
+						for each(var zombie2 :Enemy in enemies)
 						{
-							turret.target = zombie2;
+							var zpos : Point = zombie2.position;
+							var tpos : Point = turret.position;
+							
+							if (Point.distance(zpos, tpos) < turret.range)
+							{
+								turret.target = zombie2;
+								break;
+							}
+						}
+					}
+				}
+				
+				var enemiesIterator : IOrderedListIterator = enemies.iterator() as IOrderedListIterator;
+				while (enemiesIterator.hasNext()) 
+				{
+					
+					
+					var enemy: Enemy = enemiesIterator.next();
+					if (enemy != null)
+					{
+						enemy.update();
+						
+						switch (enemy.state) 
+						{
+							case Enemy.LIVE:
+								
+							break;
+							case Enemy.DEAD:
+								
+							break;
+							case Enemy.ESCAPED:
+								Factory.getInstance().removeEnemy(enemy);
 							break;
 						}
 					}
 				}
-			}
-			
-			for each(var enemy:Enemy in enemies)
-			{
-				enemy.update();
 				
-				if (enemyReachedExit(enemy)) {
-					
-					Factory.getInstance().removeEnemy(enemy);
-					//pathFinder.removeExitPoint(new ExitPoint(enemy.row, enemy.col));
-					
-					life-- ;
-				}
-				
-				if (enemy.state == Enemy.Z_IDLE)
+				for each(var projectile : Projectil in _projectils)
 				{
-					var target : Point = getNextTargetFor(enemy.row, enemy.col);
-					
-					if (target != null) {
-						enemy.target = target;
-					}
+					projectile.update();
 				}
-			}
-			
-			for each(var projectile : Projectil in _projectils)
-			{
-				projectile.update();
-			}
-			
-		}
+			} // END PAUSE
+		}// END UPDATE
 		
 		private function enemyReachedExit(z : Enemy):Boolean 
 		{

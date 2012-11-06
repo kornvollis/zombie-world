@@ -176,10 +176,8 @@ package
 			}
 		}
 		
-		public function addEnemy(row:int, col:int, TypeOfEnemy: Class):void
+		public function addEnemy(row:int, col:int, TypeOfEnemy: Class):Enemy
 		{
-			trace("enemiiii");
-			
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
 			{
@@ -188,30 +186,28 @@ package
 				if (model != null)
 				{
 					var enemy : Enemy = new TypeOfEnemy(row, col);
+					enemy.setTarget(model.pathFinder.cellGrid.getCell(row, col));
+					
 					model.enemies.add(enemy);
 					model.gameScreen.addChild(enemy);
+					
+					return enemy;
 				}
-			}
+			} return null;
 		}
 		
 		public function removeAllEnemy():void 
 		{
-			
+			for (var i : int = model.enemies.size-1; i>=0 ; i-- )
+			{
+				removeEnemy(model.enemies.removeAt(i));
+			}
 		}
 		
 		public function removeEnemy(e : Enemy):void 
 		{
-			/*
-			if (e.onStage)
-			{
-				if(view.contains(e)) view.mapAreaLayer2.removeChild(e);
-			}
-			
-			var enemy : Enemy = e;
-			enemy.isDeleted = true;
-			var enemyIndex : int = model.enemies.indexOf(enemy);
-			model.enemies.splice(enemyIndex, 1);
-			*/
+			model.enemies.remove(e);
+			model.gameScreen.removeChild(e);
 		}
 		
 		public function removeProjectil(e : Projectil):void 
@@ -237,6 +233,10 @@ package
 			if (model.pathFinder.addExitPoint(exitPoint))
 			{
 				model.gameScreen.addChild(exitPoint);
+				
+				//RUN THE PATHFINDER
+				model.pathFinder.findPath();
+				model.gameScreen.drawDebugPath();
 				
 				exitPoint.clickCallBack = function removeExitCallBack():void {
 					trace("karvaj");

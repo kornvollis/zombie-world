@@ -45,16 +45,14 @@ package
 			}
 			
 			var cell :Cell = cells[row][col];
-			if (cell.isProcessed)
-			{
+			if (cell.isProcessed) {
 				return false;
 			} else return true;
 		}
 		
 		public function getCell(row : int, col : int) : Cell
 		{
-			if (cells[row][col] != null)
-			{
+			if (cells[row][col] != null) {
 				return cells[row][col];
 			}
 			

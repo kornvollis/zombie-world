@@ -47,7 +47,7 @@ package pathfinder
 			openNodes = getStartNodes();
 			//openNodes = targetNodes;
 			
-			// If there is no survivor
+			// If no exit point
 			if (openNodes.length == 0) 
 			{
 				trace("Pathfinder: there is no exit point");
@@ -55,7 +55,7 @@ package pathfinder
 				return;
 			}
 			
-			// If there is living survivor
+			// If there is open node
 			while (openNodes.length > 0)
 			{
 				var startingCell : Cell = openNodes.shift();
@@ -137,8 +137,9 @@ package pathfinder
 					//neighbourCell.nextCell = pickedCell;
 					neighbourCell.distance = startingCell.distance + 1;
 					neighbourCell.next_direction = direction;
+					neighbourCell.next_cell = startingCell;
 				}
-				
+				/*
 				//ZIK ZAK
 				if (neighbourCell.distance == startingCell.distance + 1)
 				{
@@ -147,6 +148,7 @@ package pathfinder
 						neighbourCell.next_alternate_direction = direction;
 					}
 				}
+				*/
 				
 				if (!neighbourCell.isProcessed)
 				{
