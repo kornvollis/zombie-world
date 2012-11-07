@@ -65,13 +65,13 @@ package mvc
 			var row:int = e.stageY / Constants.CELL_SIZE;
 			var col:int = e.stageX / Constants.CELL_SIZE;
 			
-			if (mousePressed && Factory.getInstance().clickState == Factory.WALL_BUILDER && row >=0 && row<Constants.ROW_NUM && col<Constants.COL_NUM )
+			if (mousePressed && Factory.getInstance().clickState == Factory.BLOCK_BUILDER && row >=0 && row<Constants.ROW_NUM && col<Constants.COL_NUM )
 			{
 				var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 				
 				if (cell.boxOnIt == null) 
 				{
-					Factory.getInstance().addBox(row, col);
+					Factory.getInstance().addBlock(row, col);
 				}
 			}
 		}

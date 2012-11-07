@@ -88,41 +88,129 @@ package ui
 			model.pause = true;
 		}
 		
+		private function gameStageClickHandle(stageX:Number, stageY:Number):void
+		{
+			var row : int = stageY / Constants.CELL_SIZE;
+			var col : int = stageX / Constants.CELL_SIZE;
+			
+			if (row >= 0 && row < Constants.ROW_NUM && col >= 0 && col < Constants.COL_NUM)
+			{
+				var clickedCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+				
+				switch (Factory.getInstance().clickState)
+				{
+					case Factory.ENEMY_SPAWNER:
+						Factory.getInstance().addEnemy(row, col, this.spawnEnemyClass);
+						
+						var enemy : Object = new this.spawnEnemyClass(row, col);
+						enemies.add(enemy);
+						
+						
+					break;
+					case Factory.TOWER_BUILDER:
+						if(!clickedCell.blocked && !clickedCell.isExit())
+						{
+							Factory.getInstance().addTower(row, col, this.buildTowerClass, true);
+						}
+					break;
+					case Factory.SPAWN_POINT_CREATOR:
+						if(!clickedCell.blocked && !clickedCell.isExit())
+						{
+							addSpawnPoint(row, col);
+						}
+					break;
+					case Factory.ADD_EXIT:
+						if(!clickedCell.blocked && !clickedCell.isSpawnPoint())
+						{
+							var exitPoint : ExitPoint = new ExitPoint(row, col);
+							
+							Factory.getInstance().addExitPoint(exitPoint);
+						}
+					break;
+					case Factory.BLOCK_BUILDER:
+						if(!clickedCell.blocked && !clickedCell.isSpawnPoint())
+						{
+							Factory.getInstance().addBlock(row, col, true);
+						}
+					break;
+					/*case Factory.REMOVE_EXIT:
+						if (clickedCell.isExit()) { 
+							model.pathFinder.removeExitPoint(row, col); 
+							model.gameScreen.removeChild(clickedCell.exitPoint);
+						}
+					break;*/
+				} //END OF SWITCH
+			} //END OF IF
+		} //END OF FUNC
+		
+		private function onMouseMove(e:MouseEvent):void 
+		{
+			if (Factory.mouseDown)
+			{
+				gameStageClickHandle(e.stageX, e.stageY);
+			}
+		}
+		
+		private function onGameScreenClick(e:MouseEvent):void 
+		{
+			gameStageClickHandle(e.stageX, e.stageY);
+		}
+		
 		private function addEventlisteners():void 
 		{
 			//STAGE CLICK
 			gameScreen.addEventListener(MouseEvent.CLICK, onGameScreenClick);
+			gameScreen.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			gameScreen.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			gameScreen.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			
 			//DENSITY
 			mapMakerPanel.spawn_density.addEventListener(SliderEvent.CHANGE, onDenistySliderChange);
 			mapMakerPanel.delay_input.addEventListener(KeyboardEvent.KEY_DOWN, onDensityInputKeyDown);
 			
 			creatorGui.add_tower.addEventListener(MouseEvent.CLICK, addTowerClick);
+			creatorGui.remove_button.addEventListener(MouseEvent.CLICK, removeClick);
 			creatorGui.add_tower_combo.addEventListener(Event.CHANGE, towerSelect);
 			creatorGui.add_enemy_combo.addEventListener(Event.CHANGE, enemySelect);
-			creatorGui.build_block.addEventListener(MouseEvent.CLICK, addWallClick)
+			creatorGui.build_block.addEventListener(MouseEvent.CLICK, addBlockClick)
 			creatorGui.add_enemy.addEventListener(MouseEvent.CLICK, addEnemy);
-			creatorGui.remove_block.addEventListener(MouseEvent.CLICK, removeBlockKick);
-			creatorGui.sell_tower.addEventListener(MouseEvent.CLICK, sellTowerClick);
+			//creatorGui.remove_block.addEventListener(MouseEvent.CLICK, removeBlockKick);
+			//creatorGui.sell_tower.addEventListener(MouseEvent.CLICK, sellTowerClick);
 			
 			mapMakerPanel.startMap_button.addEventListener(MouseEvent.CLICK, onStartMapClick);
 			mapMakerPanel.load_button.addEventListener(MouseEvent.CLICK, onLoadClick);
 			mapMakerPanel.save_button.addEventListener(MouseEvent.CLICK, onSaveClick);
 			mapMakerPanel.add_wave.addEventListener(MouseEvent.CLICK, addWave);
 			mapMakerPanel.remove_wave.addEventListener(MouseEvent.CLICK, removeWave);
-			mapMakerPanel.remove_spawn.addEventListener(MouseEvent.CLICK, onRemoveSpawnPointClick);
+			//mapMakerPanel.remove_spawn.addEventListener(MouseEvent.CLICK, onRemoveSpawnPointClick);
 			mapMakerPanel.new_spawn.addEventListener(MouseEvent.CLICK, onNewSpawnPointButton);
 			mapMakerPanel.edit_button.addEventListener(MouseEvent.CLICK, onEditClick);
 			mapMakerPanel.addExit_button.addEventListener(MouseEvent.CLICK, onAddExit);
-			mapMakerPanel.removeExit_button.addEventListener(MouseEvent.CLICK, onRemoveExit);
+			//mapMakerPanel.removeExit_button.addEventListener(MouseEvent.CLICK, onRemoveExit);
 			
 			hammerButton.addEventListener(MouseEvent.CLICK, onHammerClick);
+			
 			//FILE MANAGER
 			fileManager.addEventListener(Event.COMPLETE, mapLoaded);
 			
 			//EVENT LISTENERS
 			//COIN CHANGED
 			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
+		}
+		
+		private function removeClick(e:MouseEvent):void 
+		{
+			Factory.getInstance().clickState = Factory.REMOVE;
+		}
+			
+		private function onMouseUp(e:MouseEvent):void 
+		{
+			Factory.mouseDown = false;
+		}
+		
+		private function onMouseDown(e:MouseEvent):void 
+		{
+			Factory.mouseDown = true;
 		}
 		
 		private function onHammerClick(e:MouseEvent):void 
@@ -137,12 +225,10 @@ package ui
 			Factory.getInstance().removeAllEnemy();
 			
 			//REPOPPULATE
-			/*
 			for (var i : int = 0; i < enemies.size; i++ ) {
-				//var enemy = enemies.itemAt(i);
-				Factory.getInstance().addEnemy(enemy.row, enemy.col, );
+				var enemy : Object = enemies.itemAt(i);
+				Factory.getInstance().addEnemy(enemy.row, enemy.col, Class(getDefinitionByName(getQualifiedClassName(enemy))) );
 			}
-			*/
 		}
 		
 		private function processLevelData(levelData : LevelData) : void
@@ -163,11 +249,6 @@ package ui
 		private function mapLoaded(e:Event):void 
 		{
 			var levelData : LevelData = fileManager.getLevel();
-		}
-		
-		private function onRemoveExit(e:MouseEvent):void 
-		{
-			Factory.getInstance().clickState = Factory.REMOVE_EXIT;
 		}
 		
 		private function onAddExit(e:MouseEvent):void 
@@ -227,12 +308,7 @@ package ui
 					//mapMakerPanel.waves.selectedItem = selectedWave;
 				}
 			}
-		}
-		
-		private function onRemoveSpawnPointClick(e:MouseEvent): void
-		{
-			Factory.getInstance().clickState = Factory.SPAWN_POINT_REMOVER;
-		}		
+		}	
 		
 		private function removeSpawnPoint(spawnPoint:SpawnPoint):void
 		{
@@ -273,59 +349,6 @@ package ui
 		private function onNewSpawnPointButton(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.SPAWN_POINT_CREATOR;
-		}
-		
-		private function onGameScreenClick(e:MouseEvent):void 
-		{
-			var row : int = e.stageY / Constants.CELL_SIZE;
-			var col : int = e.stageX / Constants.CELL_SIZE;
-			
-			if (row >= 0 && row < Constants.ROW_NUM && col >= 0 && col < Constants.COL_NUM)
-			{
-				var clickedCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
-				switch (Factory.getInstance().clickState)
-				{
-					case Factory.ENEMY_SPAWNER:
-						if(!clickedCell.blocked && !clickedCell.isExit())
-						{
-							Factory.getInstance().addEnemy(row, col, this.spawnEnemyClass);
-							//enemies.add(enemy);
-						}
-					break;
-					case Factory.TOWER_BUILDER:
-						if(!clickedCell.blocked && !clickedCell.isExit())
-						{
-							Factory.getInstance().addTower(row, col, this.buildTowerClass, true);
-						}
-					break;
-					case Factory.SPAWN_POINT_CREATOR:
-						if(!clickedCell.blocked && !clickedCell.isExit())
-						{
-							addSpawnPoint(row, col);
-						}
-					break;
-					case Factory.SPAWN_POINT_REMOVER:
-						if(!clickedCell.blocked && !clickedCell.isExit() && clickedCell.isSpawnPoint())
-						{
-							removeSpawnPoint(clickedCell.spawnPoint);
-						}
-					break;
-					case Factory.ADD_EXIT:
-						if(!clickedCell.blocked && !clickedCell.isSpawnPoint())
-						{
-							var exitPoint : ExitPoint = new ExitPoint(row, col);
-							
-							Factory.getInstance().addExitPoint(exitPoint);
-						}
-					break;
-					case Factory.REMOVE_EXIT:
-						if (clickedCell.isExit()) { 
-							model.pathFinder.removeExitPoint(row, col); 
-							model.gameScreen.removeChild(clickedCell.exitPoint);
-						}
-					break;
-				}
-			}
 		}
 		
 		private function addWave(e:MouseEvent):void 
@@ -379,17 +402,19 @@ package ui
 			Factory.getInstance().clickState = Factory.ENEMY_SPAWNER;
 		}
 		
-		private function addWallClick(e:MouseEvent):void 
+		private function addBlockClick(e:MouseEvent):void 
 		{
-			Factory.getInstance().clickState = Factory.WALL_BUILDER;
+			Factory.getInstance().clickState = Factory.BLOCK_BUILDER;
 		}
 		//ADD END
 		
 		//REMOVE
+		/*
 		private function removeBlockKick(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.REMOVE_BLOCK;
 		}
+		*/
 		
 		private function removeWave(e:MouseEvent):void 
 		{
@@ -429,10 +454,12 @@ package ui
 			creatorGui.money_text.text = "Money: " + model.money.toString();
 		}
 		
+		/*
 		private function sellTowerClick(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.SELL_TOWER;
 		}
+		*/
 		
 		private function enemySelect(e:Event):void 
 		{

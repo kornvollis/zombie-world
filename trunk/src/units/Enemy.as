@@ -2,6 +2,7 @@ package units
 {
 	import adobe.utils.CustomActions;
 	import flash.events.EventDispatcher;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	/**
 	 * ...
@@ -16,7 +17,8 @@ package units
 		
 		public static const CONSTRUCTOR_NULL_ERROR : String = "Enemy's construcotr must be not NULL";
 		
-		
+		//CALL BACKS
+		public var removeCallBack : Function = null;
 		
 		//PRIVI
 		private var speed : int = 50;
@@ -51,6 +53,25 @@ package units
 			healthBar.x = - Constants.CELL_SIZE * 0.5;
 			healthBar.y = - 6 - Constants.CELL_SIZE * 0.5;
 			addChild(healthBar);
+			
+			addEventListener(MouseEvent.CLICK, onClick);
+			addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		}
+		
+		private function onClick(e:MouseEvent):void 
+		{
+			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE)
+			{
+				removeCallBack();
+			}
+		}
+		
+		private function onMouseMove(e:MouseEvent):void 
+		{
+			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE && Factory.mouseDown)
+			{
+				removeCallBack();
+			}
 		}
 		
 		public function setTarget(targetCell : Cell) : void {
@@ -73,31 +94,35 @@ package units
 		
 		private function moveToTarget():void 
 		{
-			var move_vector : Point = new Point();
-			move_vector.x = target.middle.x - position.x;
-			move_vector.y = target.middle.y - position.y;
+			if (target != null)
+			{
 			
-			move_vector.normalize( 1 * (speed / 20) );
-			
-			if (Point.distance(position, target.middle) < 3) {
-				position.x = target.middle.x;
-				position.y = target.middle.y;
+				var move_vector : Point = new Point();
+				move_vector.x = target.middle.x - position.x;
+				move_vector.y = target.middle.y - position.y;
 				
-				if (target.isExit())
-				{
-					state = ESCAPED
+				move_vector.normalize( 1 * (speed / 20) );
+				
+				if (Point.distance(position, target.middle) < 3) {
+					position.x = target.middle.x;
+					position.y = target.middle.y;
+					
+					if (target.isExit())
+					{
+						state = ESCAPED
+					}
+					target = target.next_cell;
+				} else {
+					position.x += move_vector.x;
+					position.y += move_vector.y;
+					this.x = position.x;
+					this.y = position.y;
 				}
-				target = target.next_cell;
-			} else {
-				position.x += move_vector.x;
-				position.y += move_vector.y;
-				this.x = position.x;
-				this.y = position.y;
+				
+				//SET ROW 
+				row = int(position.y / Constants.CELL_SIZE);
+				col = int(position.x / Constants.CELL_SIZE);		
 			}
-			
-			//SET ROW 
-			row = int(position.y / Constants.CELL_SIZE);
-			col = int(position.x / Constants.CELL_SIZE);			
 		}
 		
 		public function sufferDamage(damage:int):void 

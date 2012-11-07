@@ -35,13 +35,11 @@ package mvc
 		private var _money : int = 0;
 		private var _blockers : int = 1000;
 		
-		
 		public var myStage : Stage = null;
 		
-		//public var arraylist : ArrayList = new ArrayList();
 		public var towers       : ArrayList = new ArrayList();
 		public var enemies      : ArrayList = new ArrayList();
-		private var _boxes      : Vector.<Box> = new Vector.<Box>();
+		public var boxes        : ArrayList = new ArrayList();
 		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
 		
 		
@@ -81,7 +79,6 @@ package mvc
 					direction = currentCell.next_alternate_direction;
 				}
 			}
-			
 			
 			switch (direction) 
 			{
@@ -174,16 +171,6 @@ package mvc
 				}
 			}
 			return false;
-		}
-		
-		public function get boxes():Vector.<Box> 
-		{
-			return _boxes;
-		}
-		
-		public function set boxes(value:Vector.<Box>):void 
-		{
-			_boxes = value;
 		}
 		
 		public function get life():int 

@@ -11,7 +11,7 @@ package
 		public var row : int;
 		public var col : int;
 		
-		public var clickCallBack : Function = null;
+		public var removeCallBack : Function = null;
 		
 		public function ExitPoint(row:int, col:int) 
 		{
@@ -25,13 +25,22 @@ package
 			this.y = row  * Constants.CELL_SIZE;
 			
 			addEventListener(MouseEvent.CLICK, onClick);
+			addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		}
 		
 		private function onClick(e:MouseEvent):void 
 		{
-			if (clickCallBack != null && Factory.getInstance().clickState == Factory.REMOVE_EXIT)
+			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE)
 			{
-				clickCallBack();
+				removeCallBack();
+			}
+		}
+		
+		private function onMouseMove(e:MouseEvent):void 
+		{
+			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE && Factory.mouseDown)
+			{
+				removeCallBack();
 			}
 		}
 	}

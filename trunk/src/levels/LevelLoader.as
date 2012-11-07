@@ -85,7 +85,7 @@ package levels
 				col  = wall.attribute("col");
 				
 				trace("Adding wall: " + row + ", col " +  col);
-				Factory.getInstance().addBox(row, col);
+				Factory.getInstance().addBlock(row, col);
 			}
 			
 			//LOAD TOWERS

@@ -21,18 +21,15 @@ package
 	public class Factory extends EventDispatcher
 	{
 		//TODO: REFACTORING THIS TO THE GAMECONTROLLER
-		public static const WALL_BUILDER   : String  = "WALL_BUILDER";
+		public static const BLOCK_BUILDER   : String  = "WALL_BUILDER";
 		public static const ENEMY_SPAWNER : String  = "ZOMBIE_SPAWNER";
 		public static const TOWER_BUILDER : String  = "TURRET_BUILDER";
 		public static const IDLE 		   : String  = "IDLE_FACTORY";
-		public static const REMOVE_BLOCK   : String  = "REMOVE_BLOCK";
-		static public const SELL_TOWER     : String  = "sellTower";
 		
 		//MAP MAKER
 		public static const SPAWN_POINT_CREATOR : String = "spawnPointCreator";
-		public static const SPAWN_POINT_REMOVER : String = "spawnPointRemover";
 		public static const ADD_EXIT : String = "ADD_EXIT";
-		public static const REMOVE_EXIT : String = "REMOVE_EXIT";
+		static public const REMOVE : String = "remove";
 		
 		
 		//TODO: REFACTOR THIS TOO TO THEEEEEE TO THE GAMECONTROLLER
@@ -43,7 +40,8 @@ package
 		
         private static var instance:Factory = new Factory();
 		
-		
+		//MOUSE STATE
+		public static var mouseDown : Boolean = false;
 		
        	public function Factory()
 		{
@@ -53,7 +51,7 @@ package
 			}
 		}
 		
-		public function init():void 
+		public function init():void
 		{
 			//model.levelLoader.loadLevel(1);
 			//TEMP STUFF
@@ -83,7 +81,6 @@ package
 		public function removeTowers() : void 
 		{
 			var iterator : IOrderedListIterator = model.towers.iterator() as IOrderedListIterator;
-			trace("hello");
             while (iterator.hasNext()) 
 			{
 				trace("maki");
@@ -121,38 +118,42 @@ package
 			*/
 		}
 		
-		public function removeBox(row:int, col:int) : void
+		public function removeBlock(block : Box) : void
 		{
-			var boxCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
-			var b : Box = boxCell.boxOnIt;
+			model.boxes.remove(block);
+			model.gameScreen.removeChild(block);
+			model.pathFinder.cellGrid.getCell(block.row, block.col).blocked = false;
+			model.pathFinder.cellGrid.openCell(block.row, block.col);
 			
-			if (b != null)
-			{			
-				if(view.mapAreaLayer1.contains(b)) view.mapAreaLayer1.removeChild(b);
-				
-				model.pathFinder.cellGrid.openCell(row, col);
-				
-				b.isDeleted = true;
-				var boxIndex : int = model.boxes.indexOf(b);
-				model.boxes.splice(boxIndex, 1);
-				boxCell.boxOnIt = null;
-				
-				model.pathFinder.findPath();
-				model.needPathUpdate = true;
-			}
+			model.pathFinder.findPath();
 		}
 		
-		public function addBox(row:int , col :int) : void
+		public function addBlock(row:int , col:int, isFree:Boolean = false ) : void
 		{
-			if(model.blockers > 0)
+			var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+			
+			if (!cell.isExit() && !cell.isBlocked())
 			{
-				var box : Box = new Box(row, col);
-				model.boxes.push(box);
-				model.pathFinder.cellGrid.blockCell(row, col);
-				model.pathFinder.cellGrid.getCell(row, col).boxOnIt = box;
-				model.pathFinder.findPath();
-				model.needPathUpdate = true;	
-				model.blockers = model.blockers-1;
+				if(model.blockers > 0 || isFree)
+				{
+					var block : Box = new Box(row, col);
+					
+					//model
+					model.boxes.add(block);
+					model.pathFinder.cellGrid.blockCell(row, col);
+					cell.blocked = true;
+					
+					//view
+					model.gameScreen.addChild(block);
+					
+					if (!isFree)	model.blockers = model.blockers - 1;
+
+					block.removeCallBack = function removeBlockCallBack():void {
+						Factory.getInstance().removeBlock(block);
+					};
+					
+					model.pathFinder.findPath();
+				}
 			}
 		}
 			
@@ -178,22 +179,33 @@ package
 		
 		public function addEnemy(row:int, col:int, TypeOfEnemy: Class):Enemy
 		{
-			if (row <0 || row >= Constants.ROW_NUM ||
-			    col <0 || col >= Constants.COL_NUM)
+			var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+			
+			if (!cell.isExit() && !cell.isBlocked())
 			{
-				throw(new Error("addEnemy row, col out of bound"));
-			} else {
-				if (model != null)
+				if (row <0 || row >= Constants.ROW_NUM ||
+					col <0 || col >= Constants.COL_NUM)
 				{
-					var enemy : Enemy = new TypeOfEnemy(row, col);
-					enemy.setTarget(model.pathFinder.cellGrid.getCell(row, col));
-					
-					model.enemies.add(enemy);
-					model.gameScreen.addChild(enemy);
-					
-					return enemy;
-				}
-			} return null;
+					throw(new Error("addEnemy row, col out of bound"));
+				} else {
+					if (model != null)
+					{
+						var enemy : Enemy = new TypeOfEnemy(row, col);
+						enemy.setTarget(model.pathFinder.cellGrid.getCell(row, col));
+						
+						model.enemies.add(enemy);
+						model.gameScreen.addChild(enemy);
+						
+						enemy.removeCallBack = function removeEnemyCallBack():void {
+							Factory.getInstance().removeEnemy(enemy);
+						};
+						
+						return enemy;
+					}
+				} 
+			}
+			
+			return null;
 		}
 		
 		public function removeAllEnemy():void 
@@ -238,8 +250,7 @@ package
 				model.pathFinder.findPath();
 				model.gameScreen.drawDebugPath();
 				
-				exitPoint.clickCallBack = function removeExitCallBack():void {
-					trace("karvaj");
+				exitPoint.removeCallBack = function removeExitCallBack():void {
 					Factory.getInstance().removeExitPoint(exitPoint);
 					model.gameScreen.removeChild(exitPoint); 
 				};

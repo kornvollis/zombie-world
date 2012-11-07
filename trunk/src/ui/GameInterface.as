@@ -25,7 +25,7 @@ package ui
 		
 		private function onBlockBuildClick(e:MouseEvent):void 
 		{
-			Factory.getInstance().clickState = Factory.WALL_BUILDER;
+			Factory.getInstance().clickState = Factory.BLOCK_BUILDER;
 		}
 		
 	}
