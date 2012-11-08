@@ -32,7 +32,8 @@ package pathfinder
 					//c.exit = false;
 					c.distance = 99999;
 					c.next_direction = Cell.NULL_NEXT;
-					c.next_alternate_direction = Cell.NULL_NEXT;
+					//c.next_alternate_direction = Cell.NULL_NEXT;
+					c.next_cell = null;
 					c.isProcessed = false;
 				}
 			}
@@ -139,16 +140,17 @@ package pathfinder
 					neighbourCell.next_direction = direction;
 					neighbourCell.next_cell = startingCell;
 				}
-				/*
+				
 				//ZIK ZAK
 				if (neighbourCell.distance == startingCell.distance + 1)
 				{
 					if (neighbourCell.next_direction != direction)
 					{
 						neighbourCell.next_alternate_direction = direction;
+						neighbourCell.next_alter_cell = startingCell;
 					}
 				}
-				*/
+				
 				
 				if (!neighbourCell.isProcessed)
 				{

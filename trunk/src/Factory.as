@@ -83,7 +83,6 @@ package
 			var iterator : IOrderedListIterator = model.towers.iterator() as IOrderedListIterator;
             while (iterator.hasNext()) 
 			{
-				trace("maki");
 				var t: Turret = iterator.next();
 				model.gameScreen.removeChild(t);
 				model.towers.remove(t);
@@ -123,28 +122,38 @@ package
 			model.boxes.remove(block);
 			model.gameScreen.removeChild(block);
 			model.pathFinder.cellGrid.getCell(block.row, block.col).blocked = false;
-			model.pathFinder.cellGrid.openCell(block.row, block.col);
+			model.pathFinder.cellGrid.getCell(block.row, block.col).state = Cell.OPEN_PATH;
 			
 			model.pathFinder.findPath();
+			if(model.gameScreen.hasDebug) model.gameScreen.drawDebugPath();
 		}
 		
 		public function addBlock(row:int , col:int, isFree:Boolean = false ) : void
 		{
 			var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 			
-			if (!cell.isExit() && !cell.isBlocked())
+			if (!cell.isExit() && !cell.blocked)
 			{
 				if(model.blockers > 0 || isFree)
 				{
+					//IN ORDER TO NOT PUT BOX ON THE CREEP HEADS
+					for (var i:int = 0; i < model.enemies.size; i++) {
+						if (model.enemies.itemAt(i).row == row && model.enemies.itemAt(i).col == col) {
+							return;
+						}
+					}
+					
 					var block : Box = new Box(row, col);
 					
 					//model
 					model.boxes.add(block);
-					model.pathFinder.cellGrid.blockCell(row, col);
+					cell.state = Cell.CLOSED_PATH;
+					cell.next_cell = null;
+					cell.next_direction = Cell.NULL_NEXT;
 					cell.blocked = true;
 					
 					//view
-					model.gameScreen.addChild(block);
+					model.gameScreen.addChildAt(block,0);
 					
 					if (!isFree)	model.blockers = model.blockers - 1;
 
@@ -153,6 +162,7 @@ package
 					};
 					
 					model.pathFinder.findPath();
+					if(model.gameScreen.hasDebug) model.gameScreen.drawDebugPath();
 				}
 			}
 		}
@@ -167,7 +177,7 @@ package
 				//var turret : Turret = new Turret(row, col);
 				var tower : Turret = new TowerType(row, col);
 				var buildCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
-				buildCell.towerOnIt = tower;
+				//buildCell.towerOnIt = tower;
 				if (model.coins >= tower.cost || isFree == true )
 				{
 					model.money -= tower.cost;
@@ -181,7 +191,7 @@ package
 		{
 			var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 			
-			if (!cell.isExit() && !cell.isBlocked())
+			if (!cell.isExit() && !cell.blocked)
 			{
 				if (row <0 || row >= Constants.ROW_NUM ||
 					col <0 || col >= Constants.COL_NUM)

@@ -51,8 +51,6 @@ package ui
 		private var levelData : LevelData = new LevelData();
 		private var fileReader:FileReference = new FileReference();
 		
-		private	var fileManager:FileManager = new FileManager();
-		
 		private var buildTowerClass : Class = PointDefense;
 		private var	spawnEnemyClass : Class = BasicEnemy;
 		
@@ -161,7 +159,7 @@ package ui
 			//STAGE CLICK
 			gameScreen.addEventListener(MouseEvent.CLICK, onGameScreenClick);
 			gameScreen.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			gameScreen.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			model.myStage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			gameScreen.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			
 			//DENSITY
@@ -191,7 +189,7 @@ package ui
 			hammerButton.addEventListener(MouseEvent.CLICK, onHammerClick);
 			
 			//FILE MANAGER
-			fileManager.addEventListener(Event.COMPLETE, mapLoaded);
+			model.fileManager.addEventListener(Event.COMPLETE, mapLoaded);
 			
 			//EVENT LISTENERS
 			//COIN CHANGED
@@ -238,17 +236,17 @@ package ui
 		
 		private function onSaveClick(e:MouseEvent):void 
 		{
-			fileManager.saveFile();
+			model.fileManager.saveFile();
 		}
 		
 		private function onLoadClick(e:MouseEvent):void 
 		{
-			fileManager.loadFile();
+			model.fileManager.loadFile();
 		}
 		
 		private function mapLoaded(e:Event):void 
 		{
-			var levelData : LevelData = fileManager.getLevel();
+			var levelData : LevelData = model.fileManager.getLevel();
 		}
 		
 		private function onAddExit(e:MouseEvent):void 

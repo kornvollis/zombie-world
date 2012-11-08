@@ -19,8 +19,7 @@ package
 	public class Main extends Sprite 
 	{
 		private var model : GameModel;
-		//private var view  : GameView;
-		//private var controller : GameController;
+			
 		
 		public function Main():void 
 		{			
@@ -40,34 +39,24 @@ package
 			addEventListener(Event.ENTER_FRAME, update);			
 			
 			//GAME MODEL
-			model = new GameModel();
-			model.myStage = stage;
-			
-			//DEPRI
-			//controller = new GameController(model);
-			//view = new GameView(model, controller);
+			model = new GameModel(this);
 			
 			Factory.getInstance().setModel(model);
-			//Factory.getInstance().setView(view);
 			Factory.getInstance().init();
-			
-			//addChild(view);
 			
 			//TEMP
 			addChild(model);
+			
+			
+			//DEFAULT LOAD MAP
+			model.fileManager.loadMap();
 			
 			dispatchEvent(new GameEvents(GameEvents.TURRET_SELL_EVENT));
 		}
 
 		private function update(e : Event) : void
 		{
-			
-			//trace("update");
 			model.update(e);
-			//view.update(e);
-			
-			//var updateTime : int = getTimer() - updateStart;
-			//trace("Update time: " + updateTime);
 		}
 	}
 

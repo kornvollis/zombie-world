@@ -62,6 +62,7 @@ package mvc
 		
 		public function mouseMove(e:MouseEvent):void 
 		{
+			/*
 			var row:int = e.stageY / Constants.CELL_SIZE;
 			var col:int = e.stageX / Constants.CELL_SIZE;
 			
@@ -74,6 +75,7 @@ package mvc
 					Factory.getInstance().addBlock(row, col);
 				}
 			}
+			*/
 		}
 		
 		public function mouseUp(e:MouseEvent):void 

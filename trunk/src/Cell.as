@@ -11,8 +11,8 @@ package
 
 	public class  Cell
 	{
-		public static const OPEN   : String = "OPEN";
-		public static const CLOSED : String = "CLOSED";
+		public static const OPEN_PATH   : String = "OPEN_path";
+		public static const CLOSED_PATH : String = "CLOSED_path";
 		
 		public static const NULL_NEXT   : int = -1;
 		public static const LEFT_NEXT   : int = 0;
@@ -21,21 +21,14 @@ package
 		public static const BOTTOM_NEXT : int = 3;
 		
 		/////////////////////////////////////////////////
-		//This is for the pathfinder
-		public var blocked : Boolean = false;
+		//public var numOfEnemiesOverIt : int = 0;
 		
-		public var exitPoint : ExitPoint = null;
+		public var blocked    : Boolean    = false;
+		public var exitPoint  : ExitPoint  = null;
 		public var spawnPoint : SpawnPoint = null;
 		
-		//BOX ON IT
-		public var boxOnIt   : Box = null;
-		public var towerOnIt : Turret = null;
-		
-		
-		
-		
 		//CELL STATUS
-		public var state : String = Cell.OPEN;
+		public var state : String = Cell.OPEN_PATH;
 		
 		//Cell's gridposition
 		private var _row : int;
@@ -54,6 +47,7 @@ package
 		public var next_alternate_direction : int = Cell.NULL_NEXT;
 		
 		public var next_cell : Cell = null;
+		public var next_alter_cell : Cell = null;
 		
 		public var size : int = Constants.CELL_SIZE; 
 		
@@ -76,11 +70,6 @@ package
 			} else {
 				return true;
 			}
-		}
-		
-		public function isBlocked() : Boolean
-		{
-			return blocked;
 		}
 		
 		public function get row():int 

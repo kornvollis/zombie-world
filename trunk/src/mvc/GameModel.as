@@ -2,11 +2,13 @@ package mvc
 {
 	
 	import fl.events.ScrollEvent;
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
+	import mapMaker.FileManager;
 	import org.as3commons.collections.ArrayList;
 	import org.as3commons.collections.framework.IOrderedListIterator;
 	import screens.GameScreen;
@@ -16,7 +18,6 @@ package mvc
 	import units.Projectil;
 	import units.Turret;
 	
-	import levels.LevelLoader;
 	
 	import pathfinder.PathFinder;
 
@@ -49,8 +50,16 @@ package mvc
 		//GAME SCREENS
 		public var gameScreen : GameScreen;
 		
-		public function GameModel() 
+		//FILE MANAGER
+		public var fileManager : FileManager;
+		
+		public function GameModel(gameHolder : DisplayObject) 
 		{
+			this.myStage = gameHolder.stage;
+			
+			//FILE MANAGER
+			fileManager = new FileManager(this);
+			
 			//SET PATHFINDER
 			pathFinder = new PathFinder(this);
 			//pathFinder  = new PathFinder(this);

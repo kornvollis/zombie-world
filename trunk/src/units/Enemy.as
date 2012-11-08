@@ -23,7 +23,8 @@ package units
 		//PRIVI
 		private var speed : int = 50;
 		//private var _target : Point = new Point;
-		public var target : Cell = null;
+		public var targetCell : Cell = null;
+		public var currentCell : Cell = null;
 		
 		//HEALTH BAR
 		private var healthBar : HealthBar = new HealthBar;
@@ -75,7 +76,7 @@ package units
 		}
 		
 		public function setTarget(targetCell : Cell) : void {
-			this.target = targetCell;
+			this.targetCell = targetCell;
 		}
 		
 		override public function update() : void
@@ -94,24 +95,37 @@ package units
 		
 		private function moveToTarget():void 
 		{
-			if (target != null)
+			if (targetCell != null)
 			{
 			
 				var move_vector : Point = new Point();
-				move_vector.x = target.middle.x - position.x;
-				move_vector.y = target.middle.y - position.y;
+				move_vector.x = targetCell.middle.x - position.x;
+				move_vector.y = targetCell.middle.y - position.y;
 				
 				move_vector.normalize( 1 * (speed / 20) );
 				
-				if (Point.distance(position, target.middle) < 3) {
-					position.x = target.middle.x;
-					position.y = target.middle.y;
+				if (Point.distance(position, targetCell.middle) < 3) {
+					position.x = targetCell.middle.x;
+					position.y = targetCell.middle.y;
 					
-					if (target.isExit())
+					if (targetCell.isExit())
 					{
 						state = ESCAPED
 					}
-					target = target.next_cell;
+					
+					if (targetCell.next_alter_cell != null) {
+						var myRandom : Number = Math.random();
+						
+						if (myRandom < 0.5) {
+							targetCell = targetCell.next_alter_cell;
+						} else {
+							targetCell = targetCell.next_cell;
+						}		
+					} else {
+						targetCell = targetCell.next_cell;
+					}
+					
+					
 				} else {
 					position.x += move_vector.x;
 					position.y += move_vector.y;

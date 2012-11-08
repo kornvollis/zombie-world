@@ -28,14 +28,9 @@ package
 			}
 		}
 		
-		public function blockCell(row: int, col:int) : void
-		{
-			Cell(cells[row][col]).state = Cell.CLOSED;
-		}
-		
 		public function openCell(row: int, col:int) : void
 		{
-			Cell(cells[row][col]).state = Cell.OPEN;
+			Cell(cells[row][col]).state = Cell.OPEN_PATH;
 		}
 		
 		public function isBlocked(row: int, col:int) : Boolean
@@ -61,25 +56,25 @@ package
 		
 		public function hasLeftNeighbour(cell : Cell) : Boolean
 		{
-			if (cell.col > 0 && Cell(cells[cell.row][cell.col-1]).state == Cell.OPEN) return true;
+			if (cell.col > 0 && Cell(cells[cell.row][cell.col-1]).state == Cell.OPEN_PATH) return true;
 			else return false;
 		}
 		
 		public function hasRightNeighbour(cell : Cell) : Boolean
 		{
-			if (cell.col+1 < Constants.COL_NUM && Cell(cells[cell.row][cell.col+1]).state == Cell.OPEN) return true;
+			if (cell.col+1 < Constants.COL_NUM && Cell(cells[cell.row][cell.col+1]).state == Cell.OPEN_PATH) return true;
 			else return false;
 		}
 		
 		public function hasTopNeighbour(cell : Cell) : Boolean
 		{
-			if (cell.row > 0 && Cell(cells[cell.row-1][cell.col]).state == Cell.OPEN ) return true;
+			if (cell.row > 0 && Cell(cells[cell.row-1][cell.col]).state == Cell.OPEN_PATH ) return true;
 			else return false;
 		}
 		
 		public function hasBottomNeighbour(cell : Cell) : Boolean
 		{
-			if (cell.row+1 < Constants.ROW_NUM && Cell(cells[cell.row+1][cell.col]).state == Cell.OPEN ) return true;
+			if (cell.row+1 < Constants.ROW_NUM && Cell(cells[cell.row+1][cell.col]).state == Cell.OPEN_PATH ) return true;
 			else return false;
 		}
 		
