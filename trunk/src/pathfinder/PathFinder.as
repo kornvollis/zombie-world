@@ -141,6 +141,7 @@ package pathfinder
 					neighbourCell.next_cell = startingCell;
 				}
 				
+				/*
 				//ZIK ZAK
 				if (neighbourCell.distance == startingCell.distance + 1)
 				{
@@ -150,7 +151,7 @@ package pathfinder
 						neighbourCell.next_alter_cell = startingCell;
 					}
 				}
-				
+				*/
 				
 				if (!neighbourCell.isProcessed)
 				{
