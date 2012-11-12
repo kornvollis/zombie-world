@@ -32,12 +32,13 @@ package units
 		//PUBI
 		public var maxLife : int = 3;
 		public var life  : int = 3;
-		public var state : String = LIVE;	
+		
 		public var row : int = -1;
 		public var col : int = -1;
 		
 		public function Enemy(row: int, col :int) 
 		{
+			state = LIVE;
 			this.row = row;
 			this.col = col;
 			
@@ -143,10 +144,9 @@ package units
 		{
 			life -=damage;
 			
-			if (life < 1)
+			if (life <= 0)
 			{
-				dispatchEvent(new GameEvents(GameEvents.ZOMBIE_REACHED_EXIT));
-				Factory.getInstance().removeEnemy(this); 
+				this.state = DEAD
 			} else {
 				healthBar.setSize(life, maxLife);
 			}

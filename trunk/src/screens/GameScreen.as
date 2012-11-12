@@ -25,7 +25,7 @@ package screens
 			
 			
 			//TEMP GRAPHICS
-			graphics.beginFill(0x116601);
+			graphics.beginFill(0xFFFFFF);
 			graphics.drawRect(0, 0, 720, 600);
 			
 			//DEBUG GRAPHICS

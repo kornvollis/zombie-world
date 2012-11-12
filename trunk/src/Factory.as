@@ -167,7 +167,7 @@ package
 			}
 		}
 			
-		public function addTower(row:int, col:int, TowerType : Class, isFree: Boolean = false ): void 
+		public function addTower(row:int, col:int, TowerType : Class, isFree: Boolean = false ): Turret 
 		{
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
@@ -180,11 +180,16 @@ package
 				//buildCell.towerOnIt = tower;
 				if (model.coins >= tower.cost || isFree == true )
 				{
+					tower.targetList = model.enemies;
 					model.money -= tower.cost;
 					model.towers.add(tower);
 					model.gameScreen.addChild(tower);
+					
+					return tower;
 				}
 			}
+			
+			return null;
 		}
 		
 		public function addEnemy(row:int, col:int, TypeOfEnemy: Class):Enemy
@@ -265,6 +270,12 @@ package
 					model.gameScreen.removeChild(exitPoint); 
 				};
 			}
+		}
+		
+		public function removeTower(t:Turret):void 
+		{
+			model.towers.remove(t);
+			model.gameScreen.removeChild(t);
 		}
 	}
 

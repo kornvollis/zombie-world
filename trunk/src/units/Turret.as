@@ -7,6 +7,7 @@ package units
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	import flashx.textLayout.formats.Float;
+	import org.as3commons.collections.ArrayList;
 	/**
 	 * ...
 	 * @author OML!
@@ -20,8 +21,6 @@ package units
 		public var range  : int = 250;
 		public var bulletPerSec : int = 1;	
 		public var cost : int = 50;
-		
-		public var state : String = "idle";
 		
 		private var _target : GameObject = null;
 		
@@ -41,9 +40,13 @@ package units
 		private var reloadTimer : Timer;
 		
 		private var lastShotTime : Number = -1;
+		public  var removeCallBack:Function;
+		public var targetList : ArrayList = new ArrayList();
+		
 		
 		public function Turret(row:int, col:int) 
 		{
+			state = IDLE;
 			//RELOAD TIMER
 			var timerDelay : Number = 1000 / bulletPerSec;
 			var timerRepeatCount : int = 1;
@@ -85,11 +88,23 @@ package units
 			
 			//CLICK LISTENER
 			this.addEventListener(MouseEvent.CLICK, onClick);
+			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		}
+		
+		private function onMouseMove(e:MouseEvent):void 
+		{
+			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE && Factory.mouseDown)
+			{
+				removeCallBack();
+			}
 		}
 		
 		public function onClick(e:MouseEvent):void 
 		{
-			Factory.getInstance().sellTower(this);
+			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE)
+			{
+				removeCallBack();
+			}
 		}
 		
 		private function reload(e:TimerEvent):void 
@@ -99,15 +114,19 @@ package units
 		
 		override public function update() : void
 		{
-			if (target != null)
-			{
-				//IF enemy goes out of range then we looking for another enemy
-				if (Point.distance(target.position, position) > range)
-				{
-					target = null;
+			if (targetList.size > 0 && target != null)
+			{				
+				if(target.state == Enemy.DEAD) {
+					target = findTarget();
 					return;
 				}
 				
+				//IF enemy goes out of range then we looking for another enemy
+				if (Point.distance(target.position, position) > range)
+				{
+					target = findTarget();
+					return;
+				}
 				
 				if (Enemy(target).isDeleted)
 				{
@@ -124,7 +143,23 @@ package units
 				rifleGraphics.rotation = angle;
 				
 				if (isReloaded) fire();
+			} else if (targetList.size > 0 && target == null) {
+				target = findTarget();
 			}
+			
+		}
+		
+		private function findTarget():Enemy 
+		{
+			for (var i:int = 0; i < targetList.size; i++) 
+			{
+				var enemy : Enemy = targetList.itemAt(i);
+				
+				if (Point.distance(enemy.position, this.position) < this.range) {
+					return enemy;
+				}
+			}
+			return null;
 		}
 		
 		private function fire():void 

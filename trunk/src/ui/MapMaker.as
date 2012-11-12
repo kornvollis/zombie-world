@@ -16,6 +16,7 @@ package ui
 	import org.as3commons.collections.ArrayList;
 	import screens.GameScreen;
 	import units.Enemy;
+	import units.Turret;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -108,7 +109,11 @@ package ui
 					case Factory.TOWER_BUILDER:
 						if(!clickedCell.blocked && !clickedCell.isExit())
 						{
-							Factory.getInstance().addTower(row, col, this.buildTowerClass, true);
+							//ADD TOWER
+							var t : Turret = Factory.getInstance().addTower(row, col, this.buildTowerClass, true);
+							t.removeCallBack = function removeTowerCallBack():void {
+								Factory.getInstance().removeTower(t);
+							};
 						}
 					break;
 					case Factory.SPAWN_POINT_CREATOR:

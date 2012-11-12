@@ -9,6 +9,8 @@ package
 	 */
 	public class GameObject extends MovieClip 
 	{
+		public var state : String;
+		
 		public var onStage : Boolean = false;
 		
 		public var position : Point = new Point();

@@ -34,7 +34,7 @@ package mvc
 		
 		private var _life : int = 10;
 		private var _money : int = 0;
-		private var _blockers : int = 1000;
+		public var blockers : int = 1000;
 		
 		public var myStage : Stage = null;
 		
@@ -114,37 +114,17 @@ package mvc
 			return targetPos;
 		}
 		
-		
 		public function update(e: Event) : void
 		{
 			if (!pause)
 			{
-				for each(var turret:Turret in towers)
-				{
-					turret.update();
-					
-					if(turret.target == null)
-					{
-						for each(var zombie2 :Enemy in enemies)
-						{
-							var zpos : Point = zombie2.position;
-							var tpos : Point = turret.position;
-							
-							if (Point.distance(zpos, tpos) < turret.range)
-							{
-								turret.target = zombie2;
-								break;
-							}
-						}
-					}
+				for (var i:int = towers.size-1; i >=0 ; i--) {
+					var t: Turret = towers.itemAt(i);
+					t.update();
 				}
 				
-				var enemiesIterator : IOrderedListIterator = enemies.iterator() as IOrderedListIterator;
-				while (enemiesIterator.hasNext()) 
-				{
-					
-					
-					var enemy: Enemy = enemiesIterator.next();
+				for (i = enemies.size-1; i >=0 ; i--) {
+					var enemy: Enemy = enemies.itemAt(i);
 					if (enemy != null)
 					{
 						enemy.update();
@@ -155,7 +135,7 @@ package mvc
 								
 							break;
 							case Enemy.DEAD:
-								
+								Factory.getInstance().removeEnemy(enemy);
 							break;
 							case Enemy.ESCAPED:
 								Factory.getInstance().removeEnemy(enemy);
@@ -170,32 +150,6 @@ package mvc
 				}
 			} // END PAUSE
 		}// END UPDATE
-		
-		private function enemyReachedExit(z : Enemy):Boolean 
-		{
-			for (var i:int = 0; i < pathFinder.exitPoints.length; i++) 
-			{
-				if (pathFinder.exitPoints[i].col == z.col && pathFinder.exitPoints[i].row == z.row) {
-					return true;
-				}
-			}
-			return false;
-		}
-		
-		public function get life():int 
-		{
-			return _life;
-		}
-		
-		public function set life(value:int):void 
-		{
-			_life = value;
-			
-			lifeChangedEvent = new GameEvents(GameEvents.LIFE_LOST);
-			lifeChangedEvent.data = life;
-			dispatchEvent(lifeChangedEvent);
-			
-		}
 		
 		public function get projectils():Vector.<Projectil> 
 		{
@@ -221,17 +175,6 @@ package mvc
 		{
 			_money = value;
 			dispatchEvent(new GameEvents(GameEvents.COIN_CHANGED));
-		}
-		
-		public function get blockers():int 
-		{
-			return _blockers;
-		}
-		
-		public function set blockers(value:int):void 
-		{
-			_blockers = value;
-			dispatchEvent(new GameEvents(GameEvents.BLOCKS_CHANGED));
 		}
 		
 	}
