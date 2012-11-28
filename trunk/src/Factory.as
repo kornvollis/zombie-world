@@ -14,7 +14,7 @@ package
 	import units.Box;
 	import units.Enemy;
 	import units.Projectil;
-	import units.Turret;
+	import units.towers.Tower;
 	/**
 	 * @author OML!
 	 */
@@ -78,12 +78,19 @@ package
 			Factory.view = view;
 		}
 		
+		public function addWave(row:int, col:int, start:int, num:int, spawnDelayInMillisec:int, typeOfEnemy:Class) : void
+		{
+			var wave : Wave = new Wave(row, col, start, num, spawnDelayInMillisec, typeOfEnemy);
+			
+			model.waves.add(wave);
+		}
+		
 		public function removeTowers() : void 
 		{
 			var iterator : IOrderedListIterator = model.towers.iterator() as IOrderedListIterator;
             while (iterator.hasNext()) 
 			{
-				var t: Turret = iterator.next();
+				var t: Tower = iterator.next();
 				model.gameScreen.removeChild(t);
 				model.towers.remove(t);
 			}
@@ -92,29 +99,8 @@ package
 		public function createProjectil(posX:int, posY:int, target : GameObject) : void
 		{
 			var projectil : Projectil = new Projectil(posX, posY, target);
-			model.projectils.push(projectil);
-		}
-		
-		public function sellTower(tower: Turret) : void
-		{
-			/*
-			if (Factory.getInstance().clickState == Factory.SELL_TOWER)
-			{
-				if (tower.onStage)
-				{
-					if(view.contains(tower)) view.mapAreaLayer2.removeChild(tower);
-				}
-				
-				model.money += tower.cost;
-				
-				var towerIndex : int = model.turrets.indexOf(tower);			
-				model.turrets.splice(towerIndex, 1);	
-				
-				//CELL fix
-				var cell : Cell = model.pathFinder.cellGrid.getCell(tower.row, tower.col);
-				cell.towerOnIt = null;
-			}
-			*/
+			model.projectils.add(projectil);
+			model.gameScreen.addChild(projectil);
 		}
 		
 		public function removeBlock(block : Box) : void
@@ -166,24 +152,27 @@ package
 				}
 			}
 		}
-			
-		public function addTower(row:int, col:int, TowerType : Class, isFree: Boolean = false ): Turret 
+		
+		public function addTower(row:int, col:int, TowerType : Class, isFree: Boolean = false ): Tower 
 		{
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
 			{
 				throw(new Error("addTurret row, col out of bound"));
 			} else {
-				//var turret : Turret = new Turret(row, col);
-				var tower : Turret = new TowerType(row, col);
-				var buildCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
-				//buildCell.towerOnIt = tower;
-				if (model.coins >= tower.cost || isFree == true )
+				var tower : Tower = new TowerType(row, col);
+				var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+				if (!cell.blocked && model.coins >= tower.cost || isFree == true )
 				{
 					tower.targetList = model.enemies;
 					model.money -= tower.cost;
 					model.towers.add(tower);
 					model.gameScreen.addChild(tower);
+					
+					//Block
+					cell.state = Cell.CLOSED_PATH;
+					model.pathFinder.findPath();
+					model.gameScreen.drawDebugPath();
 					
 					return tower;
 				}
@@ -237,17 +226,10 @@ package
 			model.gameScreen.removeChild(e);
 		}
 		
-		public function removeProjectil(e : Projectil):void 
+		public function removeProjectil(p : Projectil):void 
 		{
-			var projectile : Projectil = e;
-			projectile.isDeleted = true;
-			var projIndex : int = model.projectils.indexOf(projectile);
-			model.projectils.splice(projIndex, 1);
-			
-			if (e.onStage)
-			{
-				view.mapAreaLayer2.removeChild(e);
-			}
+			model.projectils.remove(p);
+			model.gameScreen.removeChild(p);
 		}
 		
 		public function removeExitPoint(exitPoint:ExitPoint):void 
@@ -255,8 +237,10 @@ package
 			model.pathFinder.removeExitPoint(exitPoint.row, exitPoint.col);
 		}
 		
-		public function addExitPoint(exitPoint: ExitPoint):void 
+		public function addExitPoint(row:int, col:int):void 
 		{
+			var exitPoint : ExitPoint = new ExitPoint(row, col);
+			
 			if (model.pathFinder.addExitPoint(exitPoint))
 			{
 				model.gameScreen.addChild(exitPoint);
@@ -272,7 +256,7 @@ package
 			}
 		}
 		
-		public function removeTower(t:Turret):void 
+		public function removeTower(t:Tower):void 
 		{
 			model.towers.remove(t);
 			model.gameScreen.removeChild(t);

@@ -1,4 +1,4 @@
-package units
+package units.towers
 {
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -8,15 +8,17 @@ package units
 	import flash.utils.Timer;
 	import flashx.textLayout.formats.Float;
 	import org.as3commons.collections.ArrayList;
+	import units.Enemy;
 	/**
 	 * ...
 	 * @author OML!
 	 */
-	public class Turret extends GameObject 
+	public class Tower extends GameObject 
 	{
 		public static const IDLE   : String = "idle";
 		public static const FIRING : String = "firing";
 		
+		//Properties
 		public var damage : int = 1;
 		public var range  : int = 250;
 		public var bulletPerSec : int = 1;	
@@ -41,10 +43,10 @@ package units
 		
 		private var lastShotTime : Number = -1;
 		public  var removeCallBack:Function;
-		public var targetList : ArrayList = new ArrayList();
+		public  var targetList : ArrayList = new ArrayList();
 		
 		
-		public function Turret(row:int, col:int) 
+		public function Tower(row:int, col:int) 
 		{
 			state = IDLE;
 			//RELOAD TIMER
@@ -73,10 +75,9 @@ package units
 			rifleGraphics.y = Constants.CELL_SIZE * 0.5;
 			
 			//Add range graphics
-			rangeGraphics.graphics.lineStyle(1, 0xFF0000, 0.1);
+			rangeGraphics.graphics.lineStyle(1, 0x00FF00, 0.3);
 			rangeGraphics.graphics.drawCircle(0, 0, range);
-			if (showRange)
-			{
+			if (showRange) {
 				rangeGraphics.visible = true;
 			} else {
 				rangeGraphics.visible = false;
@@ -124,7 +125,7 @@ package units
 				//IF enemy goes out of range then we looking for another enemy
 				if (Point.distance(target.position, position) > range)
 				{
-					target = findTarget();
+					target = null;
 					return;
 				}
 				
@@ -164,9 +165,11 @@ package units
 		
 		private function fire():void 
 		{
-			Factory.getInstance().createProjectil(position.x + Constants.CELL_SIZE * 0.5, position.y + Constants.CELL_SIZE * 0.5, target);
-			isReloaded = false;
-			reloadTimer.start();
+			if (target != null) {
+				Factory.getInstance().createProjectil(position.x + Constants.CELL_SIZE * 0.5, position.y + Constants.CELL_SIZE * 0.5, target);
+				isReloaded = false;
+				reloadTimer.start();
+			}
 		}
 		
 		public function get showRange():Boolean 

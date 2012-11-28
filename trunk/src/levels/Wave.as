@@ -26,15 +26,15 @@ package levels
 		public var icon : Object;
 		
 		
-		public function Wave(spawnPoint : SpawnPoint, startTimeSec : int, num : int, spawnDelayMilliSec: Number, enemy : Class) 
+		public function Wave(row: int,col:int, startTimeSec : int, num : int, spawnDelayMilliSec: Number, enemy : Class) 
 		{
 			this.startTimeSec = startTimeSec;
 			this.spawnDelayMilliSec = spawnDelayMilliSec;
 			this.numOfEnemies = num;
 			this.TypeOfEnemy = enemy;
 			this.spawnPoint = spawnPoint;
-			this.row = spawnPoint.row;
-			this.col = spawnPoint.col;
+			this.row = row;
+			this.col = col;
 			
 			this.data = this;
 			this.label = "S: " + startTimeSec + " | " + "#: " + num + " | " + "D: " + spawnDelayMilliSec + " T: " + enemy;
@@ -44,8 +44,6 @@ package levels
 			
 			spawnTimer = new Timer(spawnDelayMilliSec, num);
 			spawnTimer.addEventListener(TimerEvent.TIMER, spawnUnit);
-			
-			//spawnTimerTrigger.start();
 		}
 		
 		public function start() : void

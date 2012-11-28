@@ -1,11 +1,11 @@
-package  
+package units.towers
 {
-	import units.Turret;
+	import units.towers.Tower;
 	/**
 	 * ...
 	 * @author OML!
 	 */
-	public class Cannon extends Turret 
+	public class Cannon extends Tower 
 	{
 		
 		public function Cannon(row: int,col:int) 

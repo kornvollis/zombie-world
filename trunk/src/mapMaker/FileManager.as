@@ -4,10 +4,12 @@ package mapMaker
 	import flash.events.EventDispatcher;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
+	import flash.utils.getDefinitionByName;
 	import levels.LevelData;
 	import mvc.GameModel;
 	import org.as3commons.collections.ArrayList;
 	import units.Box;
+	import units.towers.Cannon;
 	/**
 	 * ...
 	 * @author OML!
@@ -25,14 +27,20 @@ package mapMaker
 		
 		public function FileManager(model : GameModel) 
 		{
+
 			this.model = model;
 			trace("file manager!");
 			var fileTypes:FileFilter = new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png");
 			
-			//DEFAULT MAP///////////////
+			// DEFAULT MAP ///////////////
 			levelData.addBlock(5, 6);
 			levelData.addBlock(5, 7);
 			levelData.addBlock(5, 8);
+			
+			
+			levelData.addTower(4, 4, "Cannon");
+			levelData.addWave(1, 2, 2, 20, 200, "BasicEnemy");
+			
 			
 			levelData.addExitPoint(0, 0);
 			levelData.addExitPoint(1, 0);
@@ -46,19 +54,38 @@ package mapMaker
 		
 		public function loadMap() : void
 		{
-			var blocks : ArrayList = levelData.getBlocks();
-			
+			// ADD BLOCKERS
+			var blocks : ArrayList = levelData.getBlockObjects();
 			for (var i:int = 0; i < blocks.size; i++) 
 			{
-				Factory.getInstance().addBlock(blocks.itemAt(i).row, blocks.itemAt(i).col, true);
+				var blockObject : Object = blocks.itemAt(i);
+				Factory.getInstance().addBlock(blockObject.row, blockObject.col, true);
 			}
 			
-			var exits : ArrayList = levelData.getExits();
-			
+			// ADD EXITS
+			var exits : ArrayList = levelData.getExitsObjects();
 			for (i = 0; i < exits.size; i++) 
 			{
-				Factory.getInstance().addExitPoint(exits.itemAt(i));
+				var exitObject: Object = exits.itemAt(i);
+				Factory.getInstance().addExitPoint(exitObject.row, exitObject.col);
 			}
+			
+			// ADD TOWERS
+			var towers : ArrayList = levelData.getTowerObjects();
+			for (i = 0; i < towers.size; i++) 
+			{
+				var toverObj : Object = towers.itemAt(i)
+				Factory.getInstance().addTower(toverObj.row, toverObj.col, Class(getDefinitionByName(toverObj.towerClass)), true);
+			}
+			
+			// ADD WAVES
+			var waves : ArrayList = levelData.getWaveObjects();
+			for (i = 0; i < waves.size; i++) 
+			{
+				var waveObj : Object = waves.itemAt(i);
+				Factory.getInstance().addWave(waveObj.row, waveObj.col, waveObj.start, waveObj.num, waveObj.density, Class(getDefinitionByName("units.towers."+waveObj.enemyClass)));
+			}
+			
 		}
 		
 		public function saveFile():void 
@@ -90,7 +117,7 @@ package mapMaker
 		private function fileLoadComplete(e:Event):void 
 		{
 			xmlData = XML(fileOpener.data); // get data
-			levelData.loadMapData(xmlData);
+			levelData.setLevelDataFromXML(xmlData);
 			
 			trace("MAP: \n");
 			trace(xmlData);

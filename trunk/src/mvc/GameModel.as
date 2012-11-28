@@ -16,8 +16,7 @@ package mvc
 	import units.Box;
 	import units.Enemy;
 	import units.Projectil;
-	import units.Turret;
-	
+	import units.towers.Tower;	
 	
 	import pathfinder.PathFinder;
 
@@ -32,17 +31,18 @@ package mvc
 		
 		private var lifeChangedEvent : GameEvents;
 		
-		private var _life : int = 10;
-		private var _money : int = 0;
+		private var _life   : int = 10;
+		private var _money  : int = 0;
 		public var blockers : int = 1000;
 		
 		public var myStage : Stage = null;
 		
+		// GAME ELEMENTS //////////////////////////////////////////
 		public var towers       : ArrayList = new ArrayList();
 		public var enemies      : ArrayList = new ArrayList();
 		public var boxes        : ArrayList = new ArrayList();
-		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>();
-		
+		public var projectils   : ArrayList = new ArrayList();
+		public var waves        : ArrayList = new ArrayList();
 		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
@@ -51,18 +51,17 @@ package mvc
 		public var gameScreen : GameScreen;
 		
 		//FILE MANAGER
-		public var fileManager : FileManager;
+		public var levelManager : FileManager;
 		
 		public function GameModel(gameHolder : DisplayObject) 
 		{
 			this.myStage = gameHolder.stage;
 			
 			//FILE MANAGER
-			fileManager = new FileManager(this);
+			levelManager = new FileManager(this);
 			
 			//SET PATHFINDER
 			pathFinder = new PathFinder(this);
-			//pathFinder  = new PathFinder(this);
 			gameScreen = new GameScreen(this);
 			
 			addChild(gameScreen);
@@ -119,7 +118,7 @@ package mvc
 			if (!pause)
 			{
 				for (var i:int = towers.size-1; i >=0 ; i--) {
-					var t: Turret = towers.itemAt(i);
+					var t: Tower = towers.itemAt(i);
 					t.update();
 				}
 				
@@ -144,22 +143,12 @@ package mvc
 					}
 				}
 				
-				for each(var projectile : Projectil in _projectils)
-				{
+				for (i = projectils.size-1; i >= 0 ; i--) {
+					var projectile : Projectil = projectils.itemAt(i);
 					projectile.update();
 				}
 			} // END PAUSE
 		}// END UPDATE
-		
-		public function get projectils():Vector.<Projectil> 
-		{
-			return _projectils;
-		}
-		
-		public function set projectils(value:Vector.<Projectil>):void 
-		{
-			_projectils = value;
-		}
 		
 		public function get coins():int 
 		{

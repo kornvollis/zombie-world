@@ -1,12 +1,12 @@
-package  
+package units.towers
 {
 	import flash.events.MouseEvent;
-	import units.Turret;
+	import units.towers.Tower;
 	/**
 	 * ...
 	 * @author OML!
 	 */
-	public class PointDefense extends Turret 
+	public class PointDefense extends Tower 
 	{
 		
 		public function PointDefense(row:int, col:int) 

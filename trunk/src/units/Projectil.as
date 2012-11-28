@@ -21,6 +21,8 @@ package units
 		{
 			this.position.x = posX;
 			this.position.y = posY;
+			this.x = position.x;
+			this.y = position.y; 
 			
 			this.target = target;
 			this.targetPosition.x = target.position.x;
@@ -47,6 +49,8 @@ package units
 				velo.normalize(speed);
 				position.x += velo.x;
 				position.y += velo.y;
+				this.x = position.x;
+				this.y = position.y;
 				
 				if (Point.distance(targetPosition, position) < 6)
 				{
@@ -68,7 +72,6 @@ package units
 		{
 			_target = value;
 		}
-		
 	}
 
 }

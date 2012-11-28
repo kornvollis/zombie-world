@@ -3,7 +3,7 @@ package levels
 	import flash.xml.XMLNode;
 	import org.as3commons.collections.ArrayList;
 	import units.Box;
-	import units.Turret;
+
 	/**
 	 * ...
 	 * @author OML!
@@ -21,6 +21,9 @@ package levels
 				</title>
 				
 				<towers>
+					<!-- 
+					<tower row='3' col='1' myclass='Cannon' />
+					-->
 				</towers>
 				
 				<blocks>
@@ -30,48 +33,101 @@ package levels
 				</exits>
 				
 				<waves>
-					<wave row='3' col='1' start='5' density='40' type='BasicEnemy' />
+					<!-- 
+					<wave row='3' col='1' start='5' density='40' myclass='BasicEnemy' />
+					-->
 				</waves>
 			</map>;
 		}
 		
-		public function loadMapData(xmlData : XML) : void
+		public function setLevelDataFromXML(xmlData : XML) : void
 		{
 			this.data = xmlData;
 		}
 		
-		public function getExits() : ArrayList
+		public function getExitsObjects() : ArrayList
 		{
 			var exits : ArrayList = new ArrayList();
 			
 			for each (var exit : XML in data.exits.exit) 
 			{
-				var new_exit : ExitPoint = new ExitPoint(int(exit.attribute("row")), int(exit.attribute("col")));
-				exits.add(new_exit);
+				var exitObj : Object = new Object();
+				exitObj.row = int(exit.attribute("row"));
+				exitObj.col = int(exit.attribute("col"));
+				exits.add(exitObj);
 			}
 			
 			return exits;
 		}
 		
-		public function getBlocks() : ArrayList
+		public function getBlockObjects() : ArrayList
 		{
 			var blocks : ArrayList = new ArrayList();
 			
 			for each (var block : XML in data.blocks.block) 
 			{
-				var new_block : Box = new Box(int(block.attribute("row")), int(block.attribute("col")));
-				blocks.add(new_block);
+				var blockObject : Object = new Object();
+				blockObject.row = int(block.attribute("row"));
+				blockObject.col = int(block.attribute("col"));
+				
+				blocks.add(blockObject);
 			}
 			
 			return blocks;
 		}
 		
-		public function addTower(row:int, col:int, type:String):void
+		public function getTowerObjects() : ArrayList
 		{
-			var towerNode : XML = <tower row='' col='' type='' />;
+			var towers : ArrayList = new ArrayList();
+			
+			for each (var tower : XML in data.towers.tower) 
+			{
+				var row : int = int(tower.attribute("row"));
+				var col : int = int(tower.attribute("col"));
+				var towerClass : String = String(tower.attribute("myclass"));
+				
+				var towerObject : Object = new Object();
+				towerObject.row = row;
+				towerObject.col = col;
+				towerObject.towerClass = towerClass;
+				
+				towers.add(towerObject);
+			}
+			
+			return towers;
+		}
+		
+		public function getWaveObjects() : ArrayList
+		{
+			var waves : ArrayList = new ArrayList();
+			
+			for each (var wave : XML in data.waves.wave) 
+			{
+				var row : int = int(wave.attribute("row"));
+				var col : int = int(wave.attribute("col"));
+				var start : int = int(wave.attribute("start"));
+				var density : int = int(wave.attribute("density"));
+				var enemyClass : String = String(wave.attribute("myclass"));
+				
+				var waveObject : Object = new Object();
+				waveObject.row = row;
+				waveObject.col = col;
+				waveObject.start = start;
+				waveObject.density = density;
+				waveObject.enemyClass = enemyClass;
+				
+				waves.add(waveObject);
+			}
+			
+			return waves;
+		}
+		
+		public function addTower(row:int, col:int, myclass:String):void
+		{
+			var towerNode : XML = <tower row='' col='' myclass='' />;
 			towerNode.@row = row;
 			towerNode.@col = col;
-			towerNode.@type = type;
+			towerNode.@myclass = myclass;
 			
 			//INSERT TOWER IN THE XML
 			data.towers.appendChild(towerNode);
@@ -87,14 +143,17 @@ package levels
 			data.exits.appendChild(exitNode);
 		}
 		
-		public function addWave(start:int, density:int, row:int, col:int, type:String):void
+		public function addWave(row:int, col:int, start:int, num:int, density:int, type:String):void
 		{
-			var waveNode : XML = <wave row='' col='' start='' density='40' type='BasicEnemy' />;
+			var waveNode : XML = <wave row='' col='' start='' num='' density='40' myclass='BasicEnemy' />;
 			waveNode.@row = row;
 			waveNode.@col = col;
 			waveNode.@start = start;
+			waveNode.@num = num;
 			waveNode.@density = density;
-			waveNode.@type = type;
+			waveNode.@myclass = type;
+			
+			data.waves.appendChild(waveNode);
 		}
 		
 		public function addBlock(row : int, col : int):void
@@ -112,10 +171,6 @@ package levels
 		{
 			return data.toXMLString();
 		}
-		
-		
-		
-		
 		
 	}
 

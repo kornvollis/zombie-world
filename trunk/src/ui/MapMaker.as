@@ -16,8 +16,9 @@ package ui
 	import org.as3commons.collections.ArrayList;
 	import screens.GameScreen;
 	import units.Enemy;
-	import units.Turret;
-	
+	import units.towers.Cannon;
+	import units.towers.PointDefense;
+	import units.towers.Tower;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -110,7 +111,7 @@ package ui
 						if(!clickedCell.blocked && !clickedCell.isExit())
 						{
 							//ADD TOWER
-							var t : Turret = Factory.getInstance().addTower(row, col, this.buildTowerClass, true);
+							var t : Tower = Factory.getInstance().addTower(row, col, this.buildTowerClass, true);
 							t.removeCallBack = function removeTowerCallBack():void {
 								Factory.getInstance().removeTower(t);
 							};
@@ -125,9 +126,7 @@ package ui
 					case Factory.ADD_EXIT:
 						if(!clickedCell.blocked && !clickedCell.isSpawnPoint())
 						{
-							var exitPoint : ExitPoint = new ExitPoint(row, col);
-							
-							Factory.getInstance().addExitPoint(exitPoint);
+							Factory.getInstance().addExitPoint(row, col);
 						}
 					break;
 					case Factory.BLOCK_BUILDER:
@@ -194,7 +193,7 @@ package ui
 			hammerButton.addEventListener(MouseEvent.CLICK, onHammerClick);
 			
 			//FILE MANAGER
-			model.fileManager.addEventListener(Event.COMPLETE, mapLoaded);
+			model.levelManager.addEventListener(Event.COMPLETE, mapLoaded);
 			
 			//EVENT LISTENERS
 			//COIN CHANGED
@@ -241,17 +240,17 @@ package ui
 		
 		private function onSaveClick(e:MouseEvent):void 
 		{
-			model.fileManager.saveFile();
+			model.levelManager.saveFile();
 		}
 		
 		private function onLoadClick(e:MouseEvent):void 
 		{
-			model.fileManager.loadFile();
+			model.levelManager.loadFile();
 		}
 		
 		private function mapLoaded(e:Event):void 
 		{
-			var levelData : LevelData = model.fileManager.getLevel();
+			var levelData : LevelData = model.levelManager.getLevel();
 		}
 		
 		private function onAddExit(e:MouseEvent):void 
@@ -266,8 +265,8 @@ package ui
 			model.money = int(mapMakerPanel.money.text);
 			
 			//START ALL WAVE TIMERS
-			for each (var wave: Wave in  waves) 
-			{			
+			for (var i : int = model.waves.size-1; i >=0 ; i--) {
+				var wave: Wave = model.waves.itemAt(i);
 				wave.start();
 			}
 			
@@ -364,10 +363,13 @@ package ui
 			
 			if (spawnTime >= 0 && numOfEnemies > 0 && spawnPoint != null)
 			{
-				var wave : Wave = new Wave(spawnPoint, spawnTime, numOfEnemies, delay, enemy);
+				var wave : Wave = new Wave(spawnPoint.row, spawnPoint.col, spawnTime, numOfEnemies, delay, enemy);
+				
+				//ADDING TO THE MODEL
+				model.waves.add(wave);
 				
 				//ADDING TO THE MAPMAKER ARRAY
-				waves.push(wave);
+				//waves.push(wave);
 				
 				//ADDING TO THE COMBO BOX
 				mapMakerPanel.waves.addItem(wave);

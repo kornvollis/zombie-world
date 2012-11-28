@@ -12,8 +12,8 @@ package
 		{
 			super(row, col);
 			
-			life = 1;
-			maxLife = 1;
+			life = 10;
+			maxLife = 10;
 			
 			//TEMP Graphics
 			this.graphics.clear();

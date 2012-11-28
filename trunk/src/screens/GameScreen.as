@@ -9,7 +9,7 @@ package screens
 	 */
 	public class GameScreen extends Screen 
 	{
-		public var hasDebug : Boolean = false;
+		public var hasDebug : Boolean = true;
 		
 		private var model : GameModel;
 		private var mapMaker : MapMaker;

@@ -1,8 +1,5 @@
 package 
 {
-	import debug.ZDebug;
-	import levels.NewWave;
-	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.utils.getTimer;
@@ -49,7 +46,7 @@ package
 			
 			
 			//DEFAULT LOAD MAP
-			model.fileManager.loadMap();
+			model.levelManager.loadMap();
 			
 			dispatchEvent(new GameEvents(GameEvents.TURRET_SELL_EVENT));
 		}
