@@ -54,7 +54,10 @@ package mapMaker
 		
 		public function loadMap() : void
 		{
+			// TODO FIXING THE SHITTY LOAD MAP
+			
 			// ADD BLOCKERS
+			/*
 			var blocks : ArrayList = levelData.getBlockObjects();
 			for (var i:int = 0; i < blocks.size; i++) 
 			{
@@ -75,7 +78,7 @@ package mapMaker
 			for (i = 0; i < towers.size; i++) 
 			{
 				var toverObj : Object = towers.itemAt(i)
-				Factory.getInstance().addTower(toverObj.row, toverObj.col, Class(getDefinitionByName(toverObj.towerClass)), true);
+				//Factory.getInstance().addTower(toverObj.row, toverObj.col, Class(getDefinitionByName(toverObj.towerClass)), true);
 			}
 			
 			// ADD WAVES
@@ -85,7 +88,7 @@ package mapMaker
 				var waveObj : Object = waves.itemAt(i);
 				Factory.getInstance().addWave(waveObj.row, waveObj.col, waveObj.start, waveObj.num, waveObj.density, Class(getDefinitionByName("units.towers."+waveObj.enemyClass)));
 			}
-			
+			*/
 		}
 		
 		public function saveFile():void 

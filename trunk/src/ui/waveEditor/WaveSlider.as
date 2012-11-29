@@ -5,7 +5,10 @@ package ui.waveEditor
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.EventPhase;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	import ui.UI;
 	
 	/**
 	 * ...
@@ -13,45 +16,69 @@ package ui.waveEditor
 	 */
 	public class WaveSlider extends MovieClip 
 	{
-		private const MIN_WIDTH : uint = 60;
-		
-		private var startTime : uint;
+		private const MIN_WIDTH : uint = 50;
+			
+		private var _startTime : uint;
 		private var endTime : uint;
 		private var numOfEnemies : uint;
-		private var density : uint;
-		private var leftSide : Sprite = new Sprite();
+		private var _density : uint;
+		private var leftSide : MovieClip = new MovieClip();
 		private var rightSide : Sprite = new Sprite();		
-		private var isMouseDown : Boolean = false;
+		
+		// MOUSE DOWNS
+		private var isMouseDown        : Boolean = false;
+		private var isLeftHandlerDown  : Boolean = false;
+		private var isRightHandlerDown : Boolean = false;
+		
+		// SLOT SIZE
+		private var slotWidth:uint;
+		private var slotHeight:uint;
 		
 		public var moveToCallBack : Function = null;
+		public var adjustLeftSizeCallBack : Function = null;
+		public var dragPoint :Point = new Point();
 		
-		public function WaveSlider(startTime: uint, numOfEnemies: uint, density: uint) 
+		public function WaveSlider(startTime: uint, numOfEnemies: uint, density: uint, slotWidth: uint, slotHeight:uint) 
 		{
+			this.slotHeight = slotHeight;
+			this.slotWidth = slotWidth;
 			this.density = density;
 			this.numOfEnemies = numOfEnemies;
 			this.startTime = startTime;
 			
 			endTime = startTime + (numOfEnemies * density) / 1000;
-			addEventListener(MouseEvent.CLICK, onClick);
-			addEventListener(MouseEvent.MOUSE_DOWN, onDown);
 			
+			// EVENTLISTENERS
+			addEventListener(MouseEvent.CLICK, onClick);
+			leftSide.addEventListener(MouseEvent.MOUSE_DOWN, onLeftClick);
+			
+			addEventListener(MouseEvent.MOUSE_DOWN, onDown);
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);
+		}
+		
+		private function onLeftClick(e:MouseEvent):void 
+		{
+			trace("left down");
+			
+			isLeftHandlerDown = true;
+			
+			e.stopPropagation();
 		}
 		
 		private function onMove(e:MouseEvent):void 
 		{
-			if (moveToCallBack != null && isMouseDown)
-			{
+			if (moveToCallBack != null && isMouseDown) {
 				moveToCallBack(e, this);
+			} else if (adjustLeftSizeCallBack != null && isLeftHandlerDown ) {
+				adjustLeftSizeCallBack(e, this);
 			}
 		}
 		
 		private function onDown(e:MouseEvent):void 
 		{
 			isMouseDown = true;
-			
-			//mouseEnabled = false;
-			stage.mouseChildren = false;
+			dragPoint.x = e.localX;
+			dragPoint.x = e.localY;
 		}
 		
 		private function onAdd(e:Event):void 
@@ -62,37 +89,62 @@ package ui.waveEditor
 		
 		private function onMouseUp(e:MouseEvent):void 
 		{
-			isMouseDown = false;
-			
-			stage.mouseChildren = true;
+			isMouseDown        = false;
+			isLeftHandlerDown  = false;
+			isRightHandlerDown = false;
 		}
 		
 		private function onClick(e:MouseEvent):void 
 		{
-			
+			trace("onclick");
 		}
 		
-		public function drawGraphics(_width: uint, _height: uint) : void {
+		public function drawGraphics() : void {
+			
+			var durationSec : uint = (numOfEnemies * density) / 1000;
+			
 			graphics.beginFill(0xFFFFFF);
-			graphics.drawRect(0, 0, _width, _height);
+			
+			var innerWidth : uint = (durationSec - 2) * slotWidth;
+			
+			if (innerWidth < 3 * slotWidth) innerWidth = 3 * slotWidth;
+			
+			graphics.drawRect(slotWidth, 0, innerWidth, slotHeight);
 			
 			// DRAW LEFT RIGHT HANDLERS
-			var handlerWidth :uint = 10;
-			var color :uint = 0xFF0000;
+			leftSide.graphics.beginFill(0xFF0000, 1);
+			leftSide.graphics.drawRect(0, 0, slotWidth, slotHeight);
 			
-			leftSide.graphics.lineStyle(handlerWidth, color, 1, false, LineScaleMode.NORMAL, CapsStyle.NONE);
-			leftSide.graphics.moveTo(0, 0);
-			leftSide.graphics.lineTo(0, _height);
+			rightSide.graphics.beginFill(0xFF0000, 1);
+			rightSide.graphics.drawRect(0, 0, slotWidth, slotHeight);
 			
-			rightSide.graphics.lineStyle(handlerWidth, color, 1, false, LineScaleMode.NORMAL, CapsStyle.NONE);
-			rightSide.graphics.moveTo(0, 0);
-			rightSide.graphics.lineTo(0, _height);
-			
-			rightSide.x = _width - handlerWidth / 2;
-			leftSide.x = handlerWidth/2;
+			rightSide.x = innerWidth + slotWidth;
+			//leftSide.x = handlerWidth/2;
 			
 			addChild(rightSide);
 			addChild(leftSide);
+		}
+		
+		public function get startTime():uint 
+		{
+			return _startTime;
+		}
+		
+		public function set startTime(value:uint):void 
+		{
+			_startTime = value;
+			
+			//drawGraphics();
+		}
+		
+		public function get density():uint 
+		{
+			return _density;
+		}
+		
+		public function set density(value:uint):void 
+		{
+			_density = value;
 		}
 	}
 
