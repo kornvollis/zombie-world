@@ -1,6 +1,7 @@
 package ui.waveEditor 
 {
 	import flash.display.MovieClip;	
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	/**
 	 * ...
@@ -27,16 +28,12 @@ package ui.waveEditor
 			
 			//LISTENERS
 			addWaveButton.addEventListener(MouseEvent.MOUSE_DOWN, onAddWaveMD);
-			addEventListener(MouseEvent.MOUSE_UP, onAddWaveMUP);
+			
+			
 			
 			//ADD GRPHICS
 			addChild(addWaveButton);
 			addChild(waveEditWindow);
-		}
-		
-		private function onAddWaveMUP(e:MouseEvent):void 
-		{
-			waveEditWindow.newWaveDraggedOver = false;
 		}
 		
 		private function onAddWaveMD(e:MouseEvent):void 

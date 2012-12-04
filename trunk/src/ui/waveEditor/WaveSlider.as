@@ -19,10 +19,12 @@ package ui.waveEditor
 		private const MIN_WIDTH : uint = 50;
 			
 		private var _startTime : uint;
-		private var endTime : uint;
-		private var numOfEnemies : uint;
 		private var _density : uint;
-		private var leftSide : MovieClip = new MovieClip();
+		
+		private var _endTime : uint;
+		private var numOfEnemies : uint;
+		
+		private var leftSide  : Sprite = new Sprite();
 		private var rightSide : Sprite = new Sprite();		
 		
 		// MOUSE DOWNS
@@ -34,17 +36,21 @@ package ui.waveEditor
 		private var slotWidth:uint;
 		private var slotHeight:uint;
 		
+		public var duration : int;
 		public var moveToCallBack : Function = null;
 		public var adjustLeftSizeCallBack : Function = null;
 		public var dragPoint :Point = new Point();
 		
-		public function WaveSlider(startTime: uint, numOfEnemies: uint, density: uint, slotWidth: uint, slotHeight:uint) 
+		public function WaveSlider(startTime: uint, endTime: uint, numOfEnemies: uint, slotWidth: uint, slotHeight:uint) 
 		{
-			this.slotHeight = slotHeight;
-			this.slotWidth = slotWidth;
-			this.density = density;
 			this.numOfEnemies = numOfEnemies;
-			this.startTime = startTime;
+			this._startTime    = startTime;
+			this.endTime      = endTime;
+			
+			this.slotHeight   = slotHeight;
+			this.slotWidth    = slotWidth;
+			
+			this.duration = endTime - startTime;
 			
 			endTime = startTime + (numOfEnemies * density) / 1000;
 			
@@ -54,6 +60,10 @@ package ui.waveEditor
 			
 			addEventListener(MouseEvent.MOUSE_DOWN, onDown);
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);
+			
+			//GRAPHICS
+			addChild(rightSide);
+			addChild(leftSide);
 		}
 		
 		private function onLeftClick(e:MouseEvent):void 
@@ -78,7 +88,7 @@ package ui.waveEditor
 		{
 			isMouseDown = true;
 			dragPoint.x = e.localX;
-			dragPoint.x = e.localY;
+			dragPoint.y = e.localY;
 		}
 		
 		private function onAdd(e:Event):void 
@@ -101,11 +111,11 @@ package ui.waveEditor
 		
 		public function drawGraphics() : void {
 			
-			var durationSec : uint = (numOfEnemies * density) / 1000;
+			graphics.clear();
 			
 			graphics.beginFill(0xFFFFFF);
 			
-			var innerWidth : uint = (durationSec - 2) * slotWidth;
+			var innerWidth : uint = (endTime-startTime - 2) * slotWidth;
 			
 			if (innerWidth < 3 * slotWidth) innerWidth = 3 * slotWidth;
 			
@@ -118,11 +128,7 @@ package ui.waveEditor
 			rightSide.graphics.beginFill(0xFF0000, 1);
 			rightSide.graphics.drawRect(0, 0, slotWidth, slotHeight);
 			
-			rightSide.x = innerWidth + slotWidth;
-			//leftSide.x = handlerWidth/2;
-			
-			addChild(rightSide);
-			addChild(leftSide);
+			rightSide.x = innerWidth + slotWidth;			
 		}
 		
 		public function get startTime():uint 
@@ -132,9 +138,12 @@ package ui.waveEditor
 		
 		public function set startTime(value:uint):void 
 		{
-			_startTime = value;
+			if (value < endTime - 4)
+			{
+				_startTime = value;
 			
-			//drawGraphics();
+				//drawGraphics();
+			}
 		}
 		
 		public function get density():uint 
@@ -145,6 +154,16 @@ package ui.waveEditor
 		public function set density(value:uint):void 
 		{
 			_density = value;
+		}
+		
+		public function get endTime():uint 
+		{
+			return _endTime;
+		}
+		
+		public function set endTime(value:uint):void 
+		{
+			_endTime = value;
 		}
 	}
 

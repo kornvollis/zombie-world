@@ -53,7 +53,7 @@ package ui.waveEditor
 			
 			// LISTENERS
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);
-			table.addEventListener(MouseEvent.MOUSE_UP, onMouseUP);
+			
 			
 			// GRAPHICS
 			newWaveGhost.visible = false;
@@ -71,34 +71,31 @@ package ui.waveEditor
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAdd);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUP);
 		}
 		
 		private function onMouseUP(e:MouseEvent):void 
-		{			
+		{		
 			if (newWaveDraggedOver) {
-				
 				// INIT
-				var positionX : Number = e.localX;
-				var positionY : Number = e.localY;
-				var row : uint = uint(positionY / rowHeight);
+				var worldPosition : Point = new Point(e.currentTarget.mouseX, e.currentTarget.mouseY);
+				var tablePosition : Point = table.globalToLocal(worldPosition);
 				
-				if (positionX > _width - newWaveGhost.width) {
-					positionX  = _width - newWaveGhost.width;
-				}
-				
-				// DATA
-				var startTime : int = (positionX * 60 / _width) + row * 60;
-				var numOfEnemies : uint = 10;
-				var density : uint = 200;
+				var startTime : int = tablePositionToStartTime(tablePosition);
 				
 				// CREATE NEW SLIDER
-				createSlider(startTime, numOfEnemies, density);
+				createSlider(startTime, startTime + 5, 10);
+				
+				newWaveDraggedOver = false;
 			}
 		}
 		
-		private function createSlider(startTime:int, numOfEnemies:uint, density:uint):void 
+		private function createSlider(startTime:int, endTime:uint, numOfEnemies:uint):void 
 		{
-			var nw : WaveSlider = new WaveSlider(startTime, numOfEnemies, density, slotWidth, slotHeight );
+			
+			
+			
+			var nw : WaveSlider = new WaveSlider(startTime, endTime, numOfEnemies, slotWidth, slotHeight );
 			nw.drawGraphics();
 			
 			// SLIDER POSITION
@@ -118,49 +115,55 @@ package ui.waveEditor
 		
 		public function adjustLeftSizeCallBack(e:MouseEvent, waveSlider : WaveSlider):void
 		{
-			var mouseStagePos : Point = new Point(e.currentTarget.mouseX, e.currentTarget.mouseX);
-			var mouseSliderPos : Point = waveSlider.globalToLocal(mouseStagePos);
+			var mouseStagePos : Point = new Point(e.currentTarget.mouseX, e.currentTarget.mouseY);
+			var mouseSliderPos : Point = table.globalToLocal(mouseStagePos);
 			
 			//trace(mouseSliderPos.x + " " + mouseSliderPos.x);
+			// CALCULATE TIME
+			if (mouseSliderPos.x < 0) mouseSliderPos.x = 0;
+			if (mouseSliderPos.x > _width) mouseSliderPos.x = _width;
 			
-			var difference : int = mouseSliderPos.x / (_width / 60);
-			trace(difference);
+			if (mouseSliderPos.y < 0) mouseSliderPos.y = 0;
+			if (mouseSliderPos.y > _height) mouseSliderPos.y = _height;
 			
-			waveSlider.startTime -= difference;
+			var currentTime : int = int(mouseSliderPos.x / slotWidth);
+			currentTime += int(mouseSliderPos.y / slotHeight) * 60;			
 			
-			//re pos
-			waveSlider.x += difference * (_width / 60);
+			//var difference : int = mouseSliderPos.x / (_width / 60);
+			trace(currentTime);
+			
+			waveSlider.startTime = currentTime;
+			waveSlider.x = (waveSlider.startTime % 60) * slotWidth;
 		}
 		
 		public function moveSlider(e:MouseEvent, waveSlider : WaveSlider):void
 		{
-			if (e.eventPhase == EventPhase.AT_TARGET || true)
+			var worldPosition : Point = new Point(e.currentTarget.mouseX, e.currentTarget.mouseY);
+			var tablePosition : Point = table.globalToLocal(worldPosition);
+			// SET DRAG OFFSET 
+			tablePosition.x -= waveSlider.dragPoint.x;
+			//tablePosition.y -= waveSlider.dragPoint.y;
+			
+			var startTime : int = tablePositionToStartTime(tablePosition);
+			
+			trace(startTime);
+						
+			waveSlider.startTime = startTime;
+			waveSlider.endTime = startTime + waveSlider.duration;
+			
+			if (int(waveSlider.startTime / 60) != int(waveSlider.endTime / 60))
 			{
-				//trace("Target: " + e.currentTarget);
-				//trace("Phase: " + e.eventPhase + " target: " + e.currentTarget +  " --- " + e.localX + ", " + e.localY);
-				//trace(e.currentTarget.mouseX + " " + e.currentTarget.mouseY);
-				
-				var properPosition : Point = new Point(e.currentTarget.mouseX - waveSlider.dragPoint.x, e.currentTarget.mouseY - waveSlider.dragPoint.y);
-				properPosition = table.globalToLocal(properPosition);
-				
-				var row: int = properPosition.y / rowHeight;
-				
-				// X //
-				if (properPosition.x < 0) properPosition.x = 0;
-				if (properPosition.x > _width - waveSlider.width) properPosition.x = _width - waveSlider.width;
-				
-				properPosition.x = properPosition.x - (properPosition.x % (_width/60));
-				
-				// Y //
-				if (row < 0) row = 0;
-				else if (row > intervall - 1) row = intervall - 1;
-				properPosition.y = row * rowHeight;
-				
-				waveSlider.x = properPosition.x;
-				waveSlider.y = properPosition.y;
-				
-				// TODO Change timeproperty !!!
+				trace("ujsor");
 			}
+			
+			
+			setWaveSliderPosition(waveSlider);
+		}
+		
+		private function setWaveSliderPosition(waveSlider:WaveSlider):void 
+		{
+			waveSlider.x = (waveSlider.startTime % 60) * slotWidth;
+			waveSlider.y = int(waveSlider.startTime / 60) * slotHeight;
 		}
 		
 		private function onMove(e:MouseEvent):void 
@@ -187,22 +190,35 @@ package ui.waveEditor
 				
 				properPosition.y = row * rowHeight;
 				
-				
 				// SHOW NEW WAVE GHOST
 				newWaveGhost.x = properPosition.x;
 				newWaveGhost.y = properPosition.y;
 			}
 		}
-
+		
+		private function tablePositionToStartTime(position : Point) : int 
+		{
+			if (position.x < 0) position.x = 0;
+			if (position.x > _width) position.x = _width-1;
+			
+			if (position.y < 0) position.y = 0;
+			if (position.y > _height) position.y = _height;
+			
+			var row : int = int(position.y / slotHeight);
+			if (row >= intervall) row = intervall - 1;
+			
+			var time : int = int(position.x / slotWidth) + row * 60;
+			
+			return time;
+		}
+		
 		private function drawGraphics():void 
 		{
 			//DRAWING THE BASE BODER
-			table.graphics.beginFill(0xd4dbca);
-			//table.graphics.lineStyle(2, 0x000000);
-			table.graphics.drawRect(0, 0, _width, _height);
+			this.graphics.beginFill(0xd4dbca);
+			this.graphics.drawRect(0, 0, _width, _height);
 			
 			//DRAWING THE LINES		
-			gridLines.graphics.lineStyle(2, 0x000000);
 			gridLines.graphics.lineStyle(2, 0x000000);
 			gridLines.graphics.drawRect(0, 0, _width, _height);
 			
@@ -226,17 +242,23 @@ package ui.waveEditor
 				labels.addChild(rightSideTime);
 			}
 			
-			// SEC LINES
-			table.graphics.lineStyle(1, 0x000000, 0.3);
-			for (var j : Number  = 1; j < 60; j++) 
+			table.graphics.lineStyle(1, 0x000000, 0.6);
+			for (var k:int = 0; k < 60; k++) 
 			{
-				table.graphics.moveTo(j * (_width / 60), 0);
-				table.graphics.lineTo(j * (_width / 60), _height);
-				
-				table.graphics.lineStyle(1, 0x000000, 0.3);
+				if (k % 10 == 0)
+				{
+					table.graphics.lineStyle(1, 0xFF0000, 0.8);
+				} else {
+					if (k % 5 == 0) {
+						table.graphics.lineStyle(1, 0x000000, 0.2);
+					} else {
+						table.graphics.lineStyle(1, 0x000000, 0.1);
+					}
+				}
+				table.graphics.moveTo(k * slotWidth, 0);
+				table.graphics.lineTo(k * slotWidth, _height);
 			}
-			// DRAW SEC STUFF
-			
+				
 			
 			//SPRITE GHOST GRAPHICS
 			newWaveGhost.graphics.beginFill(0x00FF00, 1);
