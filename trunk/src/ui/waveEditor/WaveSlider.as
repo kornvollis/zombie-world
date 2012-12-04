@@ -36,6 +36,7 @@ package ui.waveEditor
 		private var slotWidth:uint;
 		private var slotHeight:uint;
 		
+		// GRAPHICS	
 		public var duration : int;
 		public var moveToCallBack : Function = null;
 		public var adjustLeftSizeCallBack : Function = null;
@@ -61,7 +62,11 @@ package ui.waveEditor
 			addEventListener(MouseEvent.MOUSE_DOWN, onDown);
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);
 			
-			//GRAPHICS
+			// SET POSITION
+			x = slotWidth * (startTime % 60);
+			y = int(startTime / 60) * slotHeight;
+			
+			// GRAPHICS
 			addChild(rightSide);
 			addChild(leftSide);
 		}
@@ -109,10 +114,14 @@ package ui.waveEditor
 			trace("onclick");
 		}
 		
+		public function refresh() : void {
+			x = slotWidth * (startTime % 60);
+			y = int(startTime / 60) * slotHeight;	
+		}
+		
 		public function drawGraphics() : void {
 			
 			graphics.clear();
-			
 			graphics.beginFill(0xFFFFFF);
 			
 			var innerWidth : uint = (endTime-startTime - 2) * slotWidth;
@@ -128,7 +137,7 @@ package ui.waveEditor
 			rightSide.graphics.beginFill(0xFF0000, 1);
 			rightSide.graphics.drawRect(0, 0, slotWidth, slotHeight);
 			
-			rightSide.x = innerWidth + slotWidth;			
+			rightSide.x = innerWidth + slotWidth;						
 		}
 		
 		public function get startTime():uint 
@@ -138,12 +147,7 @@ package ui.waveEditor
 		
 		public function set startTime(value:uint):void 
 		{
-			if (value < endTime - 4)
-			{
-				_startTime = value;
-			
-				//drawGraphics();
-			}
+			_startTime = value;
 		}
 		
 		public function get density():uint 
@@ -161,9 +165,16 @@ package ui.waveEditor
 			return _endTime;
 		}
 		
-		public function set endTime(value:uint):void 
+		public function set endTime(newEndTime:uint):void 
 		{
-			_endTime = value;
+			if (int(startTime / 60) != int(newEndTime / 60))
+			{
+				var reminder : int = newEndTime % 60;
+				newEndTime -= reminder;
+				startTime -= reminder;
+			} 
+			
+			_endTime = newEndTime;
 		}
 	}
 

@@ -92,18 +92,15 @@ package ui.waveEditor
 		
 		private function createSlider(startTime:int, endTime:uint, numOfEnemies:uint):void 
 		{
-			
-			
-			
 			var nw : WaveSlider = new WaveSlider(startTime, endTime, numOfEnemies, slotWidth, slotHeight );
 			nw.drawGraphics();
 			
 			// SLIDER POSITION
-			var row : uint = startTime / 60;
-			var horizontalPos : Number = (_width / 60) * (startTime % 60);
-			
-			nw.x = horizontalPos;
-			nw.y = row * rowHeight;
+			//var row : uint = startTime / 60;
+			//var horizontalPos : Number = (_width / 60) * (startTime % 60);
+			//
+			//nw.x = horizontalPos;
+			//nw.y = row * rowHeight;
 			
 			//SET CALL BACK
 			nw.moveToCallBack = moveSlider;
@@ -138,32 +135,20 @@ package ui.waveEditor
 		
 		public function moveSlider(e:MouseEvent, waveSlider : WaveSlider):void
 		{
+			// POSITIONS
 			var worldPosition : Point = new Point(e.currentTarget.mouseX, e.currentTarget.mouseY);
 			var tablePosition : Point = table.globalToLocal(worldPosition);
+			
 			// SET DRAG OFFSET 
 			tablePosition.x -= waveSlider.dragPoint.x;
-			//tablePosition.y -= waveSlider.dragPoint.y;
 			
+			// SET NEW TIMES
 			var startTime : int = tablePositionToStartTime(tablePosition);
-			
-			trace(startTime);
-						
 			waveSlider.startTime = startTime;
 			waveSlider.endTime = startTime + waveSlider.duration;
 			
-			if (int(waveSlider.startTime / 60) != int(waveSlider.endTime / 60))
-			{
-				trace("ujsor");
-			}
-			
-			
-			setWaveSliderPosition(waveSlider);
-		}
-		
-		private function setWaveSliderPosition(waveSlider:WaveSlider):void 
-		{
-			waveSlider.x = (waveSlider.startTime % 60) * slotWidth;
-			waveSlider.y = int(waveSlider.startTime / 60) * slotHeight;
+			// REFRESH THE POS
+			waveSlider.refresh();
 		}
 		
 		private function onMove(e:MouseEvent):void 
