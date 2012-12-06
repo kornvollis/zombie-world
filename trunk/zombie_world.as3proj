@@ -8,8 +8,8 @@
     <movie fps="30" />
     <movie width="1000" />
     <movie height="820" />
-    <movie version="10" />
-    <movie minorVersion="3" />
+    <movie version="11" />
+    <movie minorVersion="0" />
     <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
   </output>
@@ -54,6 +54,7 @@
     <element path="assets\zombie_graphics.swc" />
     <element path="assets\gui_graphics.swc" />
     <element path="assets\as3commons-collections-1.3.2.swc" />
+    <element path="lib\starling.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

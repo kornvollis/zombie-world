@@ -39,27 +39,34 @@ package ui.waveEditor
 		// GRAPHICS	
 		public var duration : int;
 		public var moveToCallBack : Function = null;
-		public var adjustLeftSizeCallBack : Function = null;
+		public var adjustLeftSizeCallBack  : Function = null;
+		public var adjustRightSizeCallBack : Function = null;
 		public var dragPoint :Point = new Point();
+		public var clickCallBack : Function = null;
 		
 		public function WaveSlider(startTime: uint, endTime: uint, numOfEnemies: uint, slotWidth: uint, slotHeight:uint) 
 		{
 			this.numOfEnemies = numOfEnemies;
-			this._startTime    = startTime;
+			this.startTime    = startTime;
 			this.endTime      = endTime;
-			
 			this.slotHeight   = slotHeight;
 			this.slotWidth    = slotWidth;
-			
 			this.duration = endTime - startTime;
 			
 			endTime = startTime + (numOfEnemies * density) / 1000;
 			
 			// EVENTLISTENERS
-			addEventListener(MouseEvent.CLICK, onClick);
-			leftSide.addEventListener(MouseEvent.MOUSE_DOWN, onLeftClick);
+			doubleClickEnabled = true;
+			addEventListener(MouseEvent.DOUBLE_CLICK, onDClick);
+			leftSide.addEventListener(MouseEvent.MOUSE_DOWN, onLeftDown);
+			rightSide.addEventListener(MouseEvent.MOUSE_DOWN, onRightDown);
+			
+			leftSide.addEventListener(MouseEvent.CLICK, onHandlerClick);
+			rightSide.addEventListener(MouseEvent.CLICK, onHandlerClick);
 			
 			addEventListener(MouseEvent.MOUSE_DOWN, onDown);
+			
+			
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);
 			
 			// SET POSITION
@@ -71,7 +78,19 @@ package ui.waveEditor
 			addChild(leftSide);
 		}
 		
-		private function onLeftClick(e:MouseEvent):void 
+		private function onRightDown(e:MouseEvent):void 
+		{
+			isRightHandlerDown = true;
+			
+			e.stopPropagation();
+		}
+		
+		private function onHandlerClick(e:MouseEvent):void 
+		{
+			e.stopPropagation();
+		}
+		
+		private function onLeftDown(e:MouseEvent):void 
 		{
 			trace("left down");
 			
@@ -86,6 +105,8 @@ package ui.waveEditor
 				moveToCallBack(e, this);
 			} else if (adjustLeftSizeCallBack != null && isLeftHandlerDown ) {
 				adjustLeftSizeCallBack(e, this);
+			} else if (adjustRightSizeCallBack != null && isRightHandlerDown ) {
+				adjustRightSizeCallBack(e, this);
 			}
 		}
 		
@@ -109,9 +130,10 @@ package ui.waveEditor
 			isRightHandlerDown = false;
 		}
 		
-		private function onClick(e:MouseEvent):void 
+		private function onDClick(e:MouseEvent):void 
 		{
-			trace("onclick");
+			trace("sasda");
+			clickCallBack(e , this);
 		}
 		
 		public function refresh() : void {
@@ -172,9 +194,11 @@ package ui.waveEditor
 				var reminder : int = newEndTime % 60;
 				newEndTime -= reminder;
 				startTime -= reminder;
-			} 
-			
-			_endTime = newEndTime;
+				
+				_endTime = newEndTime;
+			} else {
+				_endTime = newEndTime;
+			}
 		}
 	}
 
