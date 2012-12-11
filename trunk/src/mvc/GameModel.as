@@ -35,8 +35,6 @@ package mvc
 		private var _money  : int = 0;
 		public var blockers : int = 1000;
 		
-		public var myStage : Stage = null;
-		
 		// GAME ELEMENTS //////////////////////////////////////////
 		public var towers       : ArrayList = new ArrayList();
 		public var enemies      : ArrayList = new ArrayList();
@@ -53,10 +51,8 @@ package mvc
 		//FILE MANAGER
 		public var levelManager : FileManager;
 		
-		public function GameModel(gameHolder : DisplayObject) 
-		{
-			this.myStage = gameHolder.stage;
-			
+		public function GameModel() 
+		{			
 			//FILE MANAGER
 			levelManager = new FileManager(this);
 			
@@ -64,7 +60,7 @@ package mvc
 			pathFinder = new PathFinder(this);
 			gameScreen = new GameScreen(this);
 			
-			addChild(gameScreen);
+			//addChild(gameScreen);
 		}
 		
 		public function getNextTargetFor(row: int, col : int) : Point
@@ -134,10 +130,10 @@ package mvc
 								
 							break;
 							case Enemy.DEAD:
-								Factory.getInstance().removeEnemy(enemy);
+								//Factory.getInstance().removeEnemy(enemy);
 							break;
 							case Enemy.ESCAPED:
-								Factory.getInstance().removeEnemy(enemy);
+								//Factory.getInstance().removeEnemy(enemy);
 							break;
 						}
 					}

@@ -24,11 +24,11 @@ package
 			this.x = col * Constants.CELL_SIZE;
 			this.y = row  * Constants.CELL_SIZE;
 			
-			addEventListener(MouseEvent.CLICK, onClick);
-			addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			//addEventListener(MouseEvent.CLICK, onClick);
+			//addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		}
 		
-		private function onClick(e:MouseEvent):void 
+		/*private function onClick(e:MouseEvent):void 
 		{
 			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE)
 			{
@@ -42,6 +42,6 @@ package
 			{
 				removeCallBack();
 			}
-		}
+		}*/
 	}
 }

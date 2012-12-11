@@ -19,19 +19,19 @@ package units
 		
 		public function Projectil(posX : int, posY : int, target : GameObject) 
 		{
-			this.position.x = posX;
-			this.position.y = posY;
-			this.x = position.x;
-			this.y = position.y; 
-			
-			this.target = target;
-			this.targetPosition.x = target.position.x;
-			this.targetPosition.y = target.position.y;
+			//this.position.x = posX;
+			//this.position.y = posY;
+			//this.x = position.x;
+			//this.y = position.y; 
+			//
+			//this.target = target;
+			//this.targetPosition.x = target.position.x;
+			//this.targetPosition.y = target.position.y;
 			//TEMP GRAPHICS
-			this.graphics.beginFill(0x000000, 1);
-			this.graphics.drawCircle(0, 0, 1.5);
+			//this.graphics.beginFill(0x000000, 1);
+			//this.graphics.drawCircle(0, 0, 1.5);
 		}
-		
+		/*
 		override public function update() : void
 		{
 			if (isDeleted == false)
@@ -71,7 +71,7 @@ package units
 		public function set target(value:GameObject):void 
 		{
 			_target = value;
-		}
+		}*/
 	}
 
 }

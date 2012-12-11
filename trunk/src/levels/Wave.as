@@ -28,7 +28,7 @@ package levels
 		
 		public function Wave(row: int,col:int, startTimeSec : int, num : int, spawnDelayMilliSec: Number, enemy : Class) 
 		{
-			this.startTimeSec = startTimeSec;
+			/*this.startTimeSec = startTimeSec;
 			this.spawnDelayMilliSec = spawnDelayMilliSec;
 			this.numOfEnemies = num;
 			this.TypeOfEnemy = enemy;
@@ -43,9 +43,9 @@ package levels
 			spawnTimerTrigger.addEventListener(TimerEvent.TIMER, startWave);
 			
 			spawnTimer = new Timer(spawnDelayMilliSec, num);
-			spawnTimer.addEventListener(TimerEvent.TIMER, spawnUnit);
+			spawnTimer.addEventListener(TimerEvent.TIMER, spawnUnit);*/
 		}
-		
+		/*
 		public function start() : void
 		{
 			spawnTimerTrigger.reset();
@@ -80,7 +80,7 @@ package levels
 		{
 			spawnTimer.start();
 		}
-		
+		*/
 		
 		
 	}

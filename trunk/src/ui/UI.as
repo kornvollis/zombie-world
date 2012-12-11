@@ -14,7 +14,7 @@ package ui
 	 */
 	public class UI extends MovieClip 
 	{			
-		public static const MAP_MAKER : String = "mapmaker";
+		/*public static const MAP_MAKER : String = "mapmaker";
 		public static const GAME_PLAY : String = "GAME_PLAY";
 		public static var mapMaker : MapMaker;
 		
@@ -22,11 +22,11 @@ package ui
 		private static var hammerButton :  HammerButton = new HammerButton();
 		private static var _state : String = GAME_PLAY;
 		
-		private static var model : GameModel;
+		private static var model : GameModel;*/
 		
 		public function UI(model : GameModel) 
 		{
-			UI.model = model;
+			/*UI.model = model;
 			gameInterface = new GameInterface(model);
 			//TODOOO
 			//mapMaker = new MapMaker(model);
@@ -56,9 +56,9 @@ package ui
 			
 			addChild(mapMaker);
 			addChild(hammerButton);
-			//addChild(gameInterface);
+			//addChild(gameInterface);*/
 		}
-		
+		/*
 		private function updateMoney(e:GameEvents):void 
 		{
 			UI.gameInterface.cash_label.text = "Cash: " + model.money;
@@ -88,7 +88,7 @@ package ui
 			}
 			
 			_state = value;
-		}
+		}*/
 		
 	}
 }

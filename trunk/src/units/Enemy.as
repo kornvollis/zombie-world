@@ -56,10 +56,10 @@ package units
 			healthBar.y = - 6 - Constants.CELL_SIZE * 0.5;
 			addChild(healthBar);
 			
-			addEventListener(MouseEvent.CLICK, onClick);
-			addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			//addEventListener(MouseEvent.CLICK, onClick);
+			//addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		}
-		
+		/*
 		private function onClick(e:MouseEvent):void 
 		{
 			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE)
@@ -150,6 +150,6 @@ package units
 			} else {
 				healthBar.setSize(life, maxLife);
 			}
-		}
+		}*/
 	}
 }

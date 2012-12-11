@@ -34,60 +34,60 @@ package ui
 	 */
 	public class MapMaker extends GameObject 
 	{		
-		private var creatorGui : MapCreator = new MapCreator();
-		private var mapMakerPanel : MapMakerPanel = new MapMakerPanel();
-		private var hammerButton : HammerButton = new HammerButton();
+		//private var creatorGui : MapCreator = new MapCreator();
+		//private var mapMakerPanel : MapMakerPanel = new MapMakerPanel();
+		//private var hammerButton : HammerButton = new HammerButton();
 		
 		
-		private var model : GameModel;
-		private var gameScreen : GameScreen;
-		
-		private var waveNum : int = 0;
-		
-		private var enemies : ArrayList = new ArrayList();
-		private var towers  : ArrayList = new ArrayList();
-		private var blocks  : ArrayList = new ArrayList();
-		private var spawnPoints : Vector.<SpawnPoint> = new Vector.<SpawnPoint>();
-		private var waves : Vector.<Wave> = new Vector.<Wave>();
-			
-		private var levelData : LevelData = new LevelData();
-		private var fileReader:FileReference = new FileReference();
-		
-		private var buildTowerClass : Class = PointDefense;
-		private var	spawnEnemyClass : Class = BasicEnemy;
+		//private var model : GameModel;
+		//private var gameScreen : GameScreen;
+		//
+		//private var waveNum : int = 0;
+		//
+		//private var enemies : ArrayList = new ArrayList();
+		//private var towers  : ArrayList = new ArrayList();
+		//private var blocks  : ArrayList = new ArrayList();
+		//private var spawnPoints : Vector.<SpawnPoint> = new Vector.<SpawnPoint>();
+		//private var waves : Vector.<Wave> = new Vector.<Wave>();
+			//
+		//private var levelData : LevelData = new LevelData();
+		//private var fileReader:FileReference = new FileReference();
+		//
+		//private var buildTowerClass : Class = PointDefense;
+		//private var	spawnEnemyClass : Class = BasicEnemy;
 		
 		public function MapMaker(model : GameModel, gameScreen : GameScreen) 
 		{			
-			this.gameScreen = gameScreen;
-			this.model = model;
-			creatorGui.y = 600;
-			mapMakerPanel.x = 730;
-			hammerButton.x = 730;
-			hammerButton.visible = false;
-			addChild(creatorGui);
-			addChild(mapMakerPanel);
-			addChild(hammerButton);
-			
+			//this.gameScreen = gameScreen;
+			//this.model = model;
+			//creatorGui.y = 600;
+			//mapMakerPanel.x = 730;
+			//hammerButton.x = 730;
+			//hammerButton.visible = false;
+			//addChild(creatorGui);
+			//addChild(mapMakerPanel);
+			//addChild(hammerButton);
+			//
 			//DENSITY
-			mapMakerPanel.delay_input.text =  mapMakerPanel.spawn_density.value.toString();
-			
+			//mapMakerPanel.delay_input.text =  mapMakerPanel.spawn_density.value.toString();
+			//
 			//POPULATE TOWER COMBO BOX
-			creatorGui.add_tower_combo.addItem( { label: "Point defense", data: PointDefense } );
-			creatorGui.add_tower_combo.addItem( { label: "Cannon tower", data: Cannon } );
-			
+			//creatorGui.add_tower_combo.addItem( { label: "Point defense", data: PointDefense } );
+			//creatorGui.add_tower_combo.addItem( { label: "Cannon tower", data: Cannon } );
+			//
 			//POPULATE ENEMY COMBO BOX
-			creatorGui.add_enemy_combo.addItem( { label: "Basic enemy", data: BasicEnemy} );
-			creatorGui.add_enemy_combo.addItem({ label: "Cannon tower", data: Cannon});
-			
-			mapMakerPanel.enemy_type.addItem( { label: "Basic enemy", data: BasicEnemy } );
-			
+			//creatorGui.add_enemy_combo.addItem( { label: "Basic enemy", data: BasicEnemy} );
+			//creatorGui.add_enemy_combo.addItem({ label: "Cannon tower", data: Cannon});
+			//
+			//mapMakerPanel.enemy_type.addItem( { label: "Basic enemy", data: BasicEnemy } );
+			//
 			//LISTENERS///////////////////////////////////////////////////////////////////////////
-			addEventlisteners();
-			
+			//addEventlisteners();
+			//
 			//PAUSE THE GAME
-			model.pause = true;
+			//model.pause = true;
 		}
-		
+		/*
 		private function gameStageClickHandle(stageX:Number, stageY:Number):void
 		{
 			var row : int = stageY / Constants.CELL_SIZE;
@@ -135,12 +135,12 @@ package ui
 							Factory.getInstance().addBlock(row, col, true);
 						}
 					break;
-					/*case Factory.REMOVE_EXIT:
+					case Factory.REMOVE_EXIT:
 						if (clickedCell.isExit()) { 
 							model.pathFinder.removeExitPoint(row, col); 
 							model.gameScreen.removeChild(clickedCell.exitPoint);
 						}
-					break;*/
+					break;
 				} //END OF SWITCH
 			} //END OF IF
 		} //END OF FUNC
@@ -414,12 +414,10 @@ package ui
 		//ADD END
 		
 		//REMOVE
-		/*
 		private function removeBlockKick(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.REMOVE_BLOCK;
 		}
-		*/
 		
 		private function removeWave(e:MouseEvent):void 
 		{
@@ -459,12 +457,10 @@ package ui
 			creatorGui.money_text.text = "Money: " + model.money.toString();
 		}
 		
-		/*
 		private function sellTowerClick(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.SELL_TOWER;
 		}
-		*/
 		
 		private function enemySelect(e:Event):void 
 		{
@@ -477,7 +473,7 @@ package ui
 		{
 			buildTowerClass = Class(creatorGui.add_tower_combo.selectedItem.data);
 		}
-		
+		*/
 	}
 
 }

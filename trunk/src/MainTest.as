@@ -4,6 +4,7 @@ package
 	import flash.display.Stage;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import screens.GameScreen;
 	import starling.core.Starling;
 	import starling.display.Sprite;
 	import ui.waveEditor.WaveEditor;
@@ -19,20 +20,11 @@ package
 		
 		public function MainTest()
 		{
-			stage.align = StageAlign.TOP_LEFT;
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			
-			var m : MovieClip;
-			m.remove
-			
-			var s : Sprite;
-			//s.remov
-			
 			// create our Starling instance
-			mStarling = new Starling(Sprite, stage);
-			
+			mStarling = new Starling(Game, stage);
+			//mStarling
 			// set anti-aliasing (higher the better quality but slower performance)
-			mStarling.antiAliasing = 1;
+			//mStarling.antiAliasing = 1;
 			
 			// start it!
 			mStarling.start();

@@ -50,7 +50,7 @@ package
 				throw new Error ("We cannot create a new instance.Please use Factory.getInstance()");
 			}
 		}
-		
+		/*
 		public function init():void
 		{
 			//model.levelLoader.loadLevel(1);
@@ -260,7 +260,7 @@ package
 		{
 			model.towers.remove(t);
 			model.gameScreen.removeChild(t);
-		}
+		}*/
 	}
 
 }

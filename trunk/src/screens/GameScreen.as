@@ -2,28 +2,29 @@ package screens
 {
 	import flash.display.MovieClip;
 	import mvc.GameModel;
+	import starling.display.Sprite;
 	import ui.MapMaker;
 	/**
 	 * ...
 	 * @author OML!
 	 */
-	public class GameScreen extends Screen 
+	public class GameScreen extends Sprite
 	{
 		public var hasDebug : Boolean = true;
 		
 		private var model : GameModel;
 		private var mapMaker : MapMaker;
-		private var debugArrows : MovieClip = new MovieClip();
+		//private var debugArrows : MovieClip = new MovieClip();
 		private var drawArrow : Boolean = true;
 		
 		
-		public function GameScreen(model : GameModel) 
+		public function GameScreen(model : GameModel = null) 
 		{
 			this.model = model;			
 			//MAP MAKER
 			mapMaker = new MapMaker(model, this);
 			
-			
+			/*
 			//TEMP GRAPHICS
 			graphics.beginFill(0xFFFFFF);
 			graphics.drawRect(0, 0, 720, 600);
@@ -37,10 +38,10 @@ package screens
 			
 			addChild(mapMaker);
 			
-			if(hasDebug) addChildAt(debugArrows,1);
+			if(hasDebug) addChildAt(debugArrows,1);*/
 		}
 		
-		private function drawGrid() : void
+		/*private function drawGrid() : void
 		{
 			graphics.lineStyle(1, 0x000000, 0.1);
 			for ( var i:int = 0; i < Constants.SCREEN_WIDTH / Constants.CELL_SIZE; i++)
@@ -131,7 +132,7 @@ package screens
 					}
 				}
 			}
-		}
-	}
+		}*/
+	} // END OF CLASS
 
 }
