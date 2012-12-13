@@ -42,12 +42,7 @@ package levels
 			labelIconText.y = position.y + 9;
 			
 			labelIconText.text = row + "/" + col ;			
-		}
-		
-		override public function toString():String {
-			return row + "/" + col;
-		};
-		
+		}		
 	}
 
 }

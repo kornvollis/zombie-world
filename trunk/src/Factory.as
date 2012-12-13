@@ -8,7 +8,6 @@ package
 	import levels.Wave;
 	import mvc.GameModel;
 	import debug.ZDebug;
-	import mvc.GameView;
 	import org.as3commons.collections.framework.IOrderedListIterator;
 	import pathfinder.PathFinder;
 	import units.Box;
@@ -36,7 +35,6 @@ package
 		public var clickState : String = Factory.IDLE;
 		
 		private static var model : GameModel = null;
-		private static var view  : GameView  = null;
 		
         private static var instance:Factory = new Factory();
 		

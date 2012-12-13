@@ -12,11 +12,11 @@ package
 		
 		public static const FRAME_RATE : int = 30;
 		
-		public static const CELL_SIZE  : Number = 24;
-		public static const SCREEN_WIDTH   : int = 720;
-		public static const SCREEN_HEIGHT  : int = 600;		
-		public static const COL_NUM  : int = 30;
-		public static const ROW_NUM  : int = 25;		
+		public static const CELL_SIZE  : Number = 32;
+		public static const SCREEN_WIDTH   : int = 864;
+		public static const SCREEN_HEIGHT  : int = 608;		
+		public static const COL_NUM  : int = SCREEN_WIDTH / CELL_SIZE;
+		public static const ROW_NUM  : int = SCREEN_HEIGHT / CELL_SIZE;		
 		
 		public function Constants() 
 		{

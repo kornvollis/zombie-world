@@ -1,4 +1,4 @@
-package  
+package
 {
 	import mvc.GameModel;
 	import screens.GameScreen;
@@ -8,20 +8,20 @@ package
 	 * ...
 	 * @author ...
 	 */
-	public class Game extends Sprite 
+	public class Game extends Sprite
 	{
-		private var gameModel : GameModel;
-		
+		private var gameModel  : GameModel;
 		private var gameScreen : GameScreen;
 		
-		public function Game() 
+		public function Game()
 		{
 			gameModel = new GameModel();
 			
 			gameScreen = new GameScreen(gameModel);
+			gameScreen.x = 100;
+			gameScreen.y = 30;
 			
+			addChild(gameScreen);
 		}
-		
 	}
-
 }
