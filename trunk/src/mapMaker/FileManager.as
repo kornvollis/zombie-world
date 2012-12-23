@@ -9,7 +9,6 @@ package mapMaker
 	import mvc.GameModel;
 	import org.as3commons.collections.ArrayList;
 	import units.Box;
-	import units.towers.Cannon;
 	/**
 	 * ...
 	 * @author OML!

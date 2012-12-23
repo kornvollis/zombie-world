@@ -1,17 +1,23 @@
 package units.towers
 {
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	import flashx.textLayout.formats.Float;
 	import org.as3commons.collections.ArrayList;
+	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.EnterFrameEvent;
+	import starling.textures.Texture;
 	import units.Enemy;
+	import utils.Util;
 	/**
 	 * ...
 	 * @author OML!
 	 */
-	public class Tower extends Sprite 
+	public class Tower extends GameObject 
 	{
 		public static const IDLE   : String = "idle";
 		public static const FIRING : String = "firing";
@@ -19,10 +25,9 @@ package units.towers
 		//Properties
 		public var damage : int = 1;
 		public var range  : int = 250;
-		public var bulletPerSec : int = 1;	
 		public var cost : int = 50;
-		
-		private var _target : GameObject = null;
+		private var reloadTime : Number = 2; //IN SEC
+		private var target : Enemy = null;
 		
 		public var angle : Number = 0;
 		
@@ -32,128 +37,113 @@ package units.towers
 		public var row : int;
 		public var col : int;
 		
+		
 		private var _showRange : Boolean = true;
 		
-		private var rangeGraphics : Sprite = new Sprite;
+		//private var rangeGraphics : Sprite = new Sprite;
 		
-		//RELOAD TIEMR
-		private var reloadTimer : Timer;
-		
-		private var lastShotTime : Number = -1;
+		//RELOAD TIME
+		private var lastFireTime : Number = -1;
 		public  var removeCallBack:Function;
 		public  var targetList : ArrayList = new ArrayList();
 		
+		//Graphics
+		[Embed(source = "../../../media/towers/base.png")]
+		private static const BaseSprite:Class;
+		
+		[Embed(source = "../../../media/towers/turret_01.png")]
+		private static const TowerSprite01:Class;
+		private var baseImage:Image;
+		private var towerImage:Image;
 		
 		public function Tower(row:int, col:int) 
 		{
-			state = IDLE;
+			//state = IDLE;
 			//RELOAD TIMER
-			var timerDelay : Number = 1000 / bulletPerSec;
-			var timerRepeatCount : int = 1;
-			
-			reloadTimer = new Timer(timerDelay, timerRepeatCount);
-			
-			reloadTimer.addEventListener(TimerEvent.TIMER, reload);
 			
 			this.row = row;
 			this.col = col;
 			
-			position.x = col * Constants.CELL_SIZE;
-			position.y = row * Constants.CELL_SIZE;
-			this.x = position.x;
-			this.y = position.y;
-			
-			this.graphics.beginFill(0x759933);
-			this.graphics.drawRect(0, 0, Constants.CELL_SIZE, Constants.CELL_SIZE);
-			
-			rifleGraphics.graphics.lineStyle(2, 0xFF0000);
-			rifleGraphics.graphics.lineTo(Constants.CELL_SIZE, 0);
-			
-			rifleGraphics.x = Constants.CELL_SIZE * 0.5;
-			rifleGraphics.y = Constants.CELL_SIZE * 0.5;
-			
-			//Add range graphics
-			/*rangeGraphics.graphics.lineStyle(1, 0x00FF00, 0.3);
-			rangeGraphics.graphics.drawCircle(0, 0, range);
-			if (showRange) {
-				rangeGraphics.visible = true;
-			} else {
-				rangeGraphics.visible = false;
-			}*/
-			
-			//addChild(rifleGraphics);
-			//addChild(rangeGraphics);
-			
+			addGraphics();
 			
 			//CLICK LISTENER
 			//this.addEventListener(MouseEvent.CLICK, onClick);
 			//this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		}
 		
+		private function addGraphics():void 
+		{
+			baseImage = Util.bitmapToImage(BaseSprite);
+			towerImage = Util.bitmapToImage(TowerSprite01);
+			
+			towerImage.pivotX = 16;
+			towerImage.pivotY = 16;
+			towerImage.x = 16;
+			towerImage.y = 16;
+			
+			addChild(baseImage);
+			addChild(towerImage);
+		}
+		/*
 		private function reload(e:TimerEvent):void 
 		{
 			if (!isReloaded) isReloaded = true;
 		}
-		
-		public function update() : void
+		*/
+		override public function update(e:EnterFrameEvent) : void
 		{
-			if (targetList.size > 0 && target != null)
+			if (!isReloaded) {
+				lastFireTime -= e.passedTime;
+				if (lastFireTime < 0)
+				{
+					isReloaded = true;
+				}
+			}
+			
+			if (target != null)
 			{				
 				if(target.state == Enemy.DEAD) {
-					target = findTarget();
+					target = Factory.getInstance().findTargetForTower(this);
 					return;
 				}
 				
 				//IF enemy goes out of range then we looking for another enemy
-				if (Point.distance(target.position, position) > range)
+				if (Point.distance(target.getPosition(), getPosition() ) > range)
 				{
 					target = null;
 					return;
 				}
 				
-				if (Enemy(target).isDeleted)
-				{
-					target = null;
-					return;
-				}
+				//if (Enemy(target).isDeleted)
+				//{
+					//target = null;
+					//return;
+				//}
 				
 				var vect : Point = new Point;
-				vect.x = target.x - this.position.x;
-				vect.y = target.y - this.position.y;
+				vect.x = target.x - this.x;
+				vect.y = target.y - this.y;
 				
-				angle = Math.atan2(vect.y, vect.x) * 180 / Math.PI;
+				angle = Math.atan2(vect.y, vect.x);
 				
-				rifleGraphics.rotation = angle;
+				towerImage.rotation = angle;
 				
 				if (isReloaded) fire();
-			} else if (targetList.size > 0 && target == null) {
-				target = findTarget();
+			} else {
+				target = Factory.getInstance().findTargetForTower(this);
 			}
 			
-		}
-		
-		private function findTarget():Enemy 
-		{
-			for (var i:int = 0; i < targetList.size; i++) 
-			{
-				var enemy : Enemy = targetList.itemAt(i);
-				
-				if (Point.distance(enemy.position, this.position) < this.range) {
-					return enemy;
-				}
-			}
-			return null;
 		}
 		
 		private function fire():void 
 		{
 			if (target != null) {
-				Factory.getInstance().createProjectil(position.x + Constants.CELL_SIZE * 0.5, position.y + Constants.CELL_SIZE * 0.5, target);
+				Factory.getInstance().createProjectil(this.x + Constants.CELL_SIZE * 0.5, this.y + Constants.CELL_SIZE * 0.5, target);
 				isReloaded = false;
-				reloadTimer.start();
+				lastFireTime = reloadTime;
 			}
 		}
-		
+		/*
 		public function get showRange():Boolean 
 		{
 			return _showRange;
@@ -179,7 +169,7 @@ package units.towers
 		public function set target(value:GameObject):void 
 		{
 			_target = value;
-		}
+		}*/
 	}
 
 }

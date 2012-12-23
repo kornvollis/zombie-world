@@ -1,9 +1,13 @@
 package units
 {
 	import adobe.utils.CustomActions;
+	import flash.display.Bitmap;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import starling.display.Image;
+	import starling.events.EnterFrameEvent;
+	import utils.Util;
 	/**
 	 * ...
 	 * @author OML!
@@ -36,28 +40,31 @@ package units
 		public var row : int = -1;
 		public var col : int = -1;
 		
+		[Embed(source = "../../media/creeps/simple_enemy.PNG")]
+		private var SimpleEnemyBitmap : Class;
+		
 		public function Enemy(row: int, col :int) 
 		{
 			state = LIVE;
 			this.row = row;
 			this.col = col;
 			
-			this.position.x = col * Constants.CELL_SIZE + Constants.CELL_SIZE/2;			
-			this.position.y = row * Constants.CELL_SIZE + Constants.CELL_SIZE/2;
-			this.x = position.x;
-			this.y = position.y;
-			
-			//TEMP Graphics
-			this.graphics.beginFill(0x009900);
-			this.graphics.drawCircle(0, 0, Constants.CELL_SIZE / 2);
+			// GRAPHICS
+			addGraphics();
 			
 			//Health bar graphics
-			healthBar.x = - Constants.CELL_SIZE * 0.5;
-			healthBar.y = - 6 - Constants.CELL_SIZE * 0.5;
-			addChild(healthBar);
+			//healthBar.x = - Constants.CELL_SIZE * 0.5;
+			//healthBar.y = - 6 - Constants.CELL_SIZE * 0.5;
+			//addChild(healthBar);
 			
 			//addEventListener(MouseEvent.CLICK, onClick);
 			//addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		}
+		
+		private function addGraphics():void 
+		{
+			var image : Image = Util.bitmapToImage(SimpleEnemyBitmap);
+			addChild(image);
 		}
 		/*
 		private function onClick(e:MouseEvent):void 
@@ -75,12 +82,12 @@ package units
 				removeCallBack();
 			}
 		}
-		
+		*/
 		public function setTarget(targetCell : Cell) : void {
 			this.targetCell = targetCell;
 		}
 		
-		override public function update() : void
+		override public function update(e:EnterFrameEvent) : void
 		{
 			if (state != ESCAPED)
 			{
@@ -89,25 +96,25 @@ package units
 				}
 				
 				if (state == LIVE) {
-					moveToTarget();
+					moveToTarget(e.passedTime);
 				}
 			}			
 		}
 		
-		private function moveToTarget():void 
+		private function moveToTarget(passedTime: Number):void 
 		{
 			if (targetCell != null)
 			{
-			
+				
 				var move_vector : Point = new Point();
-				move_vector.x = targetCell.middle.x - position.x;
-				move_vector.y = targetCell.middle.y - position.y;
+				move_vector.x = targetCell.topLeft.x - getPosition().x;
+				move_vector.y = targetCell.topLeft.y - getPosition().y;
 				
-				move_vector.normalize( 1 * (speed / 20) );
+				move_vector.normalize( 1 * speed * passedTime );
 				
-				if (Point.distance(position, targetCell.middle) < 3) {
-					position.x = targetCell.middle.x;
-					position.y = targetCell.middle.y;
+				if (Point.distance(getPosition(), targetCell.topLeft) < 3) {
+					getPosition().x = targetCell.topLeft.x;
+					getPosition().y = targetCell.topLeft.y;
 					
 					if (targetCell.isExit())
 					{
@@ -128,15 +135,13 @@ package units
 					
 					
 				} else {
-					position.x += move_vector.x;
-					position.y += move_vector.y;
-					this.x = position.x;
-					this.y = position.y;
+					this.x += move_vector.x;
+					this.y += move_vector.y;
 				}
 				
 				//SET ROW 
-				row = int(position.y / Constants.CELL_SIZE);
-				col = int(position.x / Constants.CELL_SIZE);		
+				row = int(getPosition().y / Constants.CELL_SIZE);
+				col = int(getPosition().x / Constants.CELL_SIZE);		
 			}
 		}
 		
@@ -150,6 +155,6 @@ package units
 			} else {
 				healthBar.setSize(life, maxLife);
 			}
-		}*/
+		}
 	}
 }

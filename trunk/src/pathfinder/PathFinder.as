@@ -10,7 +10,6 @@ package pathfinder
 	{
 		//PUBLIC
 		public var cellGrid : CellGrid = new CellGrid(); 
-		public var exitPoints : Vector.<ExitPoint> = new Vector.<ExitPoint>;
 		
 		//PRIVATE
 		private var model : GameModel;
@@ -79,7 +78,7 @@ package pathfinder
 			model.needPathUpdate = true;
 		}	
 		
-		public function addExitPoint(exitPoint : ExitPoint) : Boolean
+		/*public function addExitPoint(exitPoint : ExitPoint) : Boolean
 		{
 			var cell : Cell = cellGrid.getCell(exitPoint.row, exitPoint.col);
 			
@@ -87,7 +86,7 @@ package pathfinder
 			
 			if (!cell.isExit())
 			{
-				exitPoints.push( exitPoint );
+				model.exitPoints.push( exitPoint );
 				cell.exitPoint = exitPoint;
 				
 				dispatchEvent(new GameEvents(GameEvents.PATH_ADD_EXIT_POINT));
@@ -98,9 +97,9 @@ package pathfinder
 			}
 			
 			return false;
-		}
+		}*/
 		
-		public function removeExitPoint(row: int, col: int):void 
+		/*public function removeExitPoint(row: int, col: int):void 
 		{
 			var cell  : Cell = cellGrid.getCell(row, col);
 			
@@ -126,7 +125,7 @@ package pathfinder
 				dispatchEvent(ge);
 				findPath();
 			}
-		}
+		}*/
 		
 		private function processNeighbour(neighbourCell:Cell, startingCell:Cell, direction:int):void 
 		{			
@@ -171,11 +170,11 @@ package pathfinder
 		{
 			var openNodes : Vector.<Cell> = new Vector.<Cell>();
 			
-			for (var i:int = 0; i < exitPoints.length; i++)
+			for (var i:int = 0; i < model.exitPoints.size; i++)
 			{
-				var cell : Cell = exitPointToCell(exitPoints[i]);
+				var cell : Cell = exitPointToCell(model.exitPoints.itemAt(i));
 				cell.distance = 0;
-				cell.exitPoint = exitPoints[i];
+				cell.exitPoint = model.exitPoints.itemAt(i);
 				openNodes.push(cell);
 			}
 			

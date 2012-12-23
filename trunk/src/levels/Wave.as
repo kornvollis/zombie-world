@@ -1,6 +1,6 @@
 package levels 
 {
-	import fl.timeline.TimelineManager;
+	//import fl.timeline.TimelineManager;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	/**

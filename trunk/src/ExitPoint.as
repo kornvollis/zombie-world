@@ -2,6 +2,8 @@ package
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import starling.display.Image;
+	import utils.Util;
 	/**
 	 * ...
 	 * @author OML!
@@ -13,19 +15,37 @@ package
 		
 		public var removeCallBack : Function = null;
 		
+		// GRAPHICS
+		[Embed(source = "../media/exit/exit.png")]
+		private var ExitBitmap : Class;
+		
+		
 		public function ExitPoint(row:int, col:int) 
 		{
+			super();
 			this.col = col;
 			this.row = row;
-			//TEMP Graphics
-			graphics.beginFill(0x0000FF, 1);
-			graphics.drawRect(0,0, Constants.CELL_SIZE, Constants.CELL_SIZE);
 			
-			this.x = col * Constants.CELL_SIZE;
-			this.y = row  * Constants.CELL_SIZE;
+			addGraphics();
 			
+			id = row * 10000 + col;
 			//addEventListener(MouseEvent.CLICK, onClick);
 			//addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		}
+		
+		public function equals(exitPoint : ExitPoint) : Boolean
+		{
+			if (exitPoint.row == row && exitPoint.col == col)
+			{
+				return true;
+			} else return false;
+		}
+		
+		private function addGraphics():void 
+		{
+			var image : Image = Util.bitmapToImage(ExitBitmap);
+			addChild(image);
+			
 		}
 		
 		/*private function onClick(e:MouseEvent):void 

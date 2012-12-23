@@ -1,77 +1,80 @@
 package units
 {
 	import flash.geom.Point;
+	import starling.display.Image;
+	import starling.display.Sprite;
+	import starling.events.EnterFrameEvent;
+	import utils.Util;
 	/**
 	 * ...
 	 * @author OML!
 	 */
 	public class Projectil extends GameObject
 	{
-		private var _target : GameObject = null;
+		private var _target : Enemy = null;
 		
-		public var speed : int = 10;
+		public var speed : int = 300;
 		public var damage : int = 1;
 		private var targetISAlive : Boolean = false;
 		
 		private var targetPosition : Point = new Point;
 		//private var targetLastPosition : Point = null;
+		[Embed(source = "../../media/projectils/simple_bullet.png")]
+		private var BulletBitmap : Class;
 		
-		
-		public function Projectil(posX : int, posY : int, target : GameObject) 
+		public function Projectil(target : Enemy) 
 		{
-			//this.position.x = posX;
-			//this.position.y = posY;
-			//this.x = position.x;
-			//this.y = position.y; 
-			//
-			//this.target = target;
-			//this.targetPosition.x = target.position.x;
-			//this.targetPosition.y = target.position.y;
-			//TEMP GRAPHICS
-			//this.graphics.beginFill(0x000000, 1);
-			//this.graphics.drawCircle(0, 0, 1.5);
+			this.target = target;
+			
+			addGraphics();
 		}
-		/*
-		override public function update() : void
+		
+		private function addGraphics():void 
 		{
-			if (isDeleted == false)
-			{
-				if (target != null)
-				{
-					targetPosition.x = target.position.x;
-					targetPosition.y = target.position.y;
-				}
+			var bulletImage : Image = Util.bitmapToImage(BulletBitmap);
+			
+			bulletImage.x = 1;
+			bulletImage.y = 1;
+			
+			addChild(bulletImage);
+		}
+		
+		override public function update(e:EnterFrameEvent) : void
+		{
+			if (target != null)
+			{			
+				targetPosition = target.getPosition();
+				targetPosition.x += Constants.CELL_SIZE * 0.5;
+				targetPosition.y += Constants.CELL_SIZE * 0.5;
 				
 				var velo:Point = new Point;
-				velo.x = targetPosition.x - position.x;
-				velo.y = targetPosition.y - position.y;
+				velo.x = (target.x + Constants.CELL_SIZE*0.5) - this.x;
+				velo.y = (target.y + Constants.CELL_SIZE*0.5) - this.y;
 				
-				velo.normalize(speed);
-				position.x += velo.x;
-				position.y += velo.y;
-				this.x = position.x;
-				this.y = position.y;
+				velo.normalize(speed * e.passedTime);
+				this.x += velo.x;
+				this.y += velo.y;
 				
-				if (Point.distance(targetPosition, position) < 6)
+				if (Point.distance(targetPosition, getPosition()) < 6)
 				{
 					Factory.getInstance().removeProjectil(this);
-					if(!Enemy(target).isDeleted)
+					if(!target.isDeleted)
 					{
-						Enemy(target).sufferDamage(damage);
+						target.sufferDamage(damage);
 					}
 				}
 			}
 		}
 		
-		public function get target():GameObject
+		public function get target():Enemy
 		{
 			return _target;
 		}
 		
-		public function set target(value:GameObject):void 
+		public function set target(value:Enemy):void 
 		{
 			_target = value;
-		}*/
+		}
 	}
 
 }

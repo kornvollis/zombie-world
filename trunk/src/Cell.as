@@ -36,6 +36,7 @@ package
 		
 		//Cell's world position center position
 		public var middle : Point = new Point();
+		public var topLeft : Point = new Point();
 		
 		//public var nextCell : Cell = null;
 		public var distance : int = 99999;
@@ -81,6 +82,7 @@ package
 		{
 			_row = value;
 			this.middle.y = (value * size) + size * 0.5;
+			this.topLeft.y = (value * size);
 		}
 		
 		public function get col():int 
@@ -92,6 +94,7 @@ package
 		{
 			_col = value;
 			this.middle.x = (value * size) + size * 0.5;
+			this.topLeft.x = (value * size);
 		}
 	}
 

@@ -14,6 +14,7 @@ package
 	import units.Enemy;
 	import units.Projectil;
 	import units.towers.Tower;
+	import utils.Util;
 	/**
 	 * @author OML!
 	 */
@@ -48,16 +49,6 @@ package
 				throw new Error ("We cannot create a new instance.Please use Factory.getInstance()");
 			}
 		}
-		/*
-		public function init():void
-		{
-			//model.levelLoader.loadLevel(1);
-			//TEMP STUFF
-			
-			//Factory.getInstance().addTower2(5, 5);
-			
-			//removeTowers();
-		}	
 		
 		public static function getInstance():Factory
 		{
@@ -67,13 +58,6 @@ package
 		public function setModel(model: GameModel) :void
 		{
 			Factory.model = model;
-			
-			Factory.model.addEventListener(GameEvents.ZOMBIE_REACHED_EXIT, removeEnemy);
-		}
-		
-		public function setView(view: GameView) :void
-		{
-			Factory.view = view;
 		}
 		
 		public function addWave(row:int, col:int, start:int, num:int, spawnDelayInMillisec:int, typeOfEnemy:Class) : void
@@ -94,9 +78,12 @@ package
 			}
 		}
 		
-		public function createProjectil(posX:int, posY:int, target : GameObject) : void
+		public function createProjectil(posX:int, posY:int, target : Enemy) : void
 		{
-			var projectil : Projectil = new Projectil(posX, posY, target);
+			var projectil : Projectil = new Projectil(target);
+			projectil.x = posX;
+			projectil.y = posY;
+			
 			model.projectils.add(projectil);
 			model.gameScreen.addChild(projectil);
 		}
@@ -120,66 +107,63 @@ package
 			{
 				if(model.blockers > 0 || isFree)
 				{
+					//TODO optimize this
 					//IN ORDER TO NOT PUT BOX ON THE CREEP HEADS
-					for (var i:int = 0; i < model.enemies.size; i++) {
+					 for (var i:int = 0; i < model.enemies.size; i++) {
 						if (model.enemies.itemAt(i).row == row && model.enemies.itemAt(i).col == col) {
 							return;
 						}
 					}
 					
 					var block : Box = new Box(row, col);
+					block.x = col * Constants.CELL_SIZE;
+					block.y = row * Constants.CELL_SIZE;
 					
 					//model
 					model.boxes.add(block);
-					cell.state = Cell.CLOSED_PATH;
-					cell.next_cell = null;
-					cell.next_direction = Cell.NULL_NEXT;
-					cell.blocked = true;
+					model.gameScreen.addChild(block);
 					
-					//view
-					model.gameScreen.addChildAt(block,0);
-					
-					if (!isFree)	model.blockers = model.blockers - 1;
-
-					block.removeCallBack = function removeBlockCallBack():void {
-						Factory.getInstance().removeBlock(block);
-					};
 					
 					model.pathFinder.findPath();
-					if(model.gameScreen.hasDebug) model.gameScreen.drawDebugPath();
+					if (model.gameScreen.hasDebug) model.gameScreen.drawDebugPath();
+					if (!isFree)	model.blockers = model.blockers - 1;
 				}
 			}
 		}
 		
-		public function addTower(row:int, col:int, TowerType : Class, isFree: Boolean = false ): Tower 
+		public function addTower(row:int, col:int, isFree: Boolean = false ): Tower 
 		{
 			if (row <0 || row >= Constants.ROW_NUM ||
 			    col <0 || col >= Constants.COL_NUM)
 			{
 				throw(new Error("addTurret row, col out of bound"));
 			} else {
-				var tower : Tower = new TowerType(row, col);
-				var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
-				if (!cell.blocked && model.coins >= tower.cost || isFree == true )
-				{
-					tower.targetList = model.enemies;
-					model.money -= tower.cost;
-					model.towers.add(tower);
-					model.gameScreen.addChild(tower);
-					
-					//Block
-					cell.state = Cell.CLOSED_PATH;
-					model.pathFinder.findPath();
-					model.gameScreen.drawDebugPath();
-					
-					return tower;
-				}
+				var tower : Tower = new Tower(row, col);
+				
+				tower.x = col * Constants.CELL_SIZE;
+				tower.y = row * Constants.CELL_SIZE;
+				
+				model.towers.add(tower);
+				model.gameScreen.addChild(tower);
 			}
 			
 			return null;
 		}
 		
-		public function addEnemy(row:int, col:int, TypeOfEnemy: Class):Enemy
+		public function findTargetForTower(tower:Tower):Enemy 
+		{
+			for (var i:int = 0; i < model.enemies.size; i++) 
+			{
+				var enemy : Enemy = model.enemies.itemAt(i);
+				
+				if (Point.distance(enemy.getPosition(), tower.getPosition()) < tower.range) {
+					return enemy;
+				}
+			}
+			return null;
+		}
+		
+		public function addEnemy(row:int, col:int, properties: Object = null):Enemy
 		{
 			var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 			
@@ -192,7 +176,11 @@ package
 				} else {
 					if (model != null)
 					{
-						var enemy : Enemy = new TypeOfEnemy(row, col);
+						var enemy : Enemy = new Enemy(row, col);
+						
+						enemy.x = col * Constants.CELL_SIZE;
+						enemy.y = row * Constants.CELL_SIZE;
+						
 						enemy.setTarget(model.pathFinder.cellGrid.getCell(row, col));
 						
 						model.enemies.add(enemy);
@@ -232,16 +220,22 @@ package
 		
 		public function removeExitPoint(exitPoint:ExitPoint):void 
 		{
-			model.pathFinder.removeExitPoint(exitPoint.row, exitPoint.col);
+			//model.pathFinder.removeExitPoint(exitPoint.row, exitPoint.col);
 		}
 		
 		public function addExitPoint(row:int, col:int):void 
 		{
 			var exitPoint : ExitPoint = new ExitPoint(row, col);
-			
-			if (model.pathFinder.addExitPoint(exitPoint))
-			{
+			if(!Util.isContainingId(exitPoint.id, model.exitPoints)) {
+				// ADDING TO THE MODEL
+				model.exitPoints.add(exitPoint);
+				
+				// ADD GRAPHICS
 				model.gameScreen.addChild(exitPoint);
+				
+				// SET POSITION
+				exitPoint.x = col * Constants.CELL_SIZE;
+				exitPoint.y = row * Constants.CELL_SIZE;
 				
 				//RUN THE PATHFINDER
 				model.pathFinder.findPath();
@@ -258,7 +252,7 @@ package
 		{
 			model.towers.remove(t);
 			model.gameScreen.removeChild(t);
-		}*/
+		}
 	}
 
 }

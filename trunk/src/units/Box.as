@@ -1,34 +1,38 @@
 package units
 {
 	import flash.events.MouseEvent;
+	import starling.display.Image;
+	import starling.display.Sprite;
+	import utils.Util;
 	/**
 	 * ...
 	 * @author OML!
 	 */
-	public class Box extends GameObject 
+	public class Box extends GameObject
 	{
-		//public var col : int = 0;
-		//public var row : int = 0;
-		//public var removeCallBack:Function = null;
+		public var col : int = 0;
+		public var row : int = 0;
+		public var removeCallBack:Function = null;
 		
-		public function Box(row : int, col : int)  
+		//GRAPHICS
+		[Embed(source = "../../media/blocks/block_01.png")]
+		private var BlockBitmap : Class;
+		private var blockImage : Image;
+		
+		public function Box(row : int, col : int)
 		{
-			//this.col = col;
-			//this.row = row;
-			//
-			//this.position.x = col * Constants.CELL_SIZE;			
-			//this.position.y = row * Constants.CELL_SIZE;
-			//
-			//
-			//this.x = position.x;
-			//this.y = position.y;
-			//
-			//this.graphics.beginFill(0xB35900);
-			//this.graphics.drawRect(0, 0, Constants.CELL_SIZE, Constants.CELL_SIZE);
-			//
+			this.col = col;
+			this.row = row;
+				
+			// GRAPHICS
+			blockImage = Util.bitmapToImage(BlockBitmap);
+			addChild(blockImage);
+			
 			//addEventListener(MouseEvent.CLICK, onClick);
 			//addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-		}			
+			
+			
+		}
 		
 		//private function onMouseMove(e:MouseEvent):void 
 		//{
@@ -46,5 +50,4 @@ package units
 			//}
 		//}
 	}
-
 }

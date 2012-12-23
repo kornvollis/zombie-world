@@ -1,9 +1,6 @@
 package ui
 {
-	import fl.controls.Slider;
-	import fl.data.SimpleCollectionItem;
-	import fl.events.SliderEvent;
-	import fl.motion.Motion;
+	import feathers.controls.Button;
 	import flash.display.Loader;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
@@ -16,8 +13,6 @@ package ui
 	import org.as3commons.collections.ArrayList;
 	import screens.GameScreen;
 	import units.Enemy;
-	import units.towers.Cannon;
-	import units.towers.PointDefense;
 	import units.towers.Tower;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -39,25 +34,29 @@ package ui
 		//private var hammerButton : HammerButton = new HammerButton();
 		
 		
-		//private var model : GameModel;
-		//private var gameScreen : GameScreen;
-		//
-		//private var waveNum : int = 0;
-		//
-		//private var enemies : ArrayList = new ArrayList();
-		//private var towers  : ArrayList = new ArrayList();
-		//private var blocks  : ArrayList = new ArrayList();
-		//private var spawnPoints : Vector.<SpawnPoint> = new Vector.<SpawnPoint>();
-		//private var waves : Vector.<Wave> = new Vector.<Wave>();
-			//
-		//private var levelData : LevelData = new LevelData();
-		//private var fileReader:FileReference = new FileReference();
-		//
-		//private var buildTowerClass : Class = PointDefense;
-		//private var	spawnEnemyClass : Class = BasicEnemy;
+		private var model : GameModel;
+		private var gameScreen : GameScreen;
+		
+		private var waveNum : int = 0;
+		
+		private var enemies : ArrayList = new ArrayList();
+		private var towers  : ArrayList = new ArrayList();
+		private var blocks  : ArrayList = new ArrayList();
+		private var spawnPoints : Vector.<SpawnPoint> = new Vector.<SpawnPoint>();
+		private var waves : Vector.<Wave> = new Vector.<Wave>();
+			
+		private var levelData : LevelData = new LevelData();
+		private var fileReader:FileReference = new FileReference();
+		
+		private var buildTowerClass : Class = Tower;
+		private var	spawnEnemyClass : Class = Enemy;
 		
 		public function MapMaker(model : GameModel, gameScreen : GameScreen) 
-		{			
+		{
+			var button : Button = new Button();
+			button.label = "Mapeditor";
+			
+			addChild(button);
 			//this.gameScreen = gameScreen;
 			//this.model = model;
 			//creatorGui.y = 600;

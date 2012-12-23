@@ -11,9 +11,9 @@ package
 	
 	/**
 	 * ...
-	 * @author OML!
+	 * @author OML!   002143
 	 */
-	[SWF(width="1280", height="752", frameRate="60", backgroundColor="#002143")]
+	[SWF(width="1000", height="600", frameRate="60", backgroundColor="#8fc0f2")]
 	public class MainTest extends flash.display.Sprite 
 	{	
 		private var mStarling:Starling;
@@ -28,7 +28,7 @@ package
 			
 			// start it!
 			mStarling.start();
-			mStarling.showStats = true;
+			mStarling.showStats = false;
 		}
 		
 	}

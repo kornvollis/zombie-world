@@ -51,10 +51,9 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <element path="assets\zombie_graphics.swc" />
-    <element path="assets\gui_graphics.swc" />
-    <element path="assets\as3commons-collections-1.3.2.swc" />
     <element path="lib\starling.swc" />
+    <element path="lib\feathers.swc" />
+    <element path="lib\as3commons-collections-1.3.2.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

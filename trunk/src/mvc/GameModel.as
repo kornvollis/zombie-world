@@ -1,18 +1,19 @@
 package mvc
 {
 	
-	import fl.events.ScrollEvent;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
+	import flash.utils.getTimer;
 	import mapMaker.FileManager;
 	import org.as3commons.collections.ArrayList;
 	import org.as3commons.collections.framework.IOrderedListIterator;
 	import screens.GameScreen;
 	import screens.Screen;
+	import starling.events.EnterFrameEvent;
 	import units.Box;
 	import units.Enemy;
 	import units.Projectil;
@@ -31,7 +32,7 @@ package mvc
 		
 		private var lifeChangedEvent : GameEvents;
 		
-		private var _life   : int = 10;
+		private var life   : int = 10;
 		private var _money  : int = 0;
 		public var blockers : int = 1000;
 		
@@ -41,6 +42,7 @@ package mvc
 		public var boxes        : ArrayList = new ArrayList();
 		public var projectils   : ArrayList = new ArrayList();
 		public var waves        : ArrayList = new ArrayList();
+		public var exitPoints   : ArrayList = new ArrayList();
 		
 		public var pathFinder     : PathFinder;
 		public var needPathUpdate : Boolean = false;
@@ -66,7 +68,6 @@ package mvc
 		public function getNextTargetFor(row: int, col : int) : Point
 		{
 			var targetPos : Point = null;
-			
 			var currentCell : Cell = pathFinder.cellGrid.getCell(row, col);
 			var nextCell    : Cell = null;
 			
@@ -109,20 +110,21 @@ package mvc
 			return targetPos;
 		}
 		
-		public function update(e: Event) : void
-		{
+		public function update(e: EnterFrameEvent) : void
+		{			
 			if (!pause)
 			{
+				//update for next go around
 				for (var i:int = towers.size-1; i >=0 ; i--) {
 					var t: Tower = towers.itemAt(i);
-					t.update();
+					t.update(e);
 				}
 				
 				for (i = enemies.size-1; i >=0 ; i--) {
 					var enemy: Enemy = enemies.itemAt(i);
 					if (enemy != null)
 					{
-						enemy.update();
+						enemy.update(e);
 						
 						switch (enemy.state) 
 						{
@@ -130,10 +132,10 @@ package mvc
 								
 							break;
 							case Enemy.DEAD:
-								//Factory.getInstance().removeEnemy(enemy);
+								Factory.getInstance().removeEnemy(enemy);
 							break;
 							case Enemy.ESCAPED:
-								//Factory.getInstance().removeEnemy(enemy);
+								Factory.getInstance().removeEnemy(enemy);
 							break;
 						}
 					}
@@ -141,20 +143,11 @@ package mvc
 				
 				for (i = projectils.size-1; i >= 0 ; i--) {
 					var projectile : Projectil = projectils.itemAt(i);
-					projectile.update();
+					projectile.update(e);
 				}
 			} // END PAUSE
 		}// END UPDATE
 		
-		public function get coins():int 
-		{
-			return money;
-		}
-		
-		public function get money():int 
-		{
-			return _money;
-		}
 		
 		public function set money(value:int):void 
 		{
