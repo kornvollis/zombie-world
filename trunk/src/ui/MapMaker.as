@@ -18,10 +18,7 @@ package ui
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-	
 	import levels.SpawnPoint;
-	
-	import mvc.GameModel;
 
 	/**
 	 * ...

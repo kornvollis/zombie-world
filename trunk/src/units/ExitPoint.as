@@ -1,5 +1,6 @@
-package  
+package units
 {
+	import assets.Assets;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import starling.display.Image;
@@ -15,10 +16,7 @@ package
 		
 		public var removeCallBack : Function = null;
 		
-		// GRAPHICS
-		[Embed(source = "../media/exit/exit.png")]
-		private var ExitBitmap : Class;
-		
+		// GRAPHICS		
 		
 		public function ExitPoint(row:int, col:int) 
 		{
@@ -43,7 +41,7 @@ package
 		
 		private function addGraphics():void 
 		{
-			var image : Image = Util.bitmapToImage(ExitBitmap);
+			var image : Image = new Image(Assets.getTexture("ExitBitmap"));
 			addChild(image);
 			
 		}

@@ -1,11 +1,11 @@
 package units.towers
 {
+	import assets.Assets;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.utils.Timer;
-	import flashx.textLayout.formats.Float;
 	import org.as3commons.collections.ArrayList;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -28,31 +28,20 @@ package units.towers
 		public var cost : int = 50;
 		private var reloadTime : Number = 2; //IN SEC
 		private var target : Enemy = null;
-		
 		public var angle : Number = 0;
 		
 		//public var rifleGraphics : MovieClip = new MovieClip;
 		public var isReloaded : Boolean = true;
-		
 		public var row : int;
 		public var col : int;
-		
-		
 		private var _showRange : Boolean = true;
 		
-		//private var rangeGraphics : Sprite = new Sprite;
 		
 		//RELOAD TIME
 		private var lastFireTime : Number = -1;
 		public  var removeCallBack:Function;
 		public  var targetList : ArrayList = new ArrayList();
 		
-		//Graphics
-		[Embed(source = "../../../media/towers/base.png")]
-		private static const BaseSprite:Class;
-		
-		[Embed(source = "../../../media/towers/turret_01.png")]
-		private static const TowerSprite01:Class;
 		private var baseImage:Image;
 		private var towerImage:Image;
 		
@@ -73,8 +62,9 @@ package units.towers
 		
 		private function addGraphics():void 
 		{
-			baseImage = Util.bitmapToImage(BaseSprite);
-			towerImage = Util.bitmapToImage(TowerSprite01);
+			//baseImage = Util.bitmapToImage(BaseSprite);
+			baseImage = new Image(Assets.getTexture("BaseSprite"));
+			towerImage = new Image(Assets.getTexture("TowerSprite01"));
 			
 			towerImage.pivotX = 16;
 			towerImage.pivotY = 16;

@@ -1,11 +1,8 @@
 package pathfinder  
 {
 	import flash.events.EventDispatcher;
-	import mvc.GameModel;
-	/**
-	 * ...
-	 * @author OML!
-	 */
+	import units.ExitPoint;
+
 	public class PathFinder extends EventDispatcher
 	{
 		//PUBLIC

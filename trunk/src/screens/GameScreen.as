@@ -4,9 +4,9 @@ package screens
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
+	import pathfinder.Cell;
 	import starling.display.Image;
 	import starling.textures.Texture;
-	import mvc.GameModel;
 	import starling.display.Sprite;
 	import ui.MapMaker;
 	/**
@@ -24,8 +24,8 @@ package screens
 		private var drawingSprite : flash.display.Sprite = new flash.display.Sprite();
 		private var bmd:BitmapData = new BitmapData(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT,true, 0);
 		
-		public function GameScreen(model : GameModel) 
-		{
+		public function GameScreen(model : GameModel ) 
+		{GameModel
 			this.model = model;			
 			//MAP MAKER
 			mapMaker = new MapMaker(model, this);

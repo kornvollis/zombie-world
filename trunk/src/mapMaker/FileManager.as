@@ -6,7 +6,6 @@ package mapMaker
 	import flash.net.FileReference;
 	import flash.utils.getDefinitionByName;
 	import levels.LevelData;
-	import mvc.GameModel;
 	import org.as3commons.collections.ArrayList;
 	import units.Box;
 	/**

@@ -1,17 +1,19 @@
 package
 {
+	import assets.Assets;
 	import feathers.controls.Button;
-	import mvc.GameModel;
+	import feathers.controls.text.TextFieldTextRenderer;
+	import feathers.core.FeathersControl;
+	import feathers.core.ITextRenderer;
+	import feathers.text.BitmapFontTextFormat;
+	import flash.text.TextFormat;
 	import screens.GameScreen;
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
+	import starling.text.BitmapFont;
 	import utils.Util;
-	
-	/**
-	 * ...
-	 * @author ...
-	 */
+
 	public class Game extends Sprite
 	{
 		private var gameModel  : GameModel;
@@ -21,6 +23,12 @@ package
 		
 		public function Game()
 		{
+			
+			FeathersControl.defaultTextRendererFactory = function():ITextRenderer
+			{
+				return new TextFieldTextRenderer();
+			};
+			
 			gameModel = new GameModel();
 			
 			Factory.getInstance().setModel(gameModel);
@@ -31,12 +39,9 @@ package
 			
 			// temp
 			Factory.getInstance().addExitPoint(0, 4);
-			
 			Factory.getInstance().addEnemy(8, 11);
 			Factory.getInstance().addTower(4,4);
 			Factory.getInstance().addBlock(4, 3);
-			
-			
 			
 			//addChild(gameModel.gameScreen);
 			
@@ -44,6 +49,11 @@ package
 			b.defaultIcon = Util.bitmapToImage(Util.DefaultButtonBM);
 			b.scaleX = 0.12;
 			b.scaleY = 0.12;
+			
+			
+			//b.defaultSkin =  
+			//b.defaultLabelProperties //  textRendererProperties.textFormat = new TextFormat( "Astera", 24, 0x323232 );
+			//b.label.textRendererProperties.embedFonts = true;
 			
 			b.label = "kaka";
 			addChild(b);

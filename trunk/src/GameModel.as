@@ -1,4 +1,4 @@
-package mvc
+package 
 {
 	
 	import flash.display.DisplayObject;
@@ -11,6 +11,7 @@ package mvc
 	import mapMaker.FileManager;
 	import org.as3commons.collections.ArrayList;
 	import org.as3commons.collections.framework.IOrderedListIterator;
+	import pathfinder.Cell;
 	import screens.GameScreen;
 	import screens.Screen;
 	import starling.events.EnterFrameEvent;

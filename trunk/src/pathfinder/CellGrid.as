@@ -1,4 +1,4 @@
-package  
+package pathfinder
 {
 	/*
 	 * CellGrid contains the graphics for the CellGrid, and the cells for the pathfindig algorithm

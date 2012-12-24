@@ -1,8 +1,9 @@
-package  
+package pathfinder
 {
 	import flash.geom.Point;
 	import levels.SpawnPoint;
 	import units.Box;
+	import units.ExitPoint;
 
 	/**
 	 * ...

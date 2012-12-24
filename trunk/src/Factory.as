@@ -6,12 +6,12 @@ package
 	import flash.geom.Point;
 	import flashx.textLayout.events.ModelChange;
 	import levels.Wave;
-	import mvc.GameModel;
-	import debug.ZDebug;
 	import org.as3commons.collections.framework.IOrderedListIterator;
+	import pathfinder.Cell;
 	import pathfinder.PathFinder;
 	import units.Box;
 	import units.Enemy;
+	import units.ExitPoint;
 	import units.Projectil;
 	import units.towers.Tower;
 	import utils.Util;

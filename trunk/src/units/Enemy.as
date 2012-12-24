@@ -5,6 +5,7 @@ package units
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import pathfinder.Cell;
 	import starling.display.Image;
 	import starling.events.EnterFrameEvent;
 	import utils.Util;
