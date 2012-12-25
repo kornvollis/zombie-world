@@ -1,6 +1,5 @@
 package ui
 {
-	import feathers.controls.Button;
 	import flash.display.Loader;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
@@ -50,10 +49,10 @@ package ui
 		
 		public function MapMaker(model : GameModel, gameScreen : GameScreen) 
 		{
-			var button : Button = new Button();
-			button.label = "Mapeditor";
+			//var button : Button = new Button();
+			//button.label = "Mapeditor";
 			
-			addChild(button);
+			//addChild(button);
 			//this.gameScreen = gameScreen;
 			//this.model = model;
 			//creatorGui.y = 600;

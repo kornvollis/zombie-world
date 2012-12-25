@@ -52,7 +52,6 @@
   <!-- SWC Libraries -->
   <libraryPaths>
     <element path="lib\starling.swc" />
-    <element path="lib\feathers.swc" />
     <element path="lib\as3commons-collections-1.3.2.swc" />
   </libraryPaths>
   <!-- External Libraries -->

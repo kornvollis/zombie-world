@@ -1,17 +1,14 @@
 package
 {
 	import assets.Assets;
-	import feathers.controls.Button;
-	import feathers.controls.text.TextFieldTextRenderer;
-	import feathers.core.FeathersControl;
-	import feathers.core.ITextRenderer;
-	import feathers.text.BitmapFontTextFormat;
+	import flash.text.Font;
 	import flash.text.TextFormat;
 	import screens.GameScreen;
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
 	import starling.text.BitmapFont;
+	import starling.text.TextField;
 	import utils.Util;
 
 	public class Game extends Sprite
@@ -23,12 +20,6 @@ package
 		
 		public function Game()
 		{
-			
-			FeathersControl.defaultTextRendererFactory = function():ITextRenderer
-			{
-				return new TextFieldTextRenderer();
-			};
-			
 			gameModel = new GameModel();
 			
 			Factory.getInstance().setModel(gameModel);
@@ -43,21 +34,18 @@ package
 			Factory.getInstance().addTower(4,4);
 			Factory.getInstance().addBlock(4, 3);
 			
+		
+			
 			//addChild(gameModel.gameScreen);
+			var font : BitmapFont = new BitmapFont(Assets.getTexture("FontTexture"), XML(new Assets.FontXml()));
 			
-			var b : Button = new Button;
-			b.defaultIcon = Util.bitmapToImage(Util.DefaultButtonBM);
-			b.scaleX = 0.12;
-			b.scaleY = 0.12;
+			TextField.registerBitmapFont(font, "Myfont");
 			
-			
-			//b.defaultSkin =  
-			//b.defaultLabelProperties //  textRendererProperties.textFormat = new TextFormat( "Astera", 24, 0x323232 );
-			//b.label.textRendererProperties.embedFonts = true;
-			
-			b.label = "kaka";
-			addChild(b);
-			
+			var starlingButton : starling.display.Button = new starling.display.Button(Assets.getTexture("ButtonDefaultBM"), "KAKA");
+			starlingButton.fontName = "Myfont";
+			starlingButton.fontSize = 50;
+			addChild(starlingButton);
+
 			//EVENT LISTENERS
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
 			addEventListener(EnterFrameEvent.ENTER_FRAME, enterFrame);

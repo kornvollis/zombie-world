@@ -10,21 +10,27 @@ package assets
 	public class Assets
 	{
 		//Graphics
+		[Embed(source="../../media/gui/buttons/default-button.png")]
+		public static const ButtonDefaultBM:Class;
+		
 		[Embed(source = "../../media/towers/base.png")]
-		private static const BaseSprite:Class;
+		public static const BaseSprite:Class;
 		
 		[Embed(source = "../../media/towers/turret_01.png")]
-		private static const TowerSprite01:Class;
+		public static const TowerSprite01:Class;
 		
 		[Embed(source = "../../media/exit/exit.png")]
-		private static const ExitBitmap : Class;
+		public static const ExitBitmap : Class;
 		
-		private static var gameTextures:Dictionary = new Dictionary();
-		private static var gameTextureAtlas:TextureAtlas;
+		public static var gameTextures:Dictionary = new Dictionary();
+		public static var gameTextureAtlas:TextureAtlas;
 		
 		//FONT
-		[Embed(source = "fonts/Astera.ttf", embedAsCFF="false", fontFamily="Astera")]
-		private static const MyFont : Class;
+		[Embed(source="font/astera_font.fnt", mimeType="application/octet-stream")]
+		public static const FontXml:Class;
+		
+		[Embed(source="font/astera_font_0.png")]
+		public static const FontTexture:Class;
 		
 		/*
 		[Embed(source="../media/graphics/mySpritesheet.png")]
@@ -45,11 +51,7 @@ package assets
 		}
 */
 		
-		public static function getFont() : Object {
-			return new MyFont();
-		}
 
-		
 		public static function getTexture(name:String):Texture
 		{
 			var button : Button
