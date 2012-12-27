@@ -36,7 +36,8 @@ package
 			
 		
 			
-			//addChild(gameModel.gameScreen);
+			addChild(gameModel.gameScreen);
+			/*
 			var font : BitmapFont = new BitmapFont(Assets.getTexture("FontTexture"), XML(new Assets.FontXml()));
 			
 			TextField.registerBitmapFont(font, "Myfont");
@@ -45,7 +46,8 @@ package
 			starlingButton.fontName = "Myfont";
 			starlingButton.fontSize = 50;
 			addChild(starlingButton);
-
+			*/
+			
 			//EVENT LISTENERS
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
 			addEventListener(EnterFrameEvent.ENTER_FRAME, enterFrame);
