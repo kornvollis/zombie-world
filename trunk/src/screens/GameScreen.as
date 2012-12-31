@@ -5,6 +5,10 @@ package screens
 	import flash.display.MovieClip;
 	import pathfinder.Cell;
 	import starling.display.Image;
+	import starling.events.Event;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.textures.Texture;
 	import starling.display.Sprite;
 	import ui.MapMaker;
@@ -34,6 +38,23 @@ package screens
 			
 			drawVectorGraphics();
 			
+			// MAP MAKER
+			mapMaker.x = Constants.SCREEN_WIDTH + 15;
+			addChild(mapMaker);
+			
+			// EVENT LISTENERS
+			addEventListener(TouchEvent.TOUCH, onClick);
+		}
+		
+		private function onClick(e:TouchEvent):void 
+		{
+			var touch: Touch = e.getTouch(this);
+			if(touch) {
+				if (touch.phase == TouchPhase.BEGAN) {
+					//click 
+					
+				}
+			}
 		}
 		
 		private function drawVectorGraphics():void 

@@ -1,34 +1,34 @@
 package ui
 {
+	import assets.Assets;
 	import flash.display.Loader;
+	import flash.events.Event;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
 	import flash.utils.ByteArray;
-	import flash.utils.getDefinitionByName;
-	import flash.utils.getQualifiedClassName;
 	import levels.LevelData;
 	import levels.Wave;
 	import mapMaker.FileManager;
 	import org.as3commons.collections.ArrayList;
 	import screens.GameScreen;
+	import starling.display.Button;
+	import starling.display.Image;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import units.Enemy;
 	import units.towers.Tower;
 	import flash.display.DisplayObject;
-	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.events.MouseEvent;
 	import levels.SpawnPoint;
 
-	/**
-	 * ...
-	 * @author OML!
-	 */
 	public class MapMaker extends GameObject 
 	{		
-		//private var creatorGui : MapCreator = new MapCreator();
-		//private var mapMakerPanel : MapMakerPanel = new MapMakerPanel();
-		//private var hammerButton : HammerButton = new HammerButton();
+		public static const IDLE  : String = "idle";
+		public static const ENEMY : String = "enemy";
+		public static const BLOCK : String = "block";
 		
+		public static var state : String = IDLE;
+		public static var gameObjData : Object;
 		
 		private var model : GameModel;
 		private var gameScreen : GameScreen;
@@ -44,11 +44,44 @@ package ui
 		private var levelData : LevelData = new LevelData();
 		private var fileReader:FileReference = new FileReference();
 		
-		private var buildTowerClass : Class = Tower;
-		private var	spawnEnemyClass : Class = Enemy;
+		
+		
+		// BUTTONS
+		private var startNeditButton : Button;
+		private var buildButton  : SwitchButton;
+		private var deleteButton : SwitchButton;
+		private static const MAPEDITOR : String = "Map editor";
+		private static const STARTGAME : String = "Start_Game";
+		
+		public var objectsPanel : ObjectsPanel;
+		//
+		//private var buildTowerClass : Class = Tower;
+		//private var	spawnEnemyClass : Class = Enemy;
 		
 		public function MapMaker(model : GameModel, gameScreen : GameScreen) 
 		{
+			startNeditButton = new Button(Assets.getTexture("ButtonWide"), MAPEDITOR);
+			startNeditButton.fontSize = 12;
+			startNeditButton.fontName = Constants.FONT_NAME;
+			addChild(startNeditButton);
+			
+			// INIT MAPMAKER BUTTONS
+			buildButton = new SwitchButton(Assets.getTexture("ButtonBuildBM"));
+			buildButton.setPos(0, 0);
+			deleteButton = new SwitchButton(Assets.getTexture("ButtonDeleteBM"));
+			deleteButton.setPos(90, 0);
+			objectsPanel = new ObjectsPanel();
+			objectsPanel.y = 90;
+			
+			buildButton.visible = false;
+			deleteButton.visible = false;
+			objectsPanel.visible = false;
+			
+			
+			addChild(buildButton);
+			addChild(deleteButton);
+			addChild(objectsPanel);
+			
 			//var button : Button = new Button();
 			//button.label = "Mapeditor";
 			
@@ -77,7 +110,7 @@ package ui
 			//mapMakerPanel.enemy_type.addItem( { label: "Basic enemy", data: BasicEnemy } );
 			//
 			//LISTENERS///////////////////////////////////////////////////////////////////////////
-			//addEventlisteners();
+			addEventlisteners();
 			//
 			//PAUSE THE GAME
 			//model.pause = true;
@@ -152,49 +185,55 @@ package ui
 		{
 			gameStageClickHandle(e.stageX, e.stageY);
 		}
-		
+		*/
 		private function addEventlisteners():void 
 		{
-			//STAGE CLICK
-			gameScreen.addEventListener(MouseEvent.CLICK, onGameScreenClick);
-			gameScreen.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			model.myStage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			gameScreen.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			
-			//DENSITY
-			mapMakerPanel.spawn_density.addEventListener(SliderEvent.CHANGE, onDenistySliderChange);
-			mapMakerPanel.delay_input.addEventListener(KeyboardEvent.KEY_DOWN, onDensityInputKeyDown);
-			
-			creatorGui.add_tower.addEventListener(MouseEvent.CLICK, addTowerClick);
-			creatorGui.remove_button.addEventListener(MouseEvent.CLICK, removeClick);
-			creatorGui.add_tower_combo.addEventListener(Event.CHANGE, towerSelect);
-			creatorGui.add_enemy_combo.addEventListener(Event.CHANGE, enemySelect);
-			creatorGui.build_block.addEventListener(MouseEvent.CLICK, addBlockClick)
-			creatorGui.add_enemy.addEventListener(MouseEvent.CLICK, addEnemy);
-			//creatorGui.remove_block.addEventListener(MouseEvent.CLICK, removeBlockKick);
-			//creatorGui.sell_tower.addEventListener(MouseEvent.CLICK, sellTowerClick);
-			
-			mapMakerPanel.startMap_button.addEventListener(MouseEvent.CLICK, onStartMapClick);
-			mapMakerPanel.load_button.addEventListener(MouseEvent.CLICK, onLoadClick);
-			mapMakerPanel.save_button.addEventListener(MouseEvent.CLICK, onSaveClick);
-			mapMakerPanel.add_wave.addEventListener(MouseEvent.CLICK, addWave);
-			mapMakerPanel.remove_wave.addEventListener(MouseEvent.CLICK, removeWave);
-			//mapMakerPanel.remove_spawn.addEventListener(MouseEvent.CLICK, onRemoveSpawnPointClick);
-			mapMakerPanel.new_spawn.addEventListener(MouseEvent.CLICK, onNewSpawnPointButton);
-			mapMakerPanel.edit_button.addEventListener(MouseEvent.CLICK, onEditClick);
-			mapMakerPanel.addExit_button.addEventListener(MouseEvent.CLICK, onAddExit);
-			//mapMakerPanel.removeExit_button.addEventListener(MouseEvent.CLICK, onRemoveExit);
-			
-			hammerButton.addEventListener(MouseEvent.CLICK, onHammerClick);
-			
-			//FILE MANAGER
-			model.levelManager.addEventListener(Event.COMPLETE, mapLoaded);
-			
-			//EVENT LISTENERS
-			//COIN CHANGED
-			this.model.addEventListener(GameEvents.COIN_CHANGED, coinChanged);
+			startNeditButton.addEventListener(starling.events.Event.TRIGGERED, onSwitchClick);
+			buildButton.addEventListener(starling.events.Event.TRIGGERED, onBuildButtonClick);
+			deleteButton.addEventListener(starling.events.Event.TRIGGERED, onDeleteButtonClick);
 		}
 		
+		private function onDeleteButtonClick(e:starling.events.Event):void 
+		{
+			trace("kulso");
+			if (deleteButton.on) {
+				if (buildButton.on) buildButton.switchIt();
+			}
+			
+		}
+		
+		private function onBuildButtonClick(e:starling.events.Event):void 
+		{
+			if (buildButton.on) {
+				if (deleteButton.on) deleteButton.switchIt();
+			}
+			
+			if(buildButton.on) {
+				objectsPanel.visible = true;
+			} else {
+				objectsPanel.visible = false;
+			}
+		}
+		
+		private function onSwitchClick(e:starling.events.Event):void 
+		{
+			if (startNeditButton.text == MapMaker.MAPEDITOR) {
+				//switchButton.visible = false;
+				startNeditButton.y = Constants.SCREEN_HEIGHT - 40;
+				startNeditButton.text = MapMaker.STARTGAME;
+				deleteButton.visible = true;
+				buildButton.visible = true;
+				Factory.getInstance().clickState = Factory.MAP_MAKER_ON;
+			} else if (startNeditButton.text == MapMaker.STARTGAME) {
+				startNeditButton.y = 0;
+				startNeditButton.text = MapMaker.MAPEDITOR;
+				deleteButton.visible = false;
+				buildButton.visible = false;
+				objectsPanel.visible = false;
+				Factory.getInstance().clickState = Factory.GAME_ON;
+			}
+		}
+		/*
 		private function removeClick(e:MouseEvent):void 
 		{
 			Factory.getInstance().clickState = Factory.REMOVE;

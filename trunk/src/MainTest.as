@@ -13,7 +13,7 @@ package
 	 * ...
 	 * @author OML!   002143
 	 */
-	[SWF(width="1000", height="600", frameRate="60", backgroundColor="#8fc0f2")]
+	[SWF(width="1300", height="600", frameRate="60", backgroundColor="#8fc0f2")]
 	public class MainTest extends flash.display.Sprite 
 	{	
 		private var mStarling:Starling;

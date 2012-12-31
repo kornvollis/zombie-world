@@ -18,6 +18,9 @@ package
 		public static const COL_NUM  : int = SCREEN_WIDTH / CELL_SIZE;
 		public static const ROW_NUM  : int = SCREEN_HEIGHT / CELL_SIZE;		
 		
+		//FONT NAME
+		public static const FONT_NAME : String = "Astera";
+		
 		public function Constants() 
 		{
 			

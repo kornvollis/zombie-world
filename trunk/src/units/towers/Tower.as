@@ -45,7 +45,7 @@ package units.towers
 		private var baseImage:Image;
 		private var towerImage:Image;
 		
-		public function Tower(row:int, col:int) 
+		public function Tower(row:int, col:int, towerData : TowerData = null) 
 		{
 			//state = IDLE;
 			//RELOAD TIMER

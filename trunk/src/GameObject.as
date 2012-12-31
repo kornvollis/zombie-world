@@ -11,6 +11,11 @@ package
 	 */
 	public class GameObject extends Sprite 
 	{
+		public static const TOWER : String = "tower";
+		public static const BLOCK : String = "BLOCK";
+		public static const ENEMY : String = "ENEMY";
+		
+		
 		public static var id : int = 0;
 		
 		public var state : String;

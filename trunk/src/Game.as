@@ -20,6 +20,10 @@ package
 		
 		public function Game()
 		{
+			// REGISTER FONT
+			var font : BitmapFont = new BitmapFont(Assets.getTexture("FontTexture"), XML(new Assets.FontXml()));
+			TextField.registerBitmapFont(font, Constants.FONT_NAME);
+			
 			gameModel = new GameModel();
 			
 			Factory.getInstance().setModel(gameModel);
@@ -31,22 +35,14 @@ package
 			// temp
 			Factory.getInstance().addExitPoint(0, 4);
 			Factory.getInstance().addEnemy(8, 11);
+			Factory.getInstance().addEnemy(12, 19);
+			Factory.getInstance().addEnemy(14, 20);
+			Factory.getInstance().addEnemy(10, 17);
 			Factory.getInstance().addTower(4,4);
 			Factory.getInstance().addBlock(4, 3);
-			
-		
+				
 			
 			addChild(gameModel.gameScreen);
-			/*
-			var font : BitmapFont = new BitmapFont(Assets.getTexture("FontTexture"), XML(new Assets.FontXml()));
-			
-			TextField.registerBitmapFont(font, "Myfont");
-			
-			var starlingButton : starling.display.Button = new starling.display.Button(Assets.getTexture("ButtonDefaultBM"), "KAKA");
-			starlingButton.fontName = "Myfont";
-			starlingButton.fontSize = 50;
-			addChild(starlingButton);
-			*/
 			
 			//EVENT LISTENERS
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);

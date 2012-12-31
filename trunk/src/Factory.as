@@ -4,36 +4,29 @@ package
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
-	import flashx.textLayout.events.ModelChange;
 	import levels.Wave;
 	import org.as3commons.collections.framework.IOrderedListIterator;
 	import pathfinder.Cell;
 	import pathfinder.PathFinder;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import units.Box;
 	import units.Enemy;
 	import units.ExitPoint;
 	import units.Projectil;
 	import units.towers.Tower;
 	import utils.Util;
-	/**
-	 * @author OML!
-	 */
+	
 	public class Factory extends EventDispatcher
 	{
 		//TODO: REFACTORING THIS TO THE GAMECONTROLLER
-		public static const BLOCK_BUILDER   : String  = "WALL_BUILDER";
-		public static const ENEMY_SPAWNER : String  = "ZOMBIE_SPAWNER";
-		public static const TOWER_BUILDER : String  = "TURRET_BUILDER";
-		public static const IDLE 		   : String  = "IDLE_FACTORY";
-		
-		//MAP MAKER
-		public static const SPAWN_POINT_CREATOR : String = "spawnPointCreator";
-		public static const ADD_EXIT : String = "ADD_EXIT";
-		static public const REMOVE : String = "remove";
+		public static const GAME_ON : String  = "game";
+		public static const MAP_MAKER_ON: String  = "map";
 		
 		
 		//TODO: REFACTOR THIS TOO TO THEEEEEE TO THE GAMECONTROLLER
-		public var clickState : String = Factory.IDLE;
+		public var clickState : String = Factory.GAME_ON;
 		
 		private static var model : GameModel = null;
 		
@@ -58,6 +51,31 @@ package
 		public function setModel(model: GameModel) :void
 		{
 			Factory.model = model;
+			
+			//ADD EVENT LISTENERS
+			model.gameScreen.addEventListener(TouchEvent.TOUCH, onGameScreenClick);
+		}
+		
+		private function onGameScreenClick(e:TouchEvent):void 
+		{
+			var touch: Touch = e.getTouch(model.gameScreen);
+            if (touch) {
+                switch (touch.phase) {
+                    case TouchPhase.BEGAN:
+                    {
+						if(Factory.getInstance().clickState == Factory.MAP_MAKER_ON) {
+							trace("click" + touch.globalX + " " + touch.globalY);
+							
+							
+						}
+						
+						
+						
+						
+						
+					}
+				}
+			}
 		}
 		
 		public function addWave(row:int, col:int, start:int, num:int, spawnDelayInMillisec:int, typeOfEnemy:Class) : void

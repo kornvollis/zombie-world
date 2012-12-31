@@ -3,15 +3,35 @@ package assets
 	import flash.display.Bitmap;
 	import flash.utils.Dictionary;
 	import starling.display.Button;
+	import starling.display.Image;
 	
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 
 	public class Assets
 	{
-		//Graphics
+		// BUTTONS
 		[Embed(source="../../media/gui/buttons/default-button.png")]
 		public static const ButtonDefaultBM:Class;
+		
+		[Embed(source = "../../media/gui/buttons/build-button.png")]
+		public static const ButtonBuildBM:Class;
+		
+		[Embed(source = "../../media/gui/buttons/delete-button.png")]
+		public static const ButtonDeleteBM:Class;
+		
+		[Embed(source = "../../media/gui/buttons/small-icon.png")]
+		public static const ButtonSmallIcon:Class;
+		
+		[Embed(source = "../../media/gui/buttons/wide-button.png")]
+		public static const ButtonWide:Class;
+		
+		// BLOCKS
+		[Embed(source = "../../media/blocks/block_01.png")]
+		public static const Block01:Class;
+		
+		[Embed(source = "../../media/gui/popup.png")]
+		public static const PopUp:Class;
 		
 		[Embed(source = "../../media/towers/base.png")]
 		public static const BaseSprite:Class;
@@ -54,13 +74,19 @@ package assets
 
 		public static function getTexture(name:String):Texture
 		{
-			var button : Button
 			if (gameTextures[name] == undefined)
 			{
-				var bitmap:Bitmap = new Assets[name]();
+				var bitmap:Bitmap = new Assets[name](); //Assets.name
 				gameTextures[name] = Texture.fromBitmap(bitmap);
 			}
 			return gameTextures[name];
+		}
+		
+		public static function getImage(name:String):Image {
+			var texture:Texture = getTexture(name);
+			var image:Image = new Image(texture);
+			
+			return image;
 		}
 	}
 }
