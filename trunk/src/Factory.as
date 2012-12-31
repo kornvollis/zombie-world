@@ -140,7 +140,7 @@ package
 		public function addWave(row:int, col:int, start:int, num:int, spawnDelayInMillisec:int, typeOfEnemy:Class) : void
 		{
 			var wave : Wave = new Wave(row, col, start, num, spawnDelayInMillisec, typeOfEnemy);
-			
+			wave.start();
 			model.waves.add(wave);
 		}
 		

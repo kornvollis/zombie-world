@@ -10,6 +10,7 @@ package
 	import starling.events.KeyboardEvent;
 	import starling.text.BitmapFont;
 	import starling.text.TextField;
+	import units.Enemy;
 	import utils.Util;
 
 	public class Game extends Sprite
@@ -39,11 +40,13 @@ package
 			// temp
 			Factory.getInstance().addExitPoint(0, 4);
 			Factory.getInstance().addEnemy(8, 11);
-			Factory.getInstance().addEnemy(12, 19);
-			Factory.getInstance().addEnemy(14, 20);
-			Factory.getInstance().addEnemy(10, 17);
+			//Factory.getInstance().addEnemy(12, 19);
+			//Factory.getInstance().addEnemy(14, 20);
+			//Factory.getInstance().addEnemy(10, 17);
 			Factory.getInstance().addTower(4,4);
 			Factory.getInstance().addBlock(4, 3);
+			
+			//Factory.getInstance().addWave(15, 15, 0, 20, 100, Enemy);
 				
 			
 			addChild(gameModel.gameScreen);
