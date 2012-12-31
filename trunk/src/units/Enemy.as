@@ -1,6 +1,7 @@
 package units
 {
 	import adobe.utils.CustomActions;
+	import assets.Assets;
 	import flash.display.Bitmap;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
@@ -41,8 +42,7 @@ package units
 		public var row : int = -1;
 		public var col : int = -1;
 		
-		[Embed(source = "../../media/creeps/simple_enemy.PNG")]
-		private var SimpleEnemyBitmap : Class;
+		
 		
 		public function Enemy(row: int, col :int) 
 		{
@@ -57,33 +57,14 @@ package units
 			//healthBar.x = - Constants.CELL_SIZE * 0.5;
 			//healthBar.y = - 6 - Constants.CELL_SIZE * 0.5;
 			//addChild(healthBar);
-			
-			//addEventListener(MouseEvent.CLICK, onClick);
-			//addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		}
 		
 		private function addGraphics():void 
 		{
-			var image : Image = Util.bitmapToImage(SimpleEnemyBitmap);
+			var image : Image = Assets.getImage("SimpleEnemyBitmap");
 			addChild(image);
 		}
-		/*
-		private function onClick(e:MouseEvent):void 
-		{
-			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE)
-			{
-				removeCallBack();
-			}
-		}
 		
-		private function onMouseMove(e:MouseEvent):void 
-		{
-			if (removeCallBack != null && Factory.getInstance().clickState == Factory.REMOVE && Factory.mouseDown)
-			{
-				removeCallBack();
-			}
-		}
-		*/
 		public function setTarget(targetCell : Cell) : void {
 			this.targetCell = targetCell;
 		}

@@ -80,6 +80,10 @@ package
 									//trace("click" + int(gamePos.y/Constants.CELL_SIZE) + " " + int(gamePos.x/Constants.CELL_SIZE));
 									switch (MapMaker.state) 
 									{
+										case MapMaker.ENEMY:
+											addEnemy(row, col);
+										break;
+										
 										case MapMaker.TOWER:
 											addTower(row, col, true);
 										break;
@@ -165,6 +169,7 @@ package
 		{
 			model.boxes.remove(block);
 			model.gameScreen.removeChild(block);
+			
 			model.pathFinder.cellGrid.getCell(block.row, block.col).blocked = false;
 			model.pathFinder.cellGrid.getCell(block.row, block.col).state = Cell.OPEN_PATH;
 			
@@ -206,6 +211,9 @@ package
 					// !!!
 					cell.blocked = true;
 					cell.block = block;
+					
+					cell.state = Cell.CLOSED_PATH;
+					model.pathFinder.findPath();
 				}
 			}
 		}
@@ -234,6 +242,9 @@ package
 					
 					cell.blocked = true;
 					cell.tower = tower;
+					cell.state = Cell.CLOSED_PATH;
+					model.pathFinder.findPath();
+					
 				} 
 			}
 			
@@ -342,6 +353,10 @@ package
 		{
 			model.towers.remove(t);
 			model.gameScreen.removeChild(t);
+			
+			var cell : Cell = model.pathFinder.cellGrid.getCell(t.row, t.col);
+			cell.tower = null;
+			cell.state = Cell.OPEN_PATH;
 		}
 	}
 

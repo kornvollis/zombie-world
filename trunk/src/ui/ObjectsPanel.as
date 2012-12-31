@@ -30,7 +30,8 @@ package ui
 			
 			
 			addItem(MapMaker.TOWER,null, "BaseSprite", "TowerSprite01");
-			addItem(MapMaker.BLOCK,null, "Block01");
+			addItem(MapMaker.BLOCK, null, "Block01");
+			addItem(MapMaker.ENEMY,null, "SimpleEnemyBitmap");
 		}
 		
 		

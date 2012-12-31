@@ -26,6 +26,10 @@ package assets
 		[Embed(source = "../../media/gui/buttons/wide-button.png")]
 		public static const ButtonWide:Class;
 		
+		// ENEMIES
+		[Embed(source = "../../media/creeps/simple_enemy.PNG")]
+		public static const SimpleEnemyBitmap : Class;
+		
 		// BLOCKS
 		[Embed(source = "../../media/blocks/block_01.png")]
 		public static const Block01:Class;
