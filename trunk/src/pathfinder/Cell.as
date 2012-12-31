@@ -1,9 +1,11 @@
 package pathfinder
 {
 	import flash.geom.Point;
+	import flash.text.engine.TextBlock;
 	import levels.SpawnPoint;
 	import units.Box;
 	import units.ExitPoint;
+	import units.towers.Tower;
 
 	/**
 	 * ...
@@ -27,6 +29,8 @@ package pathfinder
 		public var blocked    : Boolean    = false;
 		public var exitPoint  : ExitPoint  = null;
 		public var spawnPoint : SpawnPoint = null;
+		public var tower      : Tower      = null;
+		public var block 	  : Box        = null;
 		
 		//CELL STATUS
 		public var state : String = Cell.OPEN_PATH;

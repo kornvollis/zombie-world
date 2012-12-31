@@ -15,6 +15,7 @@ package
 	import screens.GameScreen;
 	import screens.Screen;
 	import starling.events.EnterFrameEvent;
+	import starling.events.KeyboardEvent;
 	import units.Box;
 	import units.Enemy;
 	import units.Projectil;
@@ -62,10 +63,9 @@ package
 			//SET PATHFINDER
 			pathFinder = new PathFinder(this);
 			gameScreen = new GameScreen(this);
-			
-			//addChild(gameScreen);
 		}
 		
+
 		public function getNextTargetFor(row: int, col : int) : Point
 		{
 			var targetPos : Point = null;

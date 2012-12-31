@@ -7,6 +7,7 @@ package
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
+	import starling.events.KeyboardEvent;
 	import starling.text.BitmapFont;
 	import starling.text.TextField;
 	import utils.Util;
@@ -17,6 +18,9 @@ package
 		private var gameScreen : GameScreen;
 		
 		//private var theme : MetalWorksMobileTheme;
+		
+		//KEYBOARD STATE
+		public static var isShiftPressed : Boolean = false;
 		
 		public function Game()
 		{
@@ -47,14 +51,36 @@ package
 			//EVENT LISTENERS
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
 			addEventListener(EnterFrameEvent.ENTER_FRAME, enterFrame);
+			
+		}
+		
+		private function onKeyDown(e:KeyboardEvent):void 
+		{
+			if (e.shiftKey == true)
+			{
+				isShiftPressed = true;
+			}
+		}
+		
+		private function onKeyUp(e:KeyboardEvent):void 
+		{
+			if (e.shiftKey == false)
+			{
+				isShiftPressed = false;
+			}
 		}
 		
 		private function onAdded(e:Event):void 
 		{
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			
 			removeEventListener(Event.ADDED_TO_STAGE, onAdded);
 			
 			//theme = new MetalWorksMobileTheme(stage);
 		}
+		
+		
 		
 		private function enterFrame(e:EnterFrameEvent):void 
 		{

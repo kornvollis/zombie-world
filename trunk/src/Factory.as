@@ -11,6 +11,7 @@ package
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import ui.MapMaker;
 	import units.Box;
 	import units.Enemy;
 	import units.ExitPoint;
@@ -33,7 +34,7 @@ package
         private static var instance:Factory = new Factory();
 		
 		//MOUSE STATE
-		public static var mouseDown : Boolean = false;
+		public static var mouseDown : Boolean = false;		
 		
        	public function Factory()
 		{
@@ -59,24 +60,78 @@ package
 		private function onGameScreenClick(e:TouchEvent):void 
 		{
 			var touch: Touch = e.getTouch(model.gameScreen);
-            if (touch) {
-                switch (touch.phase) {
-                    case TouchPhase.BEGAN:
-                    {
-						if(Factory.getInstance().clickState == Factory.MAP_MAKER_ON) {
-							trace("click" + touch.globalX + " " + touch.globalY);
-							
-							
-						}
-						
-						
-						
-						
-						
-					}
+			
+			if (touch != null)
+			{
+				var clickWorldPos : Point = new Point(touch.globalX, touch.globalY);
+				var gamePos : Point = model.gameScreen.globalToLocal(clickWorldPos);
+				
+				var row : int = int(gamePos.y / Constants.CELL_SIZE);
+				var col : int = int(gamePos.x / Constants.CELL_SIZE);
+				
+				if (row >= 0 && row < Constants.ROW_NUM && col >= 0 && col < Constants.COL_NUM) 
+				{
+					if (touch) 
+					{
+						switch (touch.phase) {
+							case TouchPhase.BEGAN:
+							{
+								if(Factory.getInstance().clickState == Factory.MAP_MAKER_ON) {
+									//trace("click" + int(gamePos.y/Constants.CELL_SIZE) + " " + int(gamePos.x/Constants.CELL_SIZE));
+									switch (MapMaker.state) 
+									{
+										case MapMaker.TOWER:
+											addTower(row, col, true);
+										break;
+										
+										case MapMaker.BLOCK:
+											addBlock(row, col, true);
+										break;
+										
+										case MapMaker.DELETE:
+											var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+											if (cell.tower != null) {
+												removeTower(cell.tower);
+											} else if (cell.block != null) {
+												removeBlock(cell.block);
+											}
+										break;
+										
+										default:
+									}			
+								}
+							}
+							break;
+						case TouchPhase.HOVER:
+							if(Factory.getInstance().clickState == Factory.MAP_MAKER_ON && Game.isShiftPressed) {
+									//trace("click" + int(gamePos.y/Constants.CELL_SIZE) + " " + int(gamePos.x/Constants.CELL_SIZE));
+									switch (MapMaker.state) 
+									{
+										case MapMaker.TOWER:
+											addTower(row, col, true);
+										break;
+										
+										case MapMaker.BLOCK:
+											addBlock(row, col, true);
+										break;
+										
+										case MapMaker.DELETE:
+											var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
+											if (cell.tower != null) {
+												removeTower(cell.tower);
+											} else if (cell.block != null) {
+												removeBlock(cell.block);
+											}
+										break;
+										
+										default:
+									}			
+								}
+						}// END SWITCH
+					} // END IF
 				}
 			}
-		}
+		} // END FUNCTION
 		
 		public function addWave(row:int, col:int, start:int, num:int, spawnDelayInMillisec:int, typeOfEnemy:Class) : void
 		{
@@ -125,6 +180,8 @@ package
 			{
 				if(model.blockers > 0 || isFree)
 				{
+					
+					
 					//TODO optimize this
 					//IN ORDER TO NOT PUT BOX ON THE CREEP HEADS
 					 for (var i:int = 0; i < model.enemies.size; i++) {
@@ -145,6 +202,10 @@ package
 					model.pathFinder.findPath();
 					if (model.gameScreen.hasDebug) model.gameScreen.drawDebugPath();
 					if (!isFree)	model.blockers = model.blockers - 1;
+					
+					// !!!
+					cell.blocked = true;
+					cell.block = block;
 				}
 			}
 		}
@@ -156,13 +217,24 @@ package
 			{
 				throw(new Error("addTurret row, col out of bound"));
 			} else {
-				var tower : Tower = new Tower(row, col);
 				
-				tower.x = col * Constants.CELL_SIZE;
-				tower.y = row * Constants.CELL_SIZE;
+				var cell : Cell = model.pathFinder.cellGrid.getCell(row, col);
 				
-				model.towers.add(tower);
-				model.gameScreen.addChild(tower);
+				if(!cell.blocked)
+				{
+					var tower : Tower = new Tower(row, col);
+					
+					
+					
+					tower.x = col * Constants.CELL_SIZE;
+					tower.y = row * Constants.CELL_SIZE;
+					
+					model.towers.add(tower);
+					model.gameScreen.addChild(tower);
+					
+					cell.blocked = true;
+					cell.tower = tower;
+				} 
 			}
 			
 			return null;

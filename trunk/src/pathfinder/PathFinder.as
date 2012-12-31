@@ -75,55 +75,6 @@ package pathfinder
 			model.needPathUpdate = true;
 		}	
 		
-		/*public function addExitPoint(exitPoint : ExitPoint) : Boolean
-		{
-			var cell : Cell = cellGrid.getCell(exitPoint.row, exitPoint.col);
-			
-			//trace("cell before: " + cell.exit + " isExit" );
-			
-			if (!cell.isExit())
-			{
-				model.exitPoints.push( exitPoint );
-				cell.exitPoint = exitPoint;
-				
-				dispatchEvent(new GameEvents(GameEvents.PATH_ADD_EXIT_POINT));
-				//trace("cell in: " + cellGrid.getCell(exitPoint.row, exitPoint.col).exit + " isExit" );
-				findPath();
-				
-				return true;
-			}
-			
-			return false;
-		}*/
-		
-		/*public function removeExitPoint(row: int, col: int):void 
-		{
-			var cell  : Cell = cellGrid.getCell(row, col);
-			
-			if (cell.isExit())
-			{
-				var exitPoint : ExitPoint = null;
-				for each (var e: ExitPoint in  exitPoints) 
-				{
-					if (e.row == row && e.col == col)
-					{
-						exitPoint = e;
-						break;
-					}
-				}
-				
-				
-				exitPoints.splice(exitPoints.lastIndexOf(exitPoint), 1);	
-				cell.exitPoint = null;
-				
-				var ge : GameEvents = new GameEvents(GameEvents.PATH_REMOVE_EXIT_POINT);
-				ge.data = exitPoint;
-				
-				dispatchEvent(ge);
-				findPath();
-			}
-		}*/
-		
 		private function processNeighbour(neighbourCell:Cell, startingCell:Cell, direction:int):void 
 		{			
 			if (neighbourCell != null && openNodes != null)

@@ -28,7 +28,7 @@ package
 			
 			// start it!
 			mStarling.start();
-			mStarling.showStats = false;
+			mStarling.showStats = true;
 		}
 		
 	}

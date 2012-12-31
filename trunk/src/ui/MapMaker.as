@@ -26,6 +26,8 @@ package ui
 		public static const IDLE  : String = "idle";
 		public static const ENEMY : String = "enemy";
 		public static const BLOCK : String = "block";
+		public static const TOWER:String = "tower";
+		public static const DELETE:String = "delete";
 		
 		public static var state : String = IDLE;
 		public static var gameObjData : Object;
@@ -60,144 +62,46 @@ package ui
 		
 		public function MapMaker(model : GameModel, gameScreen : GameScreen) 
 		{
+			// START & EDIT BUTTON
 			startNeditButton = new Button(Assets.getTexture("ButtonWide"), MAPEDITOR);
 			startNeditButton.fontSize = 12;
 			startNeditButton.fontName = Constants.FONT_NAME;
+			startNeditButton.addEventListener(starling.events.Event.TRIGGERED, onSwitchClick);
 			addChild(startNeditButton);
 			
-			// INIT MAPMAKER BUTTONS
+			// BUILD BUTTONS
 			buildButton = new SwitchButton(Assets.getTexture("ButtonBuildBM"));
 			buildButton.setPos(0, 0);
+			buildButton.addEventListener(starling.events.Event.TRIGGERED, onBuildButtonClick);			
+			addChild(buildButton);
+			
+			// DELETE BUTTON
 			deleteButton = new SwitchButton(Assets.getTexture("ButtonDeleteBM"));
 			deleteButton.setPos(90, 0);
+			deleteButton.addEventListener(starling.events.Event.TRIGGERED, onDeleteButtonClick);
+			addChild(deleteButton);
+			
+			// OBJECT PANEL
 			objectsPanel = new ObjectsPanel();
 			objectsPanel.y = 90;
 			
+			// VISIBILITY
 			buildButton.visible = false;
 			deleteButton.visible = false;
 			objectsPanel.visible = false;
 			
-			
-			addChild(buildButton);
-			addChild(deleteButton);
 			addChild(objectsPanel);
 			
-			//var button : Button = new Button();
-			//button.label = "Mapeditor";
-			
-			//addChild(button);
-			//this.gameScreen = gameScreen;
-			//this.model = model;
-			//creatorGui.y = 600;
-			//mapMakerPanel.x = 730;
-			//hammerButton.x = 730;
-			//hammerButton.visible = false;
-			//addChild(creatorGui);
-			//addChild(mapMakerPanel);
-			//addChild(hammerButton);
-			//
-			//DENSITY
-			//mapMakerPanel.delay_input.text =  mapMakerPanel.spawn_density.value.toString();
-			//
-			//POPULATE TOWER COMBO BOX
-			//creatorGui.add_tower_combo.addItem( { label: "Point defense", data: PointDefense } );
-			//creatorGui.add_tower_combo.addItem( { label: "Cannon tower", data: Cannon } );
-			//
-			//POPULATE ENEMY COMBO BOX
-			//creatorGui.add_enemy_combo.addItem( { label: "Basic enemy", data: BasicEnemy} );
-			//creatorGui.add_enemy_combo.addItem({ label: "Cannon tower", data: Cannon});
-			//
-			//mapMakerPanel.enemy_type.addItem( { label: "Basic enemy", data: BasicEnemy } );
-			//
-			//LISTENERS///////////////////////////////////////////////////////////////////////////
-			addEventlisteners();
-			//
 			//PAUSE THE GAME
 			//model.pause = true;
 		}
-		/*
-		private function gameStageClickHandle(stageX:Number, stageY:Number):void
-		{
-			var row : int = stageY / Constants.CELL_SIZE;
-			var col : int = stageX / Constants.CELL_SIZE;
-			
-			if (row >= 0 && row < Constants.ROW_NUM && col >= 0 && col < Constants.COL_NUM)
-			{
-				var clickedCell : Cell = model.pathFinder.cellGrid.getCell(row, col);
-				
-				switch (Factory.getInstance().clickState)
-				{
-					case Factory.ENEMY_SPAWNER:
-						Factory.getInstance().addEnemy(row, col, this.spawnEnemyClass);
-						
-						var enemy : Object = new this.spawnEnemyClass(row, col);
-						enemies.add(enemy);
-						
-						
-					break;
-					case Factory.TOWER_BUILDER:
-						if(!clickedCell.blocked && !clickedCell.isExit())
-						{
-							//ADD TOWER
-							var t : Tower = Factory.getInstance().addTower(row, col, this.buildTowerClass, true);
-							t.removeCallBack = function removeTowerCallBack():void {
-								Factory.getInstance().removeTower(t);
-							};
-						}
-					break;
-					case Factory.SPAWN_POINT_CREATOR:
-						if(!clickedCell.blocked && !clickedCell.isExit())
-						{
-							addSpawnPoint(row, col);
-						}
-					break;
-					case Factory.ADD_EXIT:
-						if(!clickedCell.blocked && !clickedCell.isSpawnPoint())
-						{
-							Factory.getInstance().addExitPoint(row, col);
-						}
-					break;
-					case Factory.BLOCK_BUILDER:
-						if(!clickedCell.blocked && !clickedCell.isSpawnPoint())
-						{
-							Factory.getInstance().addBlock(row, col, true);
-						}
-					break;
-					case Factory.REMOVE_EXIT:
-						if (clickedCell.isExit()) { 
-							model.pathFinder.removeExitPoint(row, col); 
-							model.gameScreen.removeChild(clickedCell.exitPoint);
-						}
-					break;
-				} //END OF SWITCH
-			} //END OF IF
-		} //END OF FUNC
-		
-		private function onMouseMove(e:MouseEvent):void 
-		{
-			if (Factory.mouseDown)
-			{
-				gameStageClickHandle(e.stageX, e.stageY);
-			}
-		}
-		
-		private function onGameScreenClick(e:MouseEvent):void 
-		{
-			gameStageClickHandle(e.stageX, e.stageY);
-		}
-		*/
-		private function addEventlisteners():void 
-		{
-			startNeditButton.addEventListener(starling.events.Event.TRIGGERED, onSwitchClick);
-			buildButton.addEventListener(starling.events.Event.TRIGGERED, onBuildButtonClick);
-			deleteButton.addEventListener(starling.events.Event.TRIGGERED, onDeleteButtonClick);
-		}
-		
+
 		private function onDeleteButtonClick(e:starling.events.Event):void 
 		{
-			trace("kulso");
 			if (deleteButton.on) {
 				if (buildButton.on) buildButton.switchIt();
+				
+				MapMaker.state = MapMaker.DELETE;
 			}
 			
 		}

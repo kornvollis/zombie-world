@@ -29,8 +29,8 @@ package ui
 			addChild(Assets.getImage("PopUp"));
 			
 			
-			addItem(GameObject.TOWER,null, "BaseSprite", "TowerSprite01");
-			addItem(GameObject.BLOCK,null, "Block01");
+			addItem(MapMaker.TOWER,null, "BaseSprite", "TowerSprite01");
+			addItem(MapMaker.BLOCK,null, "Block01");
 		}
 		
 		
@@ -42,6 +42,8 @@ package ui
 			
 			var baseIcon : Texture = Assets.getTexture("ButtonSmallIcon");
 			var button : SwitchButton = new SwitchButton(baseIcon);
+			
+			button.data = buttonData;
 			
 			var itemIcon : Image = Assets.getImage(firstImage);
 			itemIcon.pivotX = itemIcon.width  * 0.5;
@@ -73,12 +75,24 @@ package ui
 		private function onButtonClick(e:Event):void 
 		{
 			var button:SwitchButton = e.currentTarget as SwitchButton;
+			
 			if (selectedItem != null && button != selectedItem) {
 				selectedItem.switchIt();
 				selectedItem = button;
-			} else {
-				selectedItem = button;
+				
+				MapMaker.state = button.data["objType"];
+				MapMaker.gameObjData = button.data["objData"];
+			} else if (selectedItem != null && button == selectedItem) {
+				selectedItem = null;
+				MapMaker.state = MapMaker.IDLE;
 			}
+			else {
+				selectedItem = button;
+				MapMaker.state = button.data["objType"];
+				MapMaker.gameObjData = button.data["objData"];
+			}
+			
+			trace(MapMaker.state);
 		}
 		
 	}
