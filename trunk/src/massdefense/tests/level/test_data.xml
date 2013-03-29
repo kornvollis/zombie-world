@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<level>
+	<rows>8</rows>
+	<cols>15</cols>
+	<cellSize>32</cellSize>
+	
+	<towers>
+		<tower row='3' col='1' />
+	</towers>
+	
+	<start_nodes>
+		<node row = '0' col = '0' />
+	</start_nodes>
+	
+	<closed_nodes>
+		<node row = '3' col = '0' />
+		<node row = '3' col = '1' />
+		<node row = '3' col = '2' />
+		<node row = '3' col = '3' />
+		<node row = '3' col = '4' />
+		<node row = '3' col = '5' />
+	</closed_nodes>
+	
+	
+	
+	<blocks>
+	</blocks>
+	
+	<exits>
+	</exits>
+	
+	<waves>
+		<wave row='3' col='1' start='5' density='40' myclass='BasicEnemy' />
+	</waves>
+	
+	
+</level>
