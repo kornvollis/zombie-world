@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<level>
+	<rows>8</rows>
+	<cols>15</cols>
+	<cellSize>32</cellSize>
+	
+	<start_nodes>
+		<node row = '0' col = '0' />
+		<node row = '0' col = '1' />
+		<node row = '0' col = '2' />
+	</start_nodes>
+	
+	<closed_nodes>
+		<node row = '3' col = '0' />
+		<node row = '3' col = '1' />
+		<node row = '3' col = '2' />
+		<node row = '3' col = '3' />
+		<node row = '3' col = '4' />
+		<node row = '3' col = '5' />
+		<node row = '3' col = '6' />
+		<node row = '3' col = '7' />
+		<node row = '2' col = '7' />
+		<node row = '1' col = '7' />
+	</closed_nodes>
+	
+	<towers>
+		<tower>
+			<row>2</row>
+			<col>3</col>
+		</tower>
+	</towers>
+	
+	<waves>
+		<wave>
+			<row>7</row>
+			<col>0</col>
+			<startInSecond>0</startInSecond>
+			<creepsToSpawn>20</creepsToSpawn>
+			<delayBetweenSpansInSecond>0.9</delayBetweenSpansInSecond>
+		</wave>
+	</waves>
+	
+	<exits>
+	</exits>	
+	
+</level>
