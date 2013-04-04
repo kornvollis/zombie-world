@@ -2,6 +2,7 @@ package massdefense.units
 {
 	import flash.geom.Point;
 	import massdefense.assets.Assets;
+	import massdefense.Factory;
 	import massdefense.misc.Position;
 	import massdefense.pathfinder.Node;
 	import massdefense.pathfinder.Path;
@@ -17,15 +18,16 @@ package massdefense.units
 		public static const DEAD      : String = "dead";
 		public static const ALIVE      : String = "live";
 		
-		private var position          : Position = new Position();
+		private var _position          : Position = new Position();
 		private var _path             : Path = null;
+		private var _health           : int  = 1;
 		
 		public var pathPosition       : uint = 0;
 		public var state			  : String = ALIVE;
 		public var speed              : int = 50;
-		public var maxLife            : int = 3;
-		public var life               : int = 3;
+		public var maxHealth            : int = 1;
 		public var distanceFromTarget : Number;
+		private var _isDead : Boolean = false;
 		
 		private var _row 			  : int;
 		private var _col               : int;
@@ -56,8 +58,6 @@ package massdefense.units
 		
 		public function update(passedTime : Number) : void 
 		{
-			//trace("creep");
-			
 			updateCreepStatus();
 			
 			if (state == ALIVE) {
@@ -105,7 +105,7 @@ package massdefense.units
 		
 		private function updateCreepStatus():void 
 		{
-			if (life <= 0) state = DEAD;
+			if (health <= 0) state = DEAD;
 		}
 		
 		public function get path():Path 
@@ -136,6 +136,40 @@ package massdefense.units
 		public function set col(value:int):void 
 		{
 			_col = value;
+		}
+		
+		public function get health():int 
+		{
+			return _health;
+		}
+		
+		public function set health(value:int):void 
+		{
+			_health = value;
+			
+			if (_health <= 0) {
+				Factory.removeCreep(this);
+			}
+		}
+		
+		public function get position():Position 
+		{
+			return _position;
+		}
+		
+		public function set position(value:Position):void 
+		{
+			_position = value;
+			this.x = _position.x;
+			this.y = _position.y;
+		}
+		
+		public function get isDead():Boolean 
+		{
+			var dead : Boolean = false;
+			if (health <= 0) dead = true;
+			
+			return dead;
 		}
 	}
 

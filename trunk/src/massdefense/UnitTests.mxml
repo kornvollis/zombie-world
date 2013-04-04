@@ -9,6 +9,7 @@
   <fx:Script>
     <![CDATA[
 	  import massdefense.tests.position.PositionTest;
+	  import massdefense.tests.TowerTest;
       import org.flexunit.listeners.UIListener;
       import org.flexunit.runner.FlexUnitCore;
  
@@ -19,6 +20,7 @@
         core = new FlexUnitCore();
         core.addListener(new UIListener(uiListener));
         core.run(PositionTest); // Add all your Test Suite classes here.
+		core.run(TowerTest);
       }
     ]]>
   </fx:Script>

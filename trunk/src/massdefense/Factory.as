@@ -37,6 +37,10 @@ package massdefense
 			level.addChild(tower);
 		}
 		
+		public static function removeCreep(creep:Creep):void {
+			level.removeChild(creep);
+		}
+		
 	}
 
 }

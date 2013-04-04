@@ -33,14 +33,15 @@ package massdefense.units
 		
 		
 		//RELOAD TIME
-		private var lastFireTime : Number = -1;
+		private var reloadTimeInSec   : Number = 1;
+		private var timeNeedForReload : Number = 1;
 		
 		private var baseImage:Image;
 		private var towerImage:Image;
 		
 		public function Tower() 
 		{
-			addGraphics()
+			//addGraphics()
 		}
 		
 		private function addGraphics():void 
@@ -58,7 +59,7 @@ package massdefense.units
 			addChild(towerImage);
 		}
 		
-		public function setPositionRowCol(row:Number, col:Number):void 
+		public function setPositionRowCol(row:int, col:int):void 
 		{
 			// TODO REFACTOR
 			setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
@@ -75,56 +76,32 @@ package massdefense.units
 		
 		public function update(timeElapssed : Number) : void
 		{
-			if(targetList!= null) {
-			trace(targetList.length);
+			reloadProgress(timeElapssed);
+			
+			if(targetList != null) {
 				if (targetList.length > 0) {
-					setTarget();
-					rotateToTarget();
+					
+					if(target == null || target.isDead) {
+						findTarget();
+					}
+					
+					if(target != null) {
+						rotateToTarget();
+						if (isReloaded) fire();
+					}
 				}
 			}
-			
-			/*
+		}
+		
+		public function reloadProgress(timeElapssed:Number):void 
+		{
 			if (!isReloaded) {
-				lastFireTime -= e.passedTime;
-				if (lastFireTime < 0)
-				{
+				timeNeedForReload -= timeElapssed;
+				if (timeNeedForReload < 0) {
+					timeNeedForReload = reloadTime;
 					isReloaded = true;
 				}
 			}
-			
-			if (target != null)
-			{				
-				if(target.state == Enemy.DEAD) {
-					target = Factory.getInstance().findTargetForTower(this);
-					return;
-				}
-				
-				//IF enemy goes out of range then we looking for another enemy
-				if (Point.distance(target.getPosition(), getPosition() ) > range)
-				{
-					target = null;
-					return;
-				}
-				
-				//if (Enemy(target).isDeleted)
-				//{
-					//target = null;
-					//return;
-				//}
-				
-				var vect : Point = new Point;
-				vect.x = target.x - this.x;
-				vect.y = target.y - this.y;
-				
-				angle = Math.atan2(vect.y, vect.x);
-				
-				towerImage.rotation = angle;
-				
-				if (isReloaded) fire();
-			} else {
-				target = Factory.getInstance().findTargetForTower(this);
-			}
-			*/
 		}
 		
 		private function rotateToTarget():void 
@@ -138,20 +115,23 @@ package massdefense.units
 			towerImage.rotation = angle;
 		}
 		
-		private function setTarget():void 
+		private function findTarget():void 
 		{
-			target = targetList[0];
+			for each (var creep : Creep in targetList) 
+			{
+				if (Position.distance(creep.position, this.position) < this.range) {
+					target = creep;
+					return;
+				}
+			}
 		}
 		
 		private function fire():void 
 		{
-			/*
 			if (target != null) {
-				Factory.getInstance().createProjectil(this.x + Constants.CELL_SIZE * 0.5, this.y + Constants.CELL_SIZE * 0.5, target);
+				target.health -= this.damage;
 				isReloaded = false;
-				lastFireTime = reloadTime;
 			}
-			*/
 		}
 		
 		public function get targetList():Vector.<Creep> 

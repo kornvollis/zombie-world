@@ -41,15 +41,20 @@ package massdefense.level
 			timeControll = new TimeControll(this);
 		}
 		
-		public function initLevel():void 
-		{
+		public function initLevel():void {
 			var levelLoader : LevelLoader = new LevelLoader(this);
 			levelLoader.loadLevel(_levelData);
 			
 			timeControll.x = 600;
 			addChild(timeControll);
 		}
-
+		
+		public function removeCreep(creep:Creep):void {
+			var index : int = creeps.indexOf(creep);
+			creeps.splice(index, 1);
+			removeChild(creep);
+		}
+		
 		public function play() : void {
 			clearLevel();
 			resetWaves();
@@ -62,7 +67,9 @@ package massdefense.level
 				removeChild(creep);
 			}
 			
-			//creeps = new Vector.<Creep>;
+			while(creeps.length > 0) {
+				creeps.pop();
+			}
 		}
 		
 		public function pause() : void {
