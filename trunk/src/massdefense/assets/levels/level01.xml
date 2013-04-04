@@ -4,6 +4,8 @@
 	<cols>15</cols>
 	<cellSize>32</cellSize>
 	
+	<life>5</life>
+	
 	<start_nodes>
 		<node row = '0' col = '0' />
 		<node row = '0' col = '1' />
@@ -35,8 +37,8 @@
 			<row>7</row>
 			<col>0</col>
 			<startInSecond>0</startInSecond>
-			<creepsToSpawn>20</creepsToSpawn>
-			<delayBetweenSpansInSecond>0.9</delayBetweenSpansInSecond>
+			<creepsToSpawn>100</creepsToSpawn>
+			<delayBetweenSpansInSecond>0.1</delayBetweenSpansInSecond>
 		</wave>
 	</waves>
 	

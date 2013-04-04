@@ -7,9 +7,11 @@ package massdefense.level
 	import massdefense.pathfinder.PathFinder;
 	import massdefense.ui.TimeControll;
 	import massdefense.units.Creep;
+	import massdefense.units.Projectil;
 	import massdefense.units.Tower;
 	import massdefense.Wave;
 	import starling.display.Sprite;
+	import starling.text.TextField;
 	
 
 	public class Level extends Sprite
@@ -20,6 +22,7 @@ package massdefense.level
 		
 		// UI
 		private var timeControll : TimeControll;
+		private var lifeDisplay  : TextField;
 		
 		// PATHFINDER 
 		private var _pathfinder  : PathFinder;
@@ -28,36 +31,45 @@ package massdefense.level
 		
 		// WAVES
 		private var _waves : Vector.<Wave>;
+		
+		// TOWERS
 		private var _towers : Vector.<Tower>;
+		
+		// PROJECTILS
+		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>;
 		
 		// CREEPS
 		private var _creeps : Vector.<Creep> = new Vector.<Creep>;
+		private var levelLoader:LevelLoader;
 		
 		// STATE
 		public var paused : Boolean = false;
 		public var stepFrames : uint = 0;
 		
+		// GAME attributes
+		private var _life : int = 1;
+		
 		public function Level() {
 			timeControll = new TimeControll(this);
 		}
 		
-		public function initLevel():void {
-			var levelLoader : LevelLoader = new LevelLoader(this);
+		public function initLevel():void 
+		{
+			levelLoader = new LevelLoader(this);
 			levelLoader.loadLevel(_levelData);
+			
+			lifeDisplay = new TextField(150, 50, "Life: " + this.life);
+			lifeDisplay.x = 600;
+			lifeDisplay.y = 60;
+			addChild(lifeDisplay);
 			
 			timeControll.x = 600;
 			addChild(timeControll);
 		}
-		
-		public function removeCreep(creep:Creep):void {
-			var index : int = creeps.indexOf(creep);
-			creeps.splice(index, 1);
-			removeChild(creep);
-		}
-		
+
 		public function play() : void {
 			clearLevel();
-			resetWaves();
+			levelLoader.loadLevel(_levelData);
 		}
 		
 		private function clearLevel():void 
@@ -66,10 +78,19 @@ package massdefense.level
 			{
 				removeChild(creep);
 			}
-			
-			while(creeps.length > 0) {
-				creeps.pop();
+			for each (var tower: Tower in towers) 
+			{
+				removeChild(tower);
 			}
+			for each (var projectil: Projectil in projectils) 
+			{
+				removeChild(projectil);
+			}
+			
+			creeps      = new Vector.<Creep>;
+			towers      = new Vector.<Tower>;
+			projectils  = new Vector.<Projectil>;
+			waves       = new Vector.<Wave>;
 		}
 		
 		public function pause() : void {
@@ -79,11 +100,16 @@ package massdefense.level
 		
 		public function update(passedTime : Number) : void 
 		{
+			//trace(creeps.length);
+			if (life <= 0)
+			{
+				//trace("GAME OVER");
+				
+				//return;
+			}
+			
 			if (!paused || stepFrames > 0) {
-				for (var i:int = creeps.length-1; i >= 0 ; i--) 
-				{
-					creeps[i].update(passedTime);
-				}
+				
 				
 				for each (var wave: Wave in waves) 
 				{
@@ -95,6 +121,24 @@ package massdefense.level
 				for each (var tower: Tower in towers) 
 				{
 					tower.update(passedTime);
+				}
+				
+				for (i = projectils.length-1; i >= 0 ; i--) 
+				{
+					projectils[i].update(passedTime);
+				}
+				
+				for (var i:int = creeps.length-1; i >= 0 ; i--) 
+				{
+					creeps[i].update(passedTime);
+					if (creeps[i].life <= 0) {
+						removeChild(creeps[i]);
+						creeps.splice(creeps.indexOf(creeps[i]), 1);
+					} else if (creeps[i].path.isEndPosition(creeps[i].pathPosition)) {
+						removeChild(creeps[i]);
+						creeps.splice(creeps.indexOf(creeps[i]), 1);
+						life--;
+					}
 				}
 				
 				if (stepFrames > 0) stepFrames--;
@@ -216,6 +260,27 @@ package massdefense.level
 		public function set towers(value:Vector.<Tower>):void 
 		{
 			_towers = value;
+		}
+		
+		public function get projectils():Vector.<Projectil> 
+		{
+			return _projectils;
+		}
+		
+		public function set projectils(value:Vector.<Projectil>):void 
+		{
+			_projectils = value;
+		}
+		
+		public function get life():uint 
+		{
+			return _life;
+		}
+		
+		public function set life(value:uint):void 
+		{
+			_life = value;
+			if(lifeDisplay != null)	lifeDisplay.text = "Life: " + _life;
 		}
 	}
 

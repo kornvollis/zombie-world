@@ -19,6 +19,9 @@ package massdefense.assets
 		public static const StepButton : Class;
 		/////////////
 		
+		[Embed(source = "images/projectils/simple_bullet.png")]
+		public static const SimpleBullet : Class;
+		
 		[Embed(source="images/gui/buttons/default-button.png")]
 		public static const ButtonDefaultBM:Class;
 		

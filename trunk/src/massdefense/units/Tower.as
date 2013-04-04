@@ -1,6 +1,8 @@
 package massdefense.units 
 {
+	import adobe.utils.ProductManager;
 	import flash.geom.Point;
+	import flash.utils.Dictionary;
 	import flexunit.utils.ArrayList;
 	import massdefense.assets.Assets;
 	import massdefense.Factory;
@@ -16,25 +18,25 @@ package massdefense.units
 		public static const FIRING : String = "firing";
 		
 		//Properties
-		private var position : Position = new Position;
-		public var damage : int = 1;
-		public var range  : int = 250;
+		public var position : Position = new Position();
 		public var cost : int = 50;
-		private var reloadTime : Number = 2; //IN SEC
+		
 		private var _targetList : Vector.<Creep>;
 		private var target : Creep = null;
 		public var angle : Number = 0;
 		
-		//public var rifleGraphics : MovieClip = new MovieClip;
-		public var isReloaded : Boolean = true;
+		
 		public var row : int;
 		public var col : int;
 		private var _showRange : Boolean = true;
 		
 		
-		//RELOAD TIME
-		private var reloadTimeInSec   : Number = 1;
-		private var timeNeedForReload : Number = 1;
+		// RELOAD && FIRE
+		public var damage       : uint = 1;
+		public var range        : uint = 250;
+		public var reloaded     : Boolean = true;
+		public var reloadTime   : Number = 0.3; 					// IN SECOND
+		public var timeToReload : Number = 0.3;
 		
 		private var baseImage:Image;
 		private var towerImage:Image;
@@ -44,7 +46,7 @@ package massdefense.units
 			//addGraphics()
 		}
 		
-		private function addGraphics():void 
+		public function addGraphics():void 
 		{
 			//baseImage = Util.bitmapToImage(BaseSprite);
 			baseImage = new Image(Assets.getTexture("BaseSprite"));
@@ -59,7 +61,7 @@ package massdefense.units
 			addChild(towerImage);
 		}
 		
-		public function setPositionRowCol(row:int, col:int):void 
+		public function setPositionRowCol(row:Number, col:Number):void 
 		{
 			// TODO REFACTOR
 			setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
@@ -76,30 +78,47 @@ package massdefense.units
 		
 		public function update(timeElapssed : Number) : void
 		{
+			checkIfTargetIsAlive();
 			reloadProgress(timeElapssed);
 			
-			if(targetList != null) {
-				if (targetList.length > 0) {
-					
-					if(target == null || target.isDead) {
-						findTarget();
-					}
-					
-					if(target != null) {
-						rotateToTarget();
-						if (isReloaded) fire();
-					}
+			if(target == null || outOfRange(target) || target.life <= 0 ) {
+				target = findTheFirstTargetInRange();
+			}
+			
+			if (target != null) {
+				rotateToTarget();
+				if(reloaded) fire();
+			}
+		}
+		
+		private function checkIfTargetIsAlive():void 
+		{
+			if (target != null) {
+				if (target.life <= 0) {
+					target = null;
 				}
 			}
 		}
 		
+		public function outOfRange(target:Creep):Boolean 
+		{
+			if (target == null) return true;
+			
+			if (Position.distance(target.position, this.position) > this.range) {
+				return true;
+			}
+			
+			return false;
+		}
+		
 		public function reloadProgress(timeElapssed:Number):void 
 		{
-			if (!isReloaded) {
-				timeNeedForReload -= timeElapssed;
-				if (timeNeedForReload < 0) {
-					timeNeedForReload = reloadTime;
-					isReloaded = true;
+			if (!reloaded) {
+				timeToReload -= timeElapssed;
+				
+				if (timeToReload <= 0) {
+					reloaded = true;
+					timeToReload = reloadTime;
 				}
 			}
 		}
@@ -115,23 +134,33 @@ package massdefense.units
 			towerImage.rotation = angle;
 		}
 		
-		private function findTarget():void 
+		private function findTheFirstTargetInRange():Creep
 		{
-			for each (var creep : Creep in targetList) 
-			{
-				if (Position.distance(creep.position, this.position) < this.range) {
-					target = creep;
-					return;
+			var nearestTarget : Creep = null;
+			
+			for each (var creep:Creep in targetList ) 
+			{				
+				if (Position.distance(creep.position, this.position) <= this.range && creep.life > 0) {
+					return creep;
 				}
 			}
+			
+			return null;
 		}
 		
 		private function fire():void 
 		{
-			if (target != null) {
-				target.health -= this.damage;
-				isReloaded = false;
-			}
+			// target.life -= this.damage;
+			var projAttr : Dictionary = new Dictionary();
+			projAttr["posx"] = this.x;
+			projAttr["posy"] = this.y;
+			projAttr["target"] = target;
+			
+			//Factory.addProjectil(projAttr);
+			target.life -= 1;
+			
+			reloaded = false;
+			timeToReload = reloadTime;
 		}
 		
 		public function get targetList():Vector.<Creep> 
