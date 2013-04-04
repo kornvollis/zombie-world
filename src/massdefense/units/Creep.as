@@ -20,21 +20,20 @@ package massdefense.units
 		
 		private var _position          : Position = new Position();
 		private var _path             : Path = null;
-		private var _health           : int  = 1;
 		
 		public var pathPosition       : uint = 0;
 		public var state			  : String = ALIVE;
-		public var speed              : int = 50;
-		public var maxHealth            : int = 1;
+		public var speed              : int = 300;
+		public var maxLife            : int = 1;
+		private var _life               : int = 1;
 		public var distanceFromTarget : Number;
-		private var _isDead : Boolean = false;
 		
 		private var _row 			  : int;
 		private var _col               : int;
 		
 		public function Creep() 
 		{
-			addGraphics();
+			//addGraphics();
 		}
 		
 		public function setPositionXY(x:Number , y:Number) : void 
@@ -46,7 +45,7 @@ package massdefense.units
 			this.y = position.y;
 		}
 		
-		private function addGraphics():void 
+		public function addGraphics():void 
 		{
 			var image : Image = Assets.getImage("SimpleEnemyBitmap");
 			
@@ -58,9 +57,7 @@ package massdefense.units
 		
 		public function update(passedTime : Number) : void 
 		{
-			updateCreepStatus();
-			
-			if (state == ALIVE) {
+			if (life > 0) {
 				if (path != null && !path.isEndPosition(pathPosition)) {
 					followPath(passedTime);
 				}
@@ -88,24 +85,8 @@ package massdefense.units
 			{
 				pathPosition++;
 			} else {
-				moveTo(targetPosition, passedTime);
+				position = Position.moveToPoint(this.position, targetPosition, this.speed, passedTime);
 			}
-		}
-		
-		private function moveTo(targetPosition:Position, passedTime : Number):void 
-		{
-			var move_vector : Point = new Point();
-			move_vector.x = targetPosition.x - position.x;
-			move_vector.y = targetPosition.y - position.y;
-			
-			move_vector.normalize( 1 * speed * passedTime );
-			
-			setPositionXY(position.x + move_vector.x, position.y + move_vector.y);
-		}
-		
-		private function updateCreepStatus():void 
-		{
-			if (health <= 0) state = DEAD;
 		}
 		
 		public function get path():Path 
@@ -138,38 +119,26 @@ package massdefense.units
 			_col = value;
 		}
 		
-		public function get health():int 
-		{
-			return _health;
-		}
-		
-		public function set health(value:int):void 
-		{
-			_health = value;
-			
-			if (_health <= 0) {
-				Factory.removeCreep(this);
-			}
-		}
-		
 		public function get position():Position 
 		{
 			return _position;
 		}
 		
-		public function set position(value:Position):void 
+		public function set position(pos:Position):void 
 		{
-			_position = value;
-			this.x = _position.x;
-			this.y = _position.y;
+			_position = pos;
+			this.x = pos.x;
+			this.y = pos.y;
 		}
 		
-		public function get isDead():Boolean 
+		public function get life():int 
 		{
-			var dead : Boolean = false;
-			if (health <= 0) dead = true;
-			
-			return dead;
+			return _life;
+		}
+		
+		public function set life(value:int):void 
+		{
+			_life = value;
 		}
 	}
 

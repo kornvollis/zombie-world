@@ -1,5 +1,8 @@
 package massdefense.level 
 {
+	import flash.display.DisplayObject;
+	import flash.utils.Dictionary;
+	import massdefense.Factory;
 	import massdefense.pathfinder.Grid;
 	import massdefense.pathfinder.Node;
 	import massdefense.pathfinder.PathFinder;
@@ -34,28 +37,25 @@ package massdefense.level
 			
 			level.pathfinder.calculateNodesDistances();
 			
+			//SetLife
+			level.life = levelData.life;
+			
 			level.waves = getWaves();
-			level.towers = getTowers();
+			getTowers();
+			//level.towers = getTowers();
 		}
 		
-		private function getTowers():Vector.<Tower> 
+		private function getTowers():void
 		{
-			var towers : Vector.<Tower> = new Vector.<Tower>();
+			level.towers = new Vector.<Tower>();
 			for each (var xml_tower : XML in levelData.towers.tower) 
 			{
-				var tower:Tower = new Tower();
-				tower.row = xml_tower.row;
-				tower.col = xml_tower.col;
+				var towerAttr : Dictionary = new Dictionary;
+				towerAttr["row"] = xml_tower.row;
+				towerAttr["col"] = xml_tower.col; 
 				
-				tower.setPositionRowCol(tower.row, tower.col);
-				tower.targetList = level.creeps;
-				
-				towers.push(tower);
-				
-				level.addChild(tower);
+				Factory.addTower(towerAttr);
 			}
-			
-			return towers;
 		}
 		
 		private function getWaves():Vector.<Wave> 

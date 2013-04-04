@@ -24,6 +24,19 @@ package massdefense.misc
 			return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
 		}
 		
+		static public function moveToPoint(startPosition:Position, targetPosition:Position, speed:Number, passedTime:Number):Position 
+		{
+			var positionAfterMove : Position = new Position();
+			positionAfterMove.x = targetPosition.x - startPosition.x;
+			positionAfterMove.y = targetPosition.y - startPosition.y;
+			
+			positionAfterMove.normalize( 1 * speed * passedTime );
+			
+			positionAfterMove.x += startPosition.x;
+			positionAfterMove.y += startPosition.y;
+			
+			return positionAfterMove;
+		}
 	}
 
 }
