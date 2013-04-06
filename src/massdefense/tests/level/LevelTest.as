@@ -2,12 +2,14 @@ package massdefense.tests.level
 {
 	import flash.text.GridFitType;
 	import flash.utils.Dictionary;
+	import massdefense.assets.Assets;
 	import massdefense.assets.LevelStore;
 	import massdefense.Factory;
 	import massdefense.level.Level;
 	import massdefense.misc.SimpleGraphics;
 	import massdefense.pathfinder.Grid;
 	import massdefense.pathfinder.PathFinder;
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
@@ -32,6 +34,9 @@ package massdefense.tests.level
 			Factory.level = level;
 			level.levelData = xml;
 			level.initLevel();
+			
+			var image : Image = Assets.getImage("Level_01");			
+			addChild(image);
 			
 			level.debugDraw();
 			addChild(level);
