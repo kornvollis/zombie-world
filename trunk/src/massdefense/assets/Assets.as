@@ -10,6 +10,10 @@ package massdefense.assets
 
 	public class Assets
 	{
+		// LEVELS
+		[Embed(source="images/levels/level_01.PNG")]
+		public static const Level_01 : Class;
+		
 		////////////
 		[Embed(source = "images/gui/timecontroll/play.png")]
 		public static const PlayButton : Class;
