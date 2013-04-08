@@ -18,6 +18,22 @@ package massdefense.misc
 			
 		}
 		
+		public static function drawRectangle(width: uint , height: uint, color: uint = 0x880000, alpha:Number = 1 ) : Image {
+			var oldSprite : flash.display.Sprite = new flash.display.Sprite;
+			oldSprite.graphics.beginFill(color, alpha);
+			
+			oldSprite.graphics.drawRect(0, 0, width, height);
+			
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			var bData:BitmapData=new BitmapData(oldSprite.width, oldSprite.height,true,1);
+			bData.draw(oldSprite);
+			
+			var texture:Texture = Texture.fromBitmapData(bData);
+			var image:Image = new Image(texture);
+			
+			return image;
+		}
+		
 		public static function drawXatRowCol(rows : uint , cols: uint, cellSize: uint, lineSize: Number = 1, color: uint = 0x880000, alpha:Number = 1 ) : Image {
 			var oldSprite : flash.display.Sprite = new flash.display.Sprite;
 			oldSprite.graphics.lineStyle(lineSize, color, alpha);

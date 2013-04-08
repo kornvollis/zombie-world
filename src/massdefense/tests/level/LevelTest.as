@@ -9,6 +9,7 @@ package massdefense.tests.level
 	import massdefense.misc.SimpleGraphics;
 	import massdefense.pathfinder.Grid;
 	import massdefense.pathfinder.PathFinder;
+	import massdefense.units.HealthBar;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
@@ -35,12 +36,21 @@ package massdefense.tests.level
 			level.levelData = xml;
 			level.initLevel();
 			
+			
 			var image : Image = Assets.getImage("Level_01");			
-			addChild(image);
+			//addChild(image);
+			
 			
 			level.debugDraw();
 			addChild(level);
 			
+			// HEALTH BAR
+			var hb : HealthBar = new HealthBar();
+			hb.addGraphics();
+			addChild(hb);
+			hb.x = 650;
+			hb.y = 60;
+			//hb.setHpPercent(100);
 			
 			// SPAWNER
 			level.play();
