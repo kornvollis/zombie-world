@@ -23,7 +23,7 @@ package massdefense.units
 		
 		public var pathPosition       : uint = 0;
 		public var state			  : String = ALIVE;
-		public var speed              : int = 300;
+		public var speed              : int = 90;
 		public var maxLife            : int = 1;
 		private var _life               : int = 1;
 		public var distanceFromTarget : Number;
@@ -53,6 +53,16 @@ package massdefense.units
 			image.y -= image.height * 0.5;
 			
 			addChild(image);
+		}
+		
+		public function isAtEndPosition() : Boolean {
+			var endPosition : Boolean = false;
+			
+			if (this.path != null) {
+				endPosition = path.isEndPosition(pathPosition);
+			}
+			
+			return endPosition;
 		}
 		
 		public function update(passedTime : Number) : void 
