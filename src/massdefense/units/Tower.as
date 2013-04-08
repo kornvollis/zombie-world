@@ -7,6 +7,7 @@ package massdefense.units
 	import massdefense.assets.Assets;
 	import massdefense.Factory;
 	import massdefense.misc.Position;
+	import massdefense.misc.SimpleGraphics;
 	import massdefense.pathfinder.Node;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -35,8 +36,8 @@ package massdefense.units
 		public var damage       : uint = 1;
 		public var range        : uint = 250;
 		public var reloaded     : Boolean = true;
-		public var reloadTime   : Number = 0.3; 					// IN SECOND
-		public var timeToReload : Number = 0.3;
+		public var reloadTime   : Number = 2; 					// IN SECOND
+		public var timeToReload : Number = 2;
 		
 		private var baseImage:Image;
 		private var towerImage:Image;
@@ -48,6 +49,7 @@ package massdefense.units
 		
 		public function addGraphics():void 
 		{
+			drawRange();
 			//baseImage = Util.bitmapToImage(BaseSprite);
 			baseImage = new Image(Assets.getTexture("BaseSprite"));
 			towerImage = new Image(Assets.getTexture("TowerSprite01"));
@@ -59,6 +61,12 @@ package massdefense.units
 
 			addChild(baseImage);
 			addChild(towerImage);
+		}
+		
+		private function drawRange():void 
+		{
+			addChild(SimpleGraphics.drawCircle(-range, -range, this.range, 2));
+			
 		}
 		
 		public function setPositionRowCol(row:Number, col:Number):void 
@@ -140,7 +148,7 @@ package massdefense.units
 			
 			for each (var creep:Creep in targetList ) 
 			{				
-				if (Position.distance(creep.position, this.position) <= this.range && creep.life > 0) {
+				if (Position.distance(creep.position, this.position) <= this.range && creep.life > 0 && !creep.isAtEndPosition()) {
 					return creep;
 				}
 			}
@@ -156,8 +164,8 @@ package massdefense.units
 			projAttr["posy"] = this.y;
 			projAttr["target"] = target;
 			
-			//Factory.addProjectil(projAttr);
-			target.life -= 1;
+			Factory.addProjectil(projAttr);
+			//target.life -= 1;
 			
 			reloaded = false;
 			timeToReload = reloadTime;

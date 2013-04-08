@@ -21,7 +21,7 @@ package massdefense.misc
 		
 		static public function distance(p1:Position, p2:Position):Number 
 		{
-			return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
+			return Math.sqrt(Math.abs(p1.x - p2.x)*Math.abs(p1.x - p2.x)  + Math.abs(p1.y - p2.y)*Math.abs(p1.y - p2.y));
 		}
 		
 		static public function moveToPoint(startPosition:Position, targetPosition:Position, speed:Number, passedTime:Number):Position 

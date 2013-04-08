@@ -63,7 +63,7 @@ package massdefense.level
 			lifeDisplay.y = 60;
 			addChild(lifeDisplay);
 			
-			timeControll.x = 600;
+			timeControll.x = 650;
 			addChild(timeControll);
 		}
 
@@ -134,7 +134,7 @@ package massdefense.level
 					if (creeps[i].life <= 0) {
 						removeChild(creeps[i]);
 						creeps.splice(creeps.indexOf(creeps[i]), 1);
-					} else if (creeps[i].path.isEndPosition(creeps[i].pathPosition)) {
+					} else if (creeps[i].isAtEndPosition()) {
 						removeChild(creeps[i]);
 						creeps.splice(creeps.indexOf(creeps[i]), 1);
 						life--;
@@ -164,7 +164,7 @@ package massdefense.level
 		}
 		
 		public function debugDraw() : void {
-			addChild(SimpleGraphics.drawGrid(grid.maxRow, grid.maxCol, Node.NODE_SIZE));
+			addChild(SimpleGraphics.drawGrid(grid.maxRow, grid.maxCol, Node.NODE_SIZE, 1, 0x880000, 0.3));
 			
 			drawDebugStartNodes();
 			drawDebugWalls();
@@ -177,7 +177,7 @@ package massdefense.level
 				for (var j:int = 0; j < grid.maxRow; j++) 
 				{
 					if (!grid.getNodeAtRowCol(i, j).isOpen()) {
-						addChild(SimpleGraphics.drawXatRowCol(i, j, Node.NODE_SIZE));
+						addChild(SimpleGraphics.drawXatRowCol(i, j, Node.NODE_SIZE, 1, 0x880000, 0.3));
 					}
 				}
 			}

@@ -18,9 +18,9 @@ package massdefense.misc
 			
 		}
 		
-		public static function drawXatRowCol(rows : uint , cols: uint, cellSize: uint, lineSize: Number = 1, color: uint = 0x880000 ) : Image {
+		public static function drawXatRowCol(rows : uint , cols: uint, cellSize: uint, lineSize: Number = 1, color: uint = 0x880000, alpha:Number = 1 ) : Image {
 			var oldSprite : flash.display.Sprite = new flash.display.Sprite;
-			oldSprite.graphics.lineStyle(lineSize, color);
+			oldSprite.graphics.lineStyle(lineSize, color, alpha);
 
 			oldSprite.graphics.moveTo(0, 0);
 			oldSprite.graphics.lineTo(cellSize, cellSize);
@@ -41,12 +41,12 @@ package massdefense.misc
 			return image;
 		}
 		
-		public static function drawGrid(rows : uint , cols: uint, cellSize: uint, borderSize:uint = 1, borderColor: uint = 0x880000 ) : Image {
+		public static function drawGrid(rows : uint , cols: uint, cellSize: uint, borderSize:uint = 1, borderColor: uint = 0x880000, alpha: Number = 1) : Image {
 			var width  : int = cols * cellSize;
 			var height : int = rows * cellSize;			
 			
 			var oldSprite : flash.display.Sprite = new flash.display.Sprite;
-			oldSprite.graphics.lineStyle(borderSize, borderColor);
+			oldSprite.graphics.lineStyle(borderSize, borderColor, alpha);
 			
 			
 			for (var  row:int  = 0; row <= rows; row++)
