@@ -31,10 +31,7 @@ package massdefense.units
 				
 				if (Position.distance(this.position, target.position) < 6) {
 					target.life -= this.damage;
-					if (target.life <= 0) {
-						Factory.removeProjectil(this);
-						
-					}
+					Factory.removeProjectil(this);
 				}
 			}
 		}

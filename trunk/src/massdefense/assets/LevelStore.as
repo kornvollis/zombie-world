@@ -8,7 +8,7 @@ package massdefense.assets
 	public class LevelStore 
 	{
 		// LEVELS
-		[Embed(source="levels/level01.xml", mimeType="application/octet-stream")] 
+		[Embed(source="../config/levels/level01.xml", mimeType = "application/octet-stream")] 
 		public static const Level_01:Class;
 		
 		private var levels : Array = new Array;

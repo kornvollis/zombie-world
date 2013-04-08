@@ -130,8 +130,13 @@
 	
 	<towers>
 		<tower>
-			<row>2</row>
-			<col>3</col>
+			<type>simple_tower</type>
+			<row>8</row>
+			<col>8</col>
+		</tower>
+		<tower>
+			<row>8</row>
+			<col>6</col>
 		</tower>
 	</towers>
 	
@@ -141,7 +146,7 @@
 			<col>0</col>
 			<startInSecond>0</startInSecond>
 			<creepsToSpawn>50</creepsToSpawn>
-			<delayBetweenSpansInSecond>1</delayBetweenSpansInSecond>
+			<delayBetweenSpansInSecond>2</delayBetweenSpansInSecond>
 		</wave>
 	</waves>
 	

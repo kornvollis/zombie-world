@@ -24,12 +24,14 @@ package massdefense.units
 		public var pathPosition       : uint = 0;
 		public var state			  : String = ALIVE;
 		public var speed              : int = 90;
-		public var maxLife            : int = 1;
-		private var _life               : int = 1;
+		public var maxLife            : int = 4;
+		private var _life               : int = 4;
 		public var distanceFromTarget : Number;
 		
 		private var _row 			  : int;
-		private var _col               : int;
+		private var _col              : int;
+		private var healthBar		  : HealthBar = new HealthBar();
+		
 		
 		public function Creep() 
 		{
@@ -53,6 +55,11 @@ package massdefense.units
 			image.y -= image.height * 0.5;
 			
 			addChild(image);
+			
+			healthBar.x = -10;
+			healthBar.y = -16;
+			healthBar.addGraphics();
+			addChild(healthBar);
 		}
 		
 		public function isAtEndPosition() : Boolean {
@@ -149,6 +156,7 @@ package massdefense.units
 		public function set life(value:int):void 
 		{
 			_life = value;
+			healthBar.setHpPercent(life / maxLife);
 		}
 	}
 

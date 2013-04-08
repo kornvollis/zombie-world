@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<units>
+	<towers>
+		<simple_tower>
+			<damage>1</damage>
+			<reload_time>3</reload_time>
+		</simple_tower>
+		
+		
+	</towers>
+	
+	
+	<creeps>
+		
+	</creeps>
+	
+</units>
