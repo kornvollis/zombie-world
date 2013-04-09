@@ -18,29 +18,25 @@ package massdefense.level
 	{
 		public static const STEP_FRAMES : uint = 10;
 		
+		// LEVEL LOADER
 		private var _levelData : XML;
+		private var levelLoader:LevelLoader;
 		
 		// UI
 		private var timeControll : TimeControll;
 		private var lifeDisplay  : TextField;
+		private var moneyDisplay : TextField;
 		
 		// PATHFINDER 
 		private var _pathfinder  : PathFinder;
 		private var _grid        : Grid;
 		private var _escapeNodes : Vector.<Node>;
 		
-		// WAVES
+		// GAME OBJECTS
 		private var _waves : Vector.<Wave>;
-		
-		// TOWERS
 		private var _towers : Vector.<Tower>;
-		
-		// PROJECTILS
 		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>;
-		
-		// CREEPS
 		private var _creeps : Vector.<Creep> = new Vector.<Creep>;
-		private var levelLoader:LevelLoader;
 		
 		// STATE
 		public var paused : Boolean = false;
@@ -48,6 +44,7 @@ package massdefense.level
 		
 		// GAME attributes
 		private var _life : int = 1;
+		private var _money : int = 0;
 		
 		public function Level() {
 			timeControll = new TimeControll(this);
@@ -58,44 +55,25 @@ package massdefense.level
 			levelLoader = new LevelLoader(this);
 			levelLoader.loadLevel(_levelData);
 			
-			lifeDisplay = new TextField(150, 50, "Life: " + this.life);
-			lifeDisplay.x = 600;
-			lifeDisplay.y = 60;
-			addChild(lifeDisplay);
-			
-			timeControll.x = 650;
-			addChild(timeControll);
+			initUI();
 		}
-
+		
 		public function play() : void {
 			clearLevel();
 			levelLoader.loadLevel(_levelData);
 		}
 		
-		private function clearLevel():void 
-		{
-			for each (var creep: Creep  in creeps ) 
-			{
-				removeChild(creep);
-			}
-			for each (var tower: Tower in towers) 
-			{
-				removeChild(tower);
-			}
-			for each (var projectil: Projectil in projectils) 
-			{
-				removeChild(projectil);
-			}
-			
-			creeps      = new Vector.<Creep>;
-			towers      = new Vector.<Tower>;
-			projectils  = new Vector.<Projectil>;
-			waves       = new Vector.<Wave>;
-		}
-		
 		public function pause() : void {
 			if (paused) paused = false;
 			else paused = true;
+		}
+		
+		public function spawnCreep(creepAttributes : Dictionary) : void {
+			var creep : Creep = new Creep();
+			creep.setPositionRowCol(creepAttributes["row"], creepAttributes["col"]);
+			
+			creeps.push(creep);
+			addChild(creep);
 		}
 		
 		public function update(passedTime : Number) : void 
@@ -131,7 +109,8 @@ package massdefense.level
 				for (var i:int = creeps.length-1; i >= 0 ; i--) 
 				{
 					creeps[i].update(passedTime);
-					if (creeps[i].life <= 0) {
+					if (creeps[i].health <= 0) {
+						money = money + creeps[i].rewardMoney;
 						removeChild(creeps[i]);
 						creeps.splice(creeps.indexOf(creeps[i]), 1);
 					} else if (creeps[i].isAtEndPosition()) {
@@ -147,12 +126,41 @@ package massdefense.level
 			
 		}
 		
-		public function spawnCreep(creepAttributes : Dictionary) : void {
-			var creep : Creep = new Creep();
-			creep.setPositionRowCol(creepAttributes["row"], creepAttributes["col"]);
+		private function initUI():void 
+		{
+			lifeDisplay = new TextField(150, 50, "Life: " + this.life);
+			lifeDisplay.x = 600;
+			lifeDisplay.y = 60;
+			addChild(lifeDisplay);
 			
-			creeps.push(creep);
-			addChild(creep);
+			moneyDisplay = new TextField(150, 50, "Money: " + this.money);
+			moneyDisplay.x = 600;
+			moneyDisplay.y = 80;
+			addChild(moneyDisplay);
+			
+			timeControll.x = 650;
+			addChild(timeControll);
+		}
+		
+		private function clearLevel():void 
+		{
+			for each (var creep: Creep  in creeps ) 
+			{
+				removeChild(creep);
+			}
+			for each (var tower: Tower in towers) 
+			{
+				removeChild(tower);
+			}
+			for each (var projectil: Projectil in projectils) 
+			{
+				removeChild(projectil);
+			}
+			
+			creeps      = new Vector.<Creep>;
+			towers      = new Vector.<Tower>;
+			projectils  = new Vector.<Projectil>;
+			waves       = new Vector.<Wave>;
 		}
 		
 		private function resetWaves():void 
@@ -281,6 +289,17 @@ package massdefense.level
 		{
 			_life = value;
 			if(lifeDisplay != null)	lifeDisplay.text = "Life: " + _life;
+		}
+		
+		public function get money():int 
+		{
+			return _money;
+		}
+		
+		public function set money(value:int):void 
+		{
+			_money = value;
+			if(moneyDisplay != null) moneyDisplay.text = "Money: " + _money;
 		}
 	}
 

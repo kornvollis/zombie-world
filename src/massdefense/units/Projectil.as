@@ -30,7 +30,7 @@ package massdefense.units
 				position  = Position.moveToPoint(this.position, target.position, speed, passedTime);
 				
 				if (Position.distance(this.position, target.position) < 6) {
-					target.life -= this.damage;
+					target.health -= this.damage;
 					Factory.removeProjectil(this);
 				}
 			}

@@ -20,6 +20,8 @@ package massdefense
 			var row : uint = attributes["row"];
 			var col : uint = attributes["col"];
 			var creep: Creep = new Creep();
+			//creep.health = attributes["health"];
+			
 			
 			creep.setPositionRowCol(row, col);
 			
@@ -32,12 +34,21 @@ package massdefense
 		}
 		
 		public static function addTower(attributes : Dictionary) : void {
-			var row : uint = attributes["row"];
-			var col : uint = attributes["col"];
 			var tower: Tower = new Tower();
+			var type : String = attributes["type"];
+			var towerProps : XMLList = Game.units.tower.(@type == type);	
 			
-			tower.setPositionRowCol(row, col);
+			// SET ATTRIBUTES
+			tower.row = attributes["row"];
+			tower.col = attributes["col"];
+			tower.damage = towerProps.damage;
+			tower.reloadTime = towerProps.reloadTime;
+			
+			// SET POSITON ON GAME SCREEN
+			tower.setPositionRowCol(tower.row, tower.col);
+			// ADD GRAPHICS
 			tower.addGraphics();
+			
 			tower.targetList = level.creeps;
 			
 			level.towers.push(tower);
@@ -48,7 +59,10 @@ package massdefense
 			var posx : uint = attributes["posx"];
 			var posy : uint = attributes["posy"];
 			var target : Creep = attributes["target"];
+			
 			var projectil : Projectil = new Projectil();
+			projectil.damage = attributes["damage"];
+			
 			
 			var position : Position = new Position;
 			position.x = posx;

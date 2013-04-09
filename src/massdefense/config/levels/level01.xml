@@ -3,7 +3,7 @@
 	<rows>20</rows>
 	<cols>20</cols>
 	<cellSize>32</cellSize>
-	
+	<money>1</money>
 	<life>5</life>
 	
 	<start_nodes>
@@ -130,11 +130,12 @@
 	
 	<towers>
 		<tower>
-			<type>simple_tower</type>
+			<type>simpleTower</type>
 			<row>8</row>
 			<col>8</col>
 		</tower>
 		<tower>
+			<type>simpleTower</type>
 			<row>8</row>
 			<col>6</col>
 		</tower>
