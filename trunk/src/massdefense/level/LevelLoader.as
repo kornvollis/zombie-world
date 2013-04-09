@@ -3,6 +3,7 @@ package massdefense.level
 	import flash.display.DisplayObject;
 	import flash.utils.Dictionary;
 	import massdefense.Factory;
+	import massdefense.Game;
 	import massdefense.pathfinder.Grid;
 	import massdefense.pathfinder.Node;
 	import massdefense.pathfinder.PathFinder;
@@ -17,6 +18,8 @@ package massdefense.level
 		private var level : Level;
 		private var levelData:XML;
 		
+		
+		
 		public function LevelLoader(level: Level) 
 		{
 			this.level = level;
@@ -26,6 +29,7 @@ package massdefense.level
 		{			
 			this.levelData = levelData;
 			// Set grid for pathfinder
+			level.money = getMoney();
 			level.pathfinder = new PathFinder();
 			level.grid  = new Grid(getRows(), getCols());
 			level.pathfinder.grid = level.grid;
@@ -45,17 +49,29 @@ package massdefense.level
 			//level.towers = getTowers();
 		}
 		
+		private function getMoney():int 
+		{
+			return int(levelData.money);
+		}
+		
 		private function getTowers():void
 		{
 			level.towers = new Vector.<Tower>();
 			for each (var xml_tower : XML in levelData.towers.tower) 
 			{
-				var towerAttr : Dictionary = new Dictionary;
-				towerAttr["row"] = xml_tower.row;
-				towerAttr["col"] = xml_tower.col; 
+				var towerProperties : Dictionary = new Dictionary;
 				
-				Factory.addTower(towerAttr);
+				setTowerProperties(towerProperties, xml_tower);
+				
+				Factory.addTower(towerProperties);
 			}
+		}
+		
+		private function setTowerProperties(towerProperties:Dictionary, xml_tower:XML):void 
+		{
+			towerProperties["row"] = xml_tower.row;
+			towerProperties["col"] = xml_tower.col;
+			towerProperties["type"] = xml_tower.type;	
 		}
 		
 		private function getWaves():Vector.<Wave> 

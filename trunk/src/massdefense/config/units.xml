@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <units>
-	<towers>
-		<simple_tower>
-			<damage>1</damage>
-			<reload_time>3</reload_time>
-		</simple_tower>
-		
-		
-	</towers>
+	<tower type="simpleTower">
+		<damage>1</damage>
+		<reloadTime>3</reloadTime>		
+	</tower>
 	
 	
-	<creeps>
+	<creep type="simpleCreep">
+		<rewardMoney>15</rewardMoney>
+		<health>1</health>
 		
-	</creeps>
+	</creep>
 	
 </units>

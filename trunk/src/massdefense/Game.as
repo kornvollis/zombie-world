@@ -7,6 +7,11 @@ package massdefense
 
 	public class Game extends Sprite 
 	{
+		[Embed(source="config/units.xml", mimeType = "application/octet-stream")] 
+		public static const Units:Class;
+		
+		
+		static public var units : XML = XML(new Units());;
 		//private var model  : Model;
 		//private var screen : Screen;
 		//private var inputManager : InputManager;
@@ -15,7 +20,7 @@ package massdefense
 		
 		public function Game() 
 		{
-			
+
 		}
 		
 		public function loadLevel(index : uint) : void {

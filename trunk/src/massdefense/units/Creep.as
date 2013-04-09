@@ -16,16 +16,17 @@ package massdefense.units
 	public class Creep extends Sprite
 	{
 		public static const DEAD      : String = "dead";
-		public static const ALIVE      : String = "live";
+		public static const ALIVE     : String = "live";
+		public var rewardMoney		  : int = 15;	
 		
-		private var _position          : Position = new Position();
+		private var _position         : Position = new Position();
 		private var _path             : Path = null;
 		
 		public var pathPosition       : uint = 0;
 		public var state			  : String = ALIVE;
 		public var speed              : int = 90;
-		public var maxLife            : int = 4;
-		private var _life               : int = 4;
+		public var maxHealth          : int = 4;
+		private var _health           : int = 4;
 		public var distanceFromTarget : Number;
 		
 		private var _row 			  : int;
@@ -74,7 +75,7 @@ package massdefense.units
 		
 		public function update(passedTime : Number) : void 
 		{
-			if (life > 0) {
+			if (health > 0) {
 				if (path != null && !path.isEndPosition(pathPosition)) {
 					followPath(passedTime);
 				}
@@ -148,15 +149,15 @@ package massdefense.units
 			this.y = pos.y;
 		}
 		
-		public function get life():int 
+		public function get health():int 
 		{
-			return _life;
+			return _health;
 		}
 		
-		public function set life(value:int):void 
+		public function set health(value:int):void 
 		{
-			_life = value;
-			healthBar.setHpPercent(life / maxLife);
+			_health = value;
+			healthBar.setHpPercent(health / maxHealth);
 		}
 	}
 

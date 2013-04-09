@@ -89,7 +89,7 @@ package massdefense.units
 			checkIfTargetIsAlive();
 			reloadProgress(timeElapssed);
 			
-			if(target == null || outOfRange(target) || target.life <= 0 ) {
+			if(target == null || outOfRange(target) || target.health <= 0 ) {
 				target = findTheFirstTargetInRange();
 			}
 			
@@ -102,7 +102,7 @@ package massdefense.units
 		private function checkIfTargetIsAlive():void 
 		{
 			if (target != null) {
-				if (target.life <= 0) {
+				if (target.health <= 0) {
 					target = null;
 				}
 			}
@@ -148,7 +148,7 @@ package massdefense.units
 			
 			for each (var creep:Creep in targetList ) 
 			{				
-				if (Position.distance(creep.position, this.position) <= this.range && creep.life > 0 && !creep.isAtEndPosition()) {
+				if (Position.distance(creep.position, this.position) <= this.range && creep.health > 0 && !creep.isAtEndPosition()) {
 					return creep;
 				}
 			}
@@ -163,6 +163,7 @@ package massdefense.units
 			projAttr["posx"] = this.x;
 			projAttr["posy"] = this.y;
 			projAttr["target"] = target;
+			projAttr["damage"] = this.damage;
 			
 			Factory.addProjectil(projAttr);
 			//target.life -= 1;
