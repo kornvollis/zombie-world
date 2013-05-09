@@ -149,6 +149,11 @@ package massdefense.pathfinder
 			return getRandomPathForNode(_grid.getNodeAtRowCol(row, col));
 		}
 		
+		public function get grid():Grid 
+		{
+			return _grid;
+		}
+		
 		public function set grid(value:Grid):void 
 		{
 			_grid = value;
@@ -158,5 +163,7 @@ package massdefense.pathfinder
 		{
 			return _startNodes;
 		}
+		
+		
 	}
 }

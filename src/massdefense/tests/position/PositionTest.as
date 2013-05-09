@@ -26,9 +26,7 @@ package massdefense.tests.position
 			p2.x = 16;
 			p2.y = 3;
 			
-			
-			
-			Assert.assertEquals(Position.distance(p1, p2), 18);   
+			Assert.assertEquals(Position.distance(p1, p2), Math.sqrt(16*16+2*2) );   
 		}
 		
 		[Test(description = "This p1 p2 dist less then 5" )]  
@@ -55,7 +53,7 @@ package massdefense.tests.position
 			p2.x = 22;
 			p2.y = 22;
 			
-			var isLess : Boolean = Position.isDistanceBetweenLessThan(p1, p2, 3);
+			var isLess : Boolean = Position.isDistanceBetweenLessThan(p1, p2, 2.7);
 			Assert.assertEquals(isLess, false);   
 		}
 		[Test] 

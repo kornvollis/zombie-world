@@ -9,10 +9,7 @@ package massdefense.units
 	import massdefense.tests.creeptest.CreepTestFakeMain;
 	import starling.display.Image;
 	import starling.display.Sprite;
-	/**
-	 * ...
-	 * @author OMLI
-	 */
+	
 	public class Creep extends Sprite
 	{
 		public static const DEAD      : String = "dead";
