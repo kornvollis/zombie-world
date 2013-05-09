@@ -15,56 +15,74 @@ package massdefense.level
 	 */
 	public class LevelLoader 
 	{
-		private var level : Level;
+		[Embed(source="../config/levels/level01.xml", mimeType = "application/octet-stream")] 
+		public static const Level_01:Class;
+		
 		private var levelData:XML;
 		
+		public function LevelLoader() {}
 		
-		
-		public function LevelLoader(level: Level) 
+		public function createLevel(LevelClass : Class): Level 
 		{
-			this.level = level;
+			var level : Level = new Level();
+			
+			levelData = XML(new LevelClass());
+			
+			setStartingMoney(level);
+			setLife(level);
+			setWaves(level);			
+			setTowers(level);
+			
+			setupPathfinder(level);
+			//level.pathfinder.calculateNodesDistances();
+			
+			return level;
+		}	
+		
+		private function setTowers(level:Level):void 
+		{
+			level.towers = 	getTowers();
 		}
 		
-		public function loadLevel(levelData : XML) : void
-		{			
-			this.levelData = levelData;
-			// Set grid for pathfinder
-			level.money = getMoney();
-			level.pathfinder = new PathFinder();
-			level.grid  = new Grid(getRows(), getCols());
-			level.pathfinder.grid = level.grid;
-			
-			// Set closed and start nodes
-			level.escapeNodes = getEscapeNodes();
-			level.pathfinder.closeNodes(getClosedNodes() );
-			level.pathfinder.setStartNodes(getEscapeNodes() );
-			
-			level.pathfinder.calculateNodesDistances();
-			
-			//SetLife
-			level.life = levelData.life;
-			
+		private function setWaves(level:Level):void 
+		{
 			level.waves = getWaves();
-			getTowers();
-			//level.towers = getTowers();
 		}
 		
-		private function getMoney():int 
+		private function setLife(level:Level):void 
 		{
-			return int(levelData.money);
+			level.life = levelData.life;
 		}
 		
-		private function getTowers():void
+		private function setupPathfinder(level:Level):void 
 		{
-			level.towers = new Vector.<Tower>();
+			var pathfinder : PathFinder = new PathFinder();
+			pathfinder.grid = new Grid(getRows(), getCols() );
+			pathfinder.closeNodes(getClosedNodes(pathfinder.grid) );
+			pathfinder.setStartNodes(getEscapeNodes(pathfinder.grid) );
+			
+			level.pathfinder = pathfinder;
+		}
+		
+		private function setStartingMoney(level:Level):void 
+		{
+			level.money = int(levelData.money);
+		}
+		
+		private function getTowers():Vector.<Tower>
+		{
+			var towers : Vector.<Tower> = new Vector.<Tower>();
 			for each (var xml_tower : XML in levelData.towers.tower) 
 			{
 				var towerProperties : Dictionary = new Dictionary;
-				
 				setTowerProperties(towerProperties, xml_tower);
 				
-				Factory.addTower(towerProperties);
+				var tower : Tower = new Tower(towerProperties);
+				
+				towers.push(tower);
 			}
+			
+			return towers;
 		}
 		
 		private function setTowerProperties(towerProperties:Dictionary, xml_tower:XML):void 
@@ -93,7 +111,7 @@ package massdefense.level
 			return waves;
 		}
 		
-		private function getEscapeNodes():Vector.<Node> 
+		private function getEscapeNodes(grid : Grid):Vector.<Node> 
 		{
 			var startNodes : Vector.<Node> = new Vector.<Node>;
 			
@@ -102,7 +120,7 @@ package massdefense.level
 				var row : int = int(xml_node.attribute("row"));
 				var col : int = int(xml_node.attribute("col"));
 				
-				var node : Node  = level.grid.getNodeAtRowCol(row, col);
+				var node : Node  = grid.getNodeAtRowCol(row, col);
 				node.distance = 0;
 				
 				startNodes.push(node);
@@ -111,7 +129,7 @@ package massdefense.level
 			return startNodes;
 		}
 		
-		public function getClosedNodes():Vector.<Node>
+		public function getClosedNodes(grid : Grid):Vector.<Node>
 		{
 			var closedNodes : Vector.<Node> = new Vector.<Node>();
 			for each (var xml_node : XML in levelData.closed_nodes.node) 
@@ -119,7 +137,7 @@ package massdefense.level
 				var row : int = int(xml_node.attribute("row"));
 				var col : int = int(xml_node.attribute("col"));
 				
-				var node : Node = level.grid.getNodeAtRowCol(row,col);
+				var node : Node = grid.getNodeAtRowCol(row,col);
 				node.close();
 				closedNodes.push(node);
 			}

@@ -42,9 +42,14 @@ package massdefense.units
 		private var baseImage:Image;
 		private var towerImage:Image;
 		
-		public function Tower() 
+		public function Tower(towerProperties : Dictionary = null) 
 		{
 			//addGraphics()
+			if (towerProperties != null)
+			{
+				
+			}
+			
 		}
 		
 		public function addGraphics():void 

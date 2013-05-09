@@ -19,8 +19,8 @@ package massdefense.level
 		public static const STEP_FRAMES : uint = 10;
 		
 		// LEVEL LOADER
-		private var _levelData : XML;
-		private var levelLoader:LevelLoader;
+		// private var _levelData : XML;
+		// private var levelLoader:LevelLoader;
 		
 		// UI
 		private var timeControll : TimeControll;
@@ -29,8 +29,6 @@ package massdefense.level
 		
 		// PATHFINDER 
 		private var _pathfinder  : PathFinder;
-		private var _grid        : Grid;
-		private var _escapeNodes : Vector.<Node>;
 		
 		// GAME OBJECTS
 		private var _waves : Vector.<Wave>;
@@ -47,25 +45,23 @@ package massdefense.level
 		private var _money : int = 0;
 		
 		public function Level() {
-			timeControll = new TimeControll(this);
+			
 		}
 		
-		public function initLevel():void 
-		{
-			levelLoader = new LevelLoader(this);
-			levelLoader.loadLevel(_levelData);
+		public function init() : void{
+			timeControll = new TimeControll(this);
 			
 			initUI();
 		}
 		
 		public function play() : void {
-			clearLevel();
-			levelLoader.loadLevel(_levelData);
+			//clearLevel();
+			//levelLoader.loadLevel(_levelData);
 		}
 		
 		public function pause() : void {
-			if (paused) paused = false;
-			else paused = true;
+			//if (paused) paused = false;
+			//else paused = true;
 		}
 		
 		public function spawnCreep(creepAttributes : Dictionary) : void {
@@ -172,7 +168,7 @@ package massdefense.level
 		}
 		
 		public function debugDraw() : void {
-			addChild(SimpleGraphics.drawGrid(grid.maxRow, grid.maxCol, Node.NODE_SIZE, 1, 0x880000, 0.3));
+			addChild(SimpleGraphics.drawGrid(pathfinder.grid.maxRow, pathfinder.grid.maxCol, Node.NODE_SIZE, 1, 0x880000, 0.3));
 			
 			drawDebugStartNodes();
 			drawDebugWalls();
@@ -180,11 +176,11 @@ package massdefense.level
 		
 		private function drawDebugWalls():void 
 		{
-			for (var i:int = 0; i < grid.maxRow; i++) 
+			for (var i:int = 0; i < pathfinder.grid.maxRow; i++) 
 			{
-				for (var j:int = 0; j < grid.maxRow; j++) 
+				for (var j:int = 0; j < pathfinder.grid.maxRow; j++) 
 				{
-					if (!grid.getNodeAtRowCol(i, j).isOpen()) {
+					if (!pathfinder.grid.getNodeAtRowCol(i, j).isOpen()) {
 						addChild(SimpleGraphics.drawXatRowCol(i, j, Node.NODE_SIZE, 1, 0x880000, 0.3));
 					}
 				}
@@ -193,21 +189,13 @@ package massdefense.level
 		
 		private function drawDebugStartNodes():void 
 		{
+			/*
 			for (var i:int = 0; i < escapeNodes.length; i++) 
 			{
 				var currentNode : Node = escapeNodes[i];
 				addChild(SimpleGraphics.drawCircle(currentNode.col * Node.NODE_SIZE, currentNode.row * Node.NODE_SIZE, Node.NODE_SIZE * 0.5));
 			}
-		}
-		
-		public function get levelData():XML 
-		{
-			return _levelData;
-		}
-		
-		public function set levelData(value:XML):void 
-		{
-			_levelData = value;
+			*/
 		}
 		
 		public function get pathfinder():PathFinder 
@@ -218,26 +206,6 @@ package massdefense.level
 		public function set pathfinder(value:PathFinder):void 
 		{
 			_pathfinder = value;
-		}
-		
-		public function get grid():Grid 
-		{
-			return _grid;
-		}
-		
-		public function set grid(value:Grid):void 
-		{
-			_grid = value;
-		}
-		
-		public function get escapeNodes():Vector.<Node> 
-		{
-			return _escapeNodes;
-		}
-		
-		public function set escapeNodes(value:Vector.<Node>):void 
-		{
-			_escapeNodes = value;
 		}
 		
 		public function get waves():Vector.<Wave> 

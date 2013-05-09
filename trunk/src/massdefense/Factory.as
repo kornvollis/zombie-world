@@ -25,7 +25,7 @@ package massdefense
 			
 			creep.setPositionRowCol(row, col);
 			
-			creep.path = level.pathfinder.getRandomPathForRowCol(row, col);
+			//creep.path = level.pathfinder.getRandomPathForRowCol(row, col);
 			
 			creep.addGraphics();
 			
@@ -49,10 +49,14 @@ package massdefense
 			// ADD GRAPHICS
 			tower.addGraphics();
 			
+			// level.grid.getNodeAtRowCol(tower.row, tower.col).close();
+			
 			tower.targetList = level.creeps;
 			
 			level.towers.push(tower);
 			level.addChild(tower);
+			
+			level.pathfinder.calculateNodesDistances();
 		}
 		
 		public static function addProjectil(attributes : Dictionary) : void {
