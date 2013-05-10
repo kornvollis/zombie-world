@@ -5,7 +5,7 @@ package massdefense.units
 	import massdefense.Factory;
 	import massdefense.misc.Position;
 	import massdefense.pathfinder.Node;
-	import massdefense.pathfinder.Path;
+	import massdefense.pathfinder.PathFinder;
 	import massdefense.tests.creeptest.CreepTestFakeMain;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -14,10 +14,10 @@ package massdefense.units
 	{
 		public static const DEAD      : String = "dead";
 		public static const ALIVE     : String = "live";
-		public var rewardMoney		  : int = 15;	
+		public var rewardMoney		  : int    = 15;	
 		
-		private var _position         : Position = new Position();
-		private var _path             : Path = null;
+		private var _position         : Position   = new Position();
+		private var _pathfinder       : PathFinder = null;
 		
 		public var pathPosition       : uint = 0;
 		public var state			  : String = ALIVE;
@@ -61,19 +61,21 @@ package massdefense.units
 		}
 		
 		public function isAtEndPosition() : Boolean {
+			/*
 			var endPosition : Boolean = false;
 			
 			if (this.path != null) {
 				endPosition = path.isEndPosition(pathPosition);
 			}
 			
-			return endPosition;
+			return endPosition;*/
+			return false;
 		}
 		
 		public function update(passedTime : Number) : void 
 		{
 			if (health > 0) {
-				if (path != null && !path.isEndPosition(pathPosition)) {
+				if (pathfinder != null) {
 					followPath(passedTime);
 				}
 			}
@@ -92,26 +94,15 @@ package massdefense.units
 		
 		private function followPath(passedTime : Number):void 
 		{
-			if (path == null) return;
+			/*
+			if (pathfinder == null) return;
 			
-			var targetPosition : Position = path.getPositionAt(pathPosition);
+			var targetPosition : Position = pathfinder.nextNode(this.row, this.col);
 			
-			if (isReachedPosition(targetPosition)) 
-			{
-				pathPosition++;
-			} else {
+			if(targetPosition != null) {
 				position = Position.moveToPoint(this.position, targetPosition, this.speed, passedTime);
 			}
-		}
-		
-		public function get path():Path 
-		{
-			return _path;
-		}
-		
-		public function set path(value:Path):void 
-		{
-			_path = value;
+			*/
 		}
 		
 		public function get row():int 
@@ -155,6 +146,16 @@ package massdefense.units
 		{
 			_health = value;
 			healthBar.setHpPercent(health / maxHealth);
+		}
+		
+		public function get pathfinder():PathFinder 
+		{
+			return _pathfinder;
+		}
+		
+		public function set pathfinder(value:PathFinder):void 
+		{
+			_pathfinder = value;
 		}
 	}
 

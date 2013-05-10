@@ -1,6 +1,7 @@
 package massdefense.pathfinder 
 {
 	import flash.events.EventDispatcher;
+	import massdefense.misc.Position;
 	import massdefense.pathfinder.Node;
 
 	public class PathFinder extends EventDispatcher
@@ -13,16 +14,46 @@ package massdefense.pathfinder
 			
 		}
 		
-		private function resetNodes() : void
+		public function nextNode(row:int, col:int):Node 
 		{
-			for (var i : int = 0; i < _grid.maxRow; i++)
-			{
-				for (var  j:int  = 0; j < _grid.maxCol; j++)
-				{
-					var node : Node = _grid.getNodeAtRowCol(i,j);
-					node.distance = Node.INFINIT;
-				}
+			var actualNode : Node = grid.getNodeAtRowCol(row, col);
+			
+			var targetNode : Node = null;
+			
+			var nextLeft : Node = grid.leftNeighbourOfNode(actualNode);
+			if (nextLeft != null && nextLeft.distance < actualNode.distance) {
+				targetNode = nextLeft;
 			}
+			
+			var nextRight : Node = grid.rightNeighbourOfNode(actualNode);
+			if (nextRight != null && nextRight.distance < actualNode.distance) {
+				targetNode = nextRight;
+			}
+			
+			var nextBottom : Node = grid.bottomNeighbourOfNode(actualNode);
+			if (nextBottom != null && nextBottom.distance < actualNode.distance) {
+				targetNode = nextBottom;
+			}
+			
+			var nextTop : Node = grid.topNeighbourOfNode(actualNode);
+			if (nextTop != null && nextTop.distance < actualNode.distance) {
+				targetNode = nextTop;
+			}
+			
+			return targetNode;
+		}
+		
+		public function closeNodes(nodes : Vector.<Node>) : void {
+			while(nodes.length > 0)
+			{
+				var node:Node = nodes.pop();
+				node.close();
+			}
+		}
+		
+		public function setStartNodes(nodes : Vector.<Node>):void 
+		{
+			this._startNodes = nodes;
 		}
 		
 		public function calculateNodesDistances() : void {			
@@ -35,6 +66,7 @@ package massdefense.pathfinder
 			_grid.print();
 		}
 		
+		/*
 		public function getRandomPathForNode(node : Node) : Path {
 			var path : Path = new Path();
 			
@@ -50,25 +82,26 @@ package massdefense.pathfinder
 			
 			return path;
 		}
+		*/
 		
 		private function getNextRandomClosestNodeOf(currentNode:Node):Node
 		{
 			var nextNodes : Vector.<Node> = new Vector.<Node>;
-			var leftNode : Node = _grid.getLeftNeighbourOfNode(currentNode);
+			var leftNode : Node = _grid.leftNeighbourOfNode(currentNode);
 			
 			if (leftNode != null && leftNode.distance < currentNode.distance) {
 				nextNodes.push(leftNode);	
 				
 			}
-			var rightNode : Node = _grid.getRightNeighbourOfNode(currentNode);
+			var rightNode : Node = _grid.rightNeighbourOfNode(currentNode);
 			if (rightNode != null && rightNode.distance < currentNode.distance) {
 				nextNodes.push(rightNode);	
 			}
-			var topNode : Node = _grid.getTopNeighbourOfNode(currentNode);
+			var topNode : Node = _grid.topNeighbourOfNode(currentNode);
 			if (topNode != null && topNode.distance < currentNode.distance) {
 				nextNodes.push(topNode);	
 			}
-			var bottomNode : Node = _grid.getBottomNeighbourOfNode(currentNode);
+			var bottomNode : Node = _grid.bottomNeighbourOfNode(currentNode);
 			if (bottomNode != null && bottomNode.distance < currentNode.distance) {
 				nextNodes.push(bottomNode);	
 			}
@@ -92,7 +125,7 @@ package massdefense.pathfinder
 		
 		private function addLeftNode(processedNode:Node):void 
 		{
-			var newNode : Node = _grid.getLeftNeighbourOfNode(processedNode);
+			var newNode : Node = _grid.leftNeighbourOfNode(processedNode);
 			if(newNode != null && newNode.isExpandable()) {
 				setNodeDistances(newNode, processedNode);
 				this._startNodes.push(newNode);
@@ -101,7 +134,7 @@ package massdefense.pathfinder
 		
 		private function addRightNode(processedNode:Node):void 
 		{
-			var newNode : Node = _grid.getRightNeighbourOfNode(processedNode);
+			var newNode : Node = _grid.rightNeighbourOfNode(processedNode);
 			if(newNode != null && newNode.isExpandable()) {
 				setNodeDistances(newNode, processedNode);
 				this._startNodes.push(newNode);
@@ -110,7 +143,7 @@ package massdefense.pathfinder
 		
 		private function addBottomNode(processedNode:Node):void 
 		{
-			var newNode : Node = _grid.getBottomNeighbourOfNode(processedNode);
+			var newNode : Node = _grid.bottomNeighbourOfNode(processedNode);
 			if(newNode != null && newNode.isExpandable()) {
 				setNodeDistances(newNode, processedNode);
 				this._startNodes.push(newNode);
@@ -119,34 +152,28 @@ package massdefense.pathfinder
 		
 		private function addTopNode(processedNode:Node):void 
 		{
-			var newNode : Node = _grid.getTopNeighbourOfNode(processedNode);
+			var newNode : Node = _grid.topNeighbourOfNode(processedNode);
 			if(newNode != null && newNode.isExpandable()) {
 				setNodeDistances(newNode, processedNode);
 				this._startNodes.push(newNode);
 			}
 		}
 		
-		private function setNodeDistances(newNode:Node, processedNode:Node):void 
+		private function resetNodes() : void
 		{
-			newNode.distance = processedNode.distance + 1;
-		}
-		
-		public function closeNodes(nodes : Vector.<Node>) : void {
-			while(nodes.length > 0)
+			for (var i : int = 0; i < _grid.rows; i++)
 			{
-				var node:Node = nodes.pop();
-				node.close();
+				for (var  j:int  = 0; j < _grid.cols; j++)
+				{
+					var node : Node = _grid.getNodeAtRowCol(i,j);
+					node.distance = Node.INFINIT;
+				}
 			}
 		}
 		
-		public function setStartNodes(nodes : Vector.<Node>):void 
+		private function setNodeDistances(newNode:Node, processedNode:Node):void 
 		{
-			this._startNodes = nodes;
-		}
-		
-		public function getRandomPathForRowCol(row:int, col:int) : Path 
-		{
-			return getRandomPathForNode(_grid.getNodeAtRowCol(row, col));
+			newNode.distance = processedNode.distance + 1;
 		}
 		
 		public function get grid():Grid 
@@ -163,7 +190,5 @@ package massdefense.pathfinder
 		{
 			return _startNodes;
 		}
-		
-		
 	}
 }

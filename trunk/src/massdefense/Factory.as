@@ -22,7 +22,7 @@ package massdefense
 			var creep: Creep = new Creep();
 			//creep.health = attributes["health"];
 			
-			
+			creep.pathfinder = level.pathfinder;
 			creep.setPositionRowCol(row, col);
 			
 			//creep.path = level.pathfinder.getRandomPathForRowCol(row, col);
