@@ -24,6 +24,8 @@ package massdefense
 			level = levelLoader.createLevel(LevelLoader.Level_01);
 			level.debugDraw();
 			
+			level.pathfinder.calculateNodesDistances();
+			
 			Factory.level = level;
 			
 			addChild(level);

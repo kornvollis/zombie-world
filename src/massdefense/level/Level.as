@@ -83,7 +83,7 @@ package massdefense.level
 			}
 			
 			if (!paused || stepFrames > 0) {
-				
+				//trace("update");
 				
 				for each (var wave: Wave in waves) 
 				{
@@ -168,7 +168,7 @@ package massdefense.level
 		}
 		
 		public function debugDraw() : void {
-			addChild(SimpleGraphics.drawGrid(pathfinder.grid.maxRow, pathfinder.grid.maxCol, Node.NODE_SIZE, 1, 0x880000, 0.3));
+			addChild(SimpleGraphics.drawGrid(pathfinder.grid.rows, pathfinder.grid.cols, Node.NODE_SIZE, 1, 0x880000, 0.3));
 			
 			drawDebugStartNodes();
 			drawDebugWalls();
@@ -176,9 +176,9 @@ package massdefense.level
 		
 		private function drawDebugWalls():void 
 		{
-			for (var i:int = 0; i < pathfinder.grid.maxRow; i++) 
+			for (var i:int = 0; i < pathfinder.grid.rows; i++) 
 			{
-				for (var j:int = 0; j < pathfinder.grid.maxRow; j++) 
+				for (var j:int = 0; j < pathfinder.grid.rows; j++) 
 				{
 					if (!pathfinder.grid.getNodeAtRowCol(i, j).isOpen()) {
 						addChild(SimpleGraphics.drawXatRowCol(i, j, Node.NODE_SIZE, 1, 0x880000, 0.3));

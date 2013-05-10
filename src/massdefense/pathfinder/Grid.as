@@ -8,56 +8,48 @@ package massdefense.pathfinder
 	 */
 	public class Grid 
 	{
-		public var maxRow : uint;
-		public var maxCol : uint;
+		public var rows : uint;
+		public var cols : uint;
 		
 		private var nodes : Vector.<Vector.<Node>> = new Vector.<Vector.<Node>>();
 
-		public function Grid(row : uint, col: uint) 
+		public function Grid(rows : uint, cols: uint) 
 		{
-			this.maxRow = row;	this.maxCol = col;
+			this.rows = rows;	this.cols = cols;
 			
 			initNodeMatrix();
 			initNodes();
 		}
 		
-		public function closeNode(node: Node):void {
-			node.close();
-		}
-		
-		public function openNode(node: Node):void {
-			node.open();
-		}
-		
-		public function getLeftNeighbourOfNode(node:Node) : Node 
+		public function leftNeighbourOfNode(node:Node) : Node 
 		{
 			if (node.col > 0) return getNodeAtRowCol(node.row, node.col - 1);
 			return null;
 		}
 		
-		public function getRightNeighbourOfNode(cell:Node) : Node 
+		public function rightNeighbourOfNode(cell:Node) : Node 
 		{
-			if (cell.col < maxCol-1) return getNodeAtRowCol(cell.row, cell.col + 1);
+			if (cell.col < cols-1) return getNodeAtRowCol(cell.row, cell.col + 1);
 			return null;
 		}
 		
-		public function getTopNeighbourOfNode(cell:Node) : Node 
+		public function topNeighbourOfNode(cell:Node) : Node 
 		{
 			if (cell.row > 0) return getNodeAtRowCol(cell.row-1, cell.col);
 			return null;
 		}
 		
-		public function getBottomNeighbourOfNode(cell:Node) : Node 
+		public function bottomNeighbourOfNode(cell:Node) : Node 
 		{
-			if (cell.row < maxRow-1) return getNodeAtRowCol(cell.row+1, cell.col);
+			if (cell.row < rows-1) return getNodeAtRowCol(cell.row+1, cell.col);
 			return null;
 		}
 		
 		private function initNodes():void 
 		{
-			for (var i : int = 0; i < maxRow; i++)
+			for (var i : int = 0; i < rows; i++)
 			{
-				for (var  j:int  = 0; j < maxCol; j++)
+				for (var  j:int  = 0; j < cols; j++)
 				{
 					createNodeAtRowCol(i, j);
 				}				
@@ -75,7 +67,7 @@ package massdefense.pathfinder
 		
 		private function initNodeMatrix():void 
 		{
-			for (var  i:int  = 0; i < this.maxRow; i++)
+			for (var  i:int  = 0; i < this.rows; i++)
 			{
 				nodes.push(new Vector.<Node>());
 			}
@@ -86,6 +78,9 @@ package massdefense.pathfinder
 		}		
 		
 		public function getNodeAtRowCol(row:uint, col:uint):Node {
+			if (row > rows - 1 || col > cols - 1) return null;
+			if (row < 0        || col < 0       ) return null;
+			
 			return nodes[row][col];
 		}
 		
@@ -93,7 +88,7 @@ package massdefense.pathfinder
 		{
 			var line : String = "      ";
 			
-			for (var j:int = 0; j < maxCol; j++) 
+			for (var j:int = 0; j < cols; j++) 
 			{
 				var colNum : String = "     " + j + ".";
 				colNum  = colNum .slice(colNum .length - 5, colNum .length);
@@ -101,13 +96,13 @@ package massdefense.pathfinder
 			}
 			line += "\n\n";
 			
-			for (var i:int = 0; i < maxRow; i++) 
+			for (var i:int = 0; i < rows; i++) 
 			{
 				var rowNum : String = "    " + i;
 				rowNum = rowNum.slice(rowNum.length - 3, rowNum.length);
 				line += rowNum + ". ";
 				
-				for (j = 0; j < maxCol; j++) 
+				for (j = 0; j < cols; j++) 
 				{
 					var currentNode : Node = getNodeAtRowCol(i, j);
 					var distance : String = "X";

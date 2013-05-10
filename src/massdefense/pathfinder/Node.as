@@ -22,13 +22,21 @@ package massdefense.pathfinder
 			
 		}
 		
-		public function getPosition() : Position {
+		public function toPosition() : Position {
 			var pos : Position = new Position();
 			
 			pos.x = this.col * NODE_SIZE + NODE_SIZE   * 0.5;
 			pos.y = this.row * NODE_SIZE  + NODE_SIZE   * 0.5;
 			
 			return pos;
+		}
+		
+		public function equals(node:Node):Boolean {
+			if (this.row == node.row && this.col == node.col) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 		
 		public function close() : void {
