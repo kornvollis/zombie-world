@@ -6,17 +6,72 @@ package massdefense.pathfinder
 
 	public class PathFinder extends EventDispatcher
 	{
-		//PRIVATE
-		private var _startNodes  : Vector.<Node> = new Vector.<Node>;
 		private var _grid : Grid = null; 
 		
-		public function PathFinder() : void {
+		public function PathFinder() : void {}
+		
+		public function calculateNodesDistances() : void {
+			var nodeQue  : Vector.<Node> = grid.exitNodes();
 			
+			while (nodeQue.length > 0)
+			{
+				var startingNode : Node = nodeQue.shift();
+				
+				expandNodeQueWithNewNodes(nodeQue, startingNode);
+			}
+			_grid.print();
+		}
+		
+		private function expandNodeQueWithNewNodes(nodeQue : Vector.<Node>, processedNode : Node):void 
+		{
+			if (processedNode != null) 
+			{
+				addLeftNode(nodeQue, processedNode);
+				addRightNode(nodeQue, processedNode);
+				addTopNode(nodeQue, processedNode);
+				addBottomNode(nodeQue, processedNode);
+			}
+		}
+		
+		private function addLeftNode(nodeQue: Vector.<Node>, processedNode:Node):void 
+		{
+			var newNode : Node = _grid.leftNeighbourOfNode(processedNode);
+			if(newNode != null && newNode.isExpandable()) {
+				setNodeDistances(newNode, processedNode);
+				nodeQue.push(newNode);
+			}
+		}
+		
+		private function addRightNode(nodeQue: Vector.<Node>, processedNode:Node):void 
+		{
+			var newNode : Node = _grid.rightNeighbourOfNode(processedNode);
+			if(newNode != null && newNode.isExpandable()) {
+				setNodeDistances(newNode, processedNode);
+				nodeQue.push(newNode);
+			}
+		}
+		
+		private function addBottomNode(nodeQue: Vector.<Node>, processedNode:Node):void 
+		{
+			var newNode : Node = _grid.bottomNeighbourOfNode(processedNode);
+			if(newNode != null && newNode.isExpandable()) {
+				setNodeDistances(newNode, processedNode);
+				nodeQue.push(newNode);
+			}
+		}
+		
+		private function addTopNode(nodeQue: Vector.<Node>, processedNode:Node):void 
+		{
+			var newNode : Node = _grid.topNeighbourOfNode(processedNode);
+			if(newNode != null && newNode.isExpandable()) {
+				setNodeDistances(newNode, processedNode);
+				nodeQue.push(newNode);
+			}
 		}
 		
 		public function nextNode(row:int, col:int):Node 
 		{
-			var actualNode : Node = grid.getNodeAtRowCol(row, col);
+			var actualNode : Node = grid.getNode(row, col);
 			
 			var targetNode : Node = null;
 			
@@ -42,47 +97,6 @@ package massdefense.pathfinder
 			
 			return targetNode;
 		}
-		
-		public function closeNodes(nodes : Vector.<Node>) : void {
-			while(nodes.length > 0)
-			{
-				var node:Node = nodes.pop();
-				node.close();
-			}
-		}
-		
-		public function setStartNodes(nodes : Vector.<Node>):void 
-		{
-			this._startNodes = nodes;
-		}
-		
-		public function calculateNodesDistances() : void {			
-			while (_startNodes.length > 0)
-			{
-				var startingNode : Node = _startNodes.shift();
-				
-				expandNodeQueWithNewNodes(startingNode);
-			}
-			_grid.print();
-		}
-		
-		/*
-		public function getRandomPathForNode(node : Node) : Path {
-			var path : Path = new Path();
-			
-			if (node.distance == Node.INFINIT) return null;
-			
-			var currentNode : Node = node;
-			
-			while (currentNode.distance != 0) {
-				path.addNodeToTheEnd(currentNode);
-				currentNode = getNextRandomClosestNodeOf(currentNode);
-			}
-			path.addNodeToTheEnd(currentNode);
-			
-			return path;
-		}
-		*/
 		
 		private function getNextRandomClosestNodeOf(currentNode:Node):Node
 		{
@@ -112,60 +126,13 @@ package massdefense.pathfinder
 			return nextNode;
 		}
 		
-		
-		private function expandNodeQueWithNewNodes(processedNode : Node):void 
-		{
-			if(processedNode != null) {
-				addLeftNode(processedNode);
-				addRightNode(processedNode);
-				addTopNode(processedNode);
-				addBottomNode(processedNode);
-			}
-		}
-		
-		private function addLeftNode(processedNode:Node):void 
-		{
-			var newNode : Node = _grid.leftNeighbourOfNode(processedNode);
-			if(newNode != null && newNode.isExpandable()) {
-				setNodeDistances(newNode, processedNode);
-				this._startNodes.push(newNode);
-			}
-		}
-		
-		private function addRightNode(processedNode:Node):void 
-		{
-			var newNode : Node = _grid.rightNeighbourOfNode(processedNode);
-			if(newNode != null && newNode.isExpandable()) {
-				setNodeDistances(newNode, processedNode);
-				this._startNodes.push(newNode);
-			}
-		}
-		
-		private function addBottomNode(processedNode:Node):void 
-		{
-			var newNode : Node = _grid.bottomNeighbourOfNode(processedNode);
-			if(newNode != null && newNode.isExpandable()) {
-				setNodeDistances(newNode, processedNode);
-				this._startNodes.push(newNode);
-			}
-		}
-		
-		private function addTopNode(processedNode:Node):void 
-		{
-			var newNode : Node = _grid.topNeighbourOfNode(processedNode);
-			if(newNode != null && newNode.isExpandable()) {
-				setNodeDistances(newNode, processedNode);
-				this._startNodes.push(newNode);
-			}
-		}
-		
 		private function resetNodes() : void
 		{
 			for (var i : int = 0; i < _grid.rows; i++)
 			{
 				for (var  j:int  = 0; j < _grid.cols; j++)
 				{
-					var node : Node = _grid.getNodeAtRowCol(i,j);
+					var node : Node = _grid.getNode(i,j);
 					node.distance = Node.INFINIT;
 				}
 			}
@@ -184,11 +151,6 @@ package massdefense.pathfinder
 		public function set grid(value:Grid):void 
 		{
 			_grid = value;
-		}
-		
-		public function get startNodes():Vector.<Node> 
-		{
-			return _startNodes;
 		}
 	}
 }

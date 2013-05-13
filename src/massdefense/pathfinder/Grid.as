@@ -12,7 +12,7 @@ package massdefense.pathfinder
 		public var cols : uint;
 		
 		private var nodes : Vector.<Vector.<Node>> = new Vector.<Vector.<Node>>();
-
+		
 		public function Grid(rows : uint, cols: uint) 
 		{
 			this.rows = rows;	this.cols = cols;
@@ -21,28 +21,12 @@ package massdefense.pathfinder
 			initNodes();
 		}
 		
-		public function leftNeighbourOfNode(node:Node) : Node 
+		private function initNodeMatrix():void 
 		{
-			if (node.col > 0) return getNodeAtRowCol(node.row, node.col - 1);
-			return null;
-		}
-		
-		public function rightNeighbourOfNode(cell:Node) : Node 
-		{
-			if (cell.col < cols-1) return getNodeAtRowCol(cell.row, cell.col + 1);
-			return null;
-		}
-		
-		public function topNeighbourOfNode(cell:Node) : Node 
-		{
-			if (cell.row > 0) return getNodeAtRowCol(cell.row-1, cell.col);
-			return null;
-		}
-		
-		public function bottomNeighbourOfNode(cell:Node) : Node 
-		{
-			if (cell.row < rows-1) return getNodeAtRowCol(cell.row+1, cell.col);
-			return null;
+			for (var  i:int  = 0; i < this.rows; i++)
+			{
+				nodes.push(new Vector.<Node>());
+			}
 		}
 		
 		private function initNodes():void 
@@ -65,23 +49,51 @@ package massdefense.pathfinder
 			nodes[row][col] = node;
 		}
 		
-		private function initNodeMatrix():void 
+		public function exitNodes():Vector.<Node> 
 		{
-			for (var  i:int  = 0; i < this.rows; i++)
+			var nodes : Vector.<Node> = new Vector.<Node>();
+			for (var i : int = 0; i < rows; i++)
 			{
-				nodes.push(new Vector.<Node>());
+				for (var  j:int  = 0; j < cols; j++)
+				{
+					var node : Node = getNode(i, j);
+					if (node.exit) {
+						nodes.push(node);
+					}
+				}
 			}
+			return nodes;
 		}
 		
-		public function isNodeOpenAtRowCol(row:uint, col:uint):Boolean {
-			return getNodeAtRowCol(row, col).isOpen();
-		}		
-		
-		public function getNodeAtRowCol(row:uint, col:uint):Node {
+		public function getNode(row:uint, col:uint):Node {
 			if (row > rows - 1 || col > cols - 1) return null;
 			if (row < 0        || col < 0       ) return null;
 			
 			return nodes[row][col];
+		}
+		
+		public function isNodeOpenAtRowCol(row:uint, col:uint):Boolean {
+			return getNode(row, col).isOpen();
+		}		
+		
+		public function leftNeighbourOfNode(node:Node) : Node 
+		{
+			return getNode(node.row, node.col - 1);
+		}
+		
+		public function rightNeighbourOfNode(node:Node) : Node 
+		{
+			return getNode(node.row, node.col + 1);
+		}
+		
+		public function topNeighbourOfNode(node:Node) : Node 
+		{
+			return getNode(node.row-1, node.col);
+		}
+		
+		public function bottomNeighbourOfNode(node:Node) : Node 
+		{
+			return getNode(node.row+1, node.col);
 		}
 		
 		public function print():void 
@@ -104,7 +116,7 @@ package massdefense.pathfinder
 				
 				for (j = 0; j < cols; j++) 
 				{
-					var currentNode : Node = getNodeAtRowCol(i, j);
+					var currentNode : Node = getNode(i, j);
 					var distance : String = "X";
 					if(currentNode.distance != Node.INFINIT) {
 						distance = currentNode.distance.toString();
