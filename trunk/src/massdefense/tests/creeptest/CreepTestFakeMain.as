@@ -46,23 +46,23 @@ package massdefense.tests.creeptest
 			addChild(SimpleGraphics.drawGrid(10, 15, 32));
 			
 			var startNodes : Vector.<Node> = new Vector.<Node>;
-			startNodes.push(grid.getNodeAtRowCol(9, 1));
+			startNodes.push(grid.getNode(9, 1));
 			pathfinder.setStartNodes(startNodes);
 			
 			var closedNodes : Vector.<Node> = new Vector.<Node>;
-			closedNodes.push(grid.getNodeAtRowCol(0, 5));
+			closedNodes.push(grid.getNode(0, 5));
 			addChild(SimpleGraphics.drawXatRowCol(0, 5, 32));
 			
-			closedNodes.push(grid.getNodeAtRowCol(5, 0));
+			closedNodes.push(grid.getNode(5, 0));
 			addChild(SimpleGraphics.drawXatRowCol(5, 0, 32));
 			
-			closedNodes.push(grid.getNodeAtRowCol(5, 1));
+			closedNodes.push(grid.getNode(5, 1));
 			addChild(SimpleGraphics.drawXatRowCol(5, 1, 32));
 			
-			closedNodes.push(grid.getNodeAtRowCol(5, 2));
+			closedNodes.push(grid.getNode(5, 2));
 			addChild(SimpleGraphics.drawXatRowCol(5, 2, 32));
 			
-			closedNodes.push(grid.getNodeAtRowCol(5, 3));
+			closedNodes.push(grid.getNode(5, 3));
 			addChild(SimpleGraphics.drawXatRowCol(5, 3, 32));
 			
 			pathfinder.closeNodes(closedNodes);
@@ -114,7 +114,7 @@ package massdefense.tests.creeptest
 			creep.path = fakePath;
 			*/
 			
-			var node : Node = grid.getNodeAtRowCol(0, 0);
+			var node : Node = grid.getNode(0, 0);
 			var path : Path = pathfinder.getRandomPathForNode(node);
 			creep.path = path;
 			

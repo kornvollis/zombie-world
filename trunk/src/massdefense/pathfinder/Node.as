@@ -14,8 +14,9 @@ package massdefense.pathfinder
 		private var _row  : uint;
 		private var _col  : uint;
 		private var _open  : Boolean = true;
-		
+		private var _exit : Boolean = false;
 		public var distance : int = INFINIT;
+		
 		
 		public function Node()
 		{
@@ -81,6 +82,17 @@ package massdefense.pathfinder
 		public function set col(value:uint):void 
 		{
 			_col = value;
+		}
+		
+		public function get exit():Boolean 
+		{
+			return _exit;
+		}
+		
+		public function set exit(value:Boolean):void 
+		{
+			if (value == true) { distance = 0 };
+			_exit = value;
 		}
 		
 	}

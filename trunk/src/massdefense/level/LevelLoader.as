@@ -39,58 +39,11 @@ package massdefense.level
 			return level;
 		}	
 		
-		private function setTowers(level:Level):void 
-		{
-			level.towers = 	getTowers();
-		}
+		private function setStartingMoney(level:Level):void { level.money = int(levelData.money); }
 		
-		private function setWaves(level:Level):void 
-		{
-			level.waves = getWaves();
-		}
+		private function setLife(level:Level):void { level.life = levelData.life; }
 		
-		private function setLife(level:Level):void 
-		{
-			level.life = levelData.life;
-		}
-		
-		private function setupPathfinder(level:Level):void 
-		{
-			var pathfinder : PathFinder = new PathFinder();
-			pathfinder.grid = new Grid(getRows(), getCols() );
-			pathfinder.closeNodes(getClosedNodes(pathfinder.grid) );
-			pathfinder.setStartNodes(getEscapeNodes(pathfinder.grid) );
-			
-			level.pathfinder = pathfinder;
-		}
-		
-		private function setStartingMoney(level:Level):void 
-		{
-			level.money = int(levelData.money);
-		}
-		
-		private function getTowers():Vector.<Tower>
-		{
-			var towers : Vector.<Tower> = new Vector.<Tower>();
-			for each (var xml_tower : XML in levelData.towers.tower) 
-			{
-				var towerProperties : Dictionary = new Dictionary;
-				setTowerProperties(towerProperties, xml_tower);
-				
-				var tower : Tower = new Tower(towerProperties);
-				
-				towers.push(tower);
-			}
-			
-			return towers;
-		}
-		
-		private function setTowerProperties(towerProperties:Dictionary, xml_tower:XML):void 
-		{
-			towerProperties["row"] = xml_tower.row;
-			towerProperties["col"] = xml_tower.col;
-			towerProperties["type"] = xml_tower.type;	
-		}
+		private function setWaves(level:Level):void { level.waves = getWaves(); }
 		
 		private function getWaves():Vector.<Wave> 
 		{
@@ -111,37 +64,62 @@ package massdefense.level
 			return waves;
 		}
 		
-		private function getEscapeNodes(grid : Grid):Vector.<Node> 
+		private function setTowers(level:Level):void { level.towers = getTowers(); }
+		
+		private function getTowers():Vector.<Tower>
 		{
-			var startNodes : Vector.<Node> = new Vector.<Node>;
-			
-			for each (var xml_node : XML in levelData.start_nodes.node) 
+			var towers : Vector.<Tower> = new Vector.<Tower>();
+			for each (var xml_tower : XML in levelData.towers.tower) 
 			{
-				var row : int = int(xml_node.attribute("row"));
-				var col : int = int(xml_node.attribute("col"));
-				
-				var node : Node  = grid.getNodeAtRowCol(row, col);
-				node.distance = 0;
-				
-				startNodes.push(node);
+					var towerProperties : Dictionary = new Dictionary;
+					setTowerProperties(towerProperties, xml_tower);
+					
+					var tower : Tower = new Tower(towerProperties);
+					
+					towers.push(tower);
 			}
 			
-			return startNodes;
+			return towers;
 		}
 		
-		public function getClosedNodes(grid : Grid):Vector.<Node>
+		private function setTowerProperties(towerProperties:Dictionary, xml_tower:XML):void 
 		{
-			var closedNodes : Vector.<Node> = new Vector.<Node>();
+			towerProperties["row"] = xml_tower.row;
+			towerProperties["col"] = xml_tower.col;
+			towerProperties["type"] = xml_tower.type;	
+		}
+		
+		private function setupPathfinder(level:Level):void 
+		{
+			var pathfinder : PathFinder = new PathFinder();
+			var grid : Grid = new Grid(getRows(), getCols() );
+			readAndSetClosedNodes(grid);
+			readAndSetExitNodes(grid);
+			
+			pathfinder.grid = grid;
+			level.pathfinder = pathfinder;
+		}
+		
+		private function readAndSetClosedNodes(grid : Grid):void
+		{
 			for each (var xml_node : XML in levelData.closed_nodes.node) 
 			{
 				var row : int = int(xml_node.attribute("row"));
 				var col : int = int(xml_node.attribute("col"));
 				
-				var node : Node = grid.getNodeAtRowCol(row,col);
-				node.close();
-				closedNodes.push(node);
+				grid.getNode(row,col).close();
 			}
-			return closedNodes;
+		}
+		
+		private function readAndSetExitNodes(grid : Grid):void
+		{
+			for each (var xml_node : XML in levelData.start_nodes.node) 
+			{
+				var row : int = int(xml_node.attribute("row"));
+				var col : int = int(xml_node.attribute("col"));
+				
+				grid.getNode(row, col).exit = true;
+			}
 		}
 		
 		public function getRows() : uint {

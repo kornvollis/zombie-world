@@ -1,6 +1,7 @@
 package massdefense.tests
 {
 	import massdefense.level.LevelLoader;
+	import massdefense.pathfinder.PathFinder;
 	import massdefense.tests.level.LevelLoaderTest;
 	import massdefense.tests.position.PositionTest;
 	import massdefense.tests.tower.TowerTest;
@@ -16,6 +17,7 @@ package massdefense.tests
 		public var levelLoader:LevelLoaderTest;
 		public var node:NodeTest;
 		public var grid:GridTest;
+		public var pathFinder:PathfinderTest;
 	}
 
 }

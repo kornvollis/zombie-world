@@ -180,7 +180,7 @@ package massdefense.level
 			{
 				for (var j:int = 0; j < pathfinder.grid.rows; j++) 
 				{
-					if (!pathfinder.grid.getNodeAtRowCol(i, j).isOpen()) {
+					if (!pathfinder.grid.getNode(i, j).isOpen()) {
 						addChild(SimpleGraphics.drawXatRowCol(i, j, Node.NODE_SIZE, 1, 0x880000, 0.3));
 					}
 				}
