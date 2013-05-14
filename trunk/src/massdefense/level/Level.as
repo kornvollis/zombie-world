@@ -31,10 +31,10 @@ package massdefense.level
 		private var _pathfinder  : PathFinder;
 		
 		// GAME OBJECTS
-		private var _waves : Vector.<Wave>;
-		private var _towers : Vector.<Tower>;
-		private var _projectils : Vector.<Projectil> = new Vector.<Projectil>;
-		private var _creeps : Vector.<Creep> = new Vector.<Creep>;
+		private var _waves       : Vector.<Wave> = new Vector.<Wave>;
+		private var _towers      : Vector.<Tower> = new Vector.<Tower>;
+		private var _projectils  : Vector.<Projectil> = new Vector.<Projectil>;
+		private var _creeps      : Vector.<Creep> = new Vector.<Creep>;
 		
 		// STATE
 		public var paused : Boolean = false;
@@ -109,7 +109,7 @@ package massdefense.level
 						money = money + creeps[i].rewardMoney;
 						removeChild(creeps[i]);
 						creeps.splice(creeps.indexOf(creeps[i]), 1);
-					} else if (creeps[i].isAtEndPosition()) {
+					} else if (creeps[i].isEscaped()) {
 						removeChild(creeps[i]);
 						creeps.splice(creeps.indexOf(creeps[i]), 1);
 						life--;

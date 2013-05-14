@@ -13,7 +13,6 @@ package massdefense
 		public static const Units:Class;
 		
 		static public var units : XML = XML(new Units());
-
 		
 		private var level : Level = null;
 		
@@ -25,9 +24,6 @@ package massdefense
 			level.debugDraw();
 			
 			level.pathfinder.calculateNodesDistances();
-			
-			Factory.level = level;
-			
 			addChild(level);
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);

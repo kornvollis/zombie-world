@@ -17,18 +17,12 @@ package massdefense
 		public function Factory() { }
 		
 		public static function spawnCreep(attributes : Dictionary) : void {
-			var row : uint = attributes["row"];
-			var col : uint = attributes["col"];
 			var creep: Creep = new Creep();
-			//creep.health = attributes["health"];
+			creep.init(attributes);
 			
 			creep.pathfinder = level.pathfinder;
-			creep.setPositionRowCol(row, col);
-			
-			//creep.path = level.pathfinder.getRandomPathForRowCol(row, col);
 			
 			creep.addGraphics();
-			
 			level.creeps.push(creep);
 			level.addChild(creep);
 		}
@@ -38,18 +32,17 @@ package massdefense
 			var type : String = attributes["type"];
 			var towerProps : XMLList = Game.units.tower.(@type == type);	
 			
-			// SET ATTRIBUTES
 			tower.row = attributes["row"];
 			tower.col = attributes["col"];
 			tower.damage = towerProps.damage;
 			tower.reloadTime = towerProps.reloadTime;
 			
-			// SET POSITON ON GAME SCREEN
+
 			tower.setPositionRowCol(tower.row, tower.col);
-			// ADD GRAPHICS
+
 			tower.addGraphics();
 			
-			// level.grid.getNodeAtRowCol(tower.row, tower.col).close();
+			level.pathfinder.grid.getNode(tower.row, tower.col).close();
 			
 			tower.targetList = level.creeps;
 			
