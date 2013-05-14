@@ -1,17 +1,12 @@
-package massdefense 
+package massdefense
 {
-	/**
-	 * ...
-	 * @author OMLI
-	 */
-	public class InputManager 
+	public class InputManager
 	{
 		
-		public function InputManager() 
+		public function InputManager()
 		{
 			
 		}
 		
 	}
-
 }

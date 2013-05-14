@@ -1,6 +1,7 @@
 package massdefense.units 
 {
 	import flash.geom.Point;
+	import flash.utils.Dictionary;
 	import massdefense.assets.Assets;
 	import massdefense.Factory;
 	import massdefense.misc.Position;
@@ -12,9 +13,10 @@ package massdefense.units
 	
 	public class Creep extends Sprite
 	{
-		public static const DEAD      : String = "dead";
-		public static const ALIVE     : String = "live";
-		public var rewardMoney		  : int    = 15;	
+		public static const DEAD         : String = "dead";
+		public static const ALIVE        : String = "live";
+		public static const ESCAPED      : String = "escaped";
+		public var rewardMoney		     : int    = 15;	
 		
 		private var _position         : Position   = new Position();
 		private var _pathfinder       : PathFinder = null;
@@ -45,6 +47,11 @@ package massdefense.units
 			this.y = position.y;
 		}
 		
+		public function setPositionRowCol(row:Number, col:Number):void 
+		{
+				setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
+		}
+		
 		public function addGraphics():void 
 		{
 			var image : Image = Assets.getImage("SimpleEnemyBitmap");
@@ -60,49 +67,64 @@ package massdefense.units
 			addChild(healthBar);
 		}
 		
-		public function isAtEndPosition() : Boolean {
-			/*
-			var endPosition : Boolean = false;
-			
-			if (this.path != null) {
-				endPosition = path.isEndPosition(pathPosition);
-			}
-			
-			return endPosition;*/
-			return false;
-		}
-		
 		public function update(passedTime : Number) : void 
 		{
-			if (health > 0) {
-				if (pathfinder != null) {
-					followPath(passedTime);
+			if (isAlive()) {
+				if(distanceFromExit() > 0) {
+					goToTheExit(passedTime);
 				}
 			}
 		}
 		
-		public function setPositionRowCol(row:Number, col:Number):void 
+		private function isAlive():Boolean 
 		{
-			// TODO REFACTOR
-			setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
+			if (health > 0) return true;
+			else return false;
 		}
 		
-		private function isReachedPosition(targetPosition:Position):Boolean 
+		private function goToTheExit(passedTime : Number):void 
 		{
-			return Position.isDistanceBetweenLessThan(targetPosition, position, 5);
-		}
-		
-		private function followPath(passedTime : Number):void 
-		{
-			/*
 			if (pathfinder == null) return;
 			
-			var targetPosition : Position = pathfinder.nextNode(this.row, this.col);
-			
-			if(targetPosition != null) {
+			var nextNode : Node = pathfinder.nextNode(this.row, this.col);
+			goToTheNextNode(nextNode, passedTime);
+		}
+		
+		private function goToTheNextNode(nextNode:Node, passedTime : Number):void 
+		{
+			if (nextNode != null) {
+				var targetPosition : Position = pathfinder.nextNode(this.row, this.col).toPosition();
 				position = Position.moveToPoint(this.position, targetPosition, this.speed, passedTime);
 			}
-			*/
+		}
+		
+		public function distanceFromExit():uint {
+			var distance : uint = Node.INFINIT;
+			
+			if (pathfinder != null) {
+				var node : Node = pathfinder.grid.getNode(this.row, this.col);
+				distance = node.distance;
+			}
+			
+			return distance;
+		}
+		
+		public function isEscaped():Boolean 
+		{
+			var escaped : Boolean = false;
+			if (distanceFromExit() == 0) {
+				escaped = true;
+			}
+			return escaped;
+		}
+		
+		public function init(attributes:Dictionary):void 
+		{
+			var row : uint = attributes["row"];
+			var col : uint = attributes["col"];
+			setPositionRowCol(row, col);
+			
+			pathfinder = attributes["pathfinder"];
 		}
 		
 		public function get row():int 

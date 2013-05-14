@@ -9,10 +9,7 @@ package massdefense.level
 	import massdefense.pathfinder.PathFinder;
 	import massdefense.units.Tower;
 	import massdefense.Wave;
-	/**
-	 * ...
-	 * @author OMLI
-	 */
+
 	public class LevelLoader 
 	{
 		[Embed(source="../config/levels/level01.xml", mimeType = "application/octet-stream")] 
@@ -26,15 +23,16 @@ package massdefense.level
 		{
 			var level : Level = new Level();
 			
+			Factory.level = level;
+			
 			levelData = XML(new LevelClass());
 			
 			setStartingMoney(level);
 			setLife(level);
 			setWaves(level);			
-			setTowers(level);
 			
 			setupPathfinder(level);
-			//level.pathfinder.calculateNodesDistances();
+			setTowers(level);
 			
 			return level;
 		}	
@@ -43,11 +41,7 @@ package massdefense.level
 		
 		private function setLife(level:Level):void { level.life = levelData.life; }
 		
-		private function setWaves(level:Level):void { level.waves = getWaves(); }
-		
-		private function getWaves():Vector.<Wave> 
-		{
-			var waves : Vector.<Wave> = new Vector.<Wave>();
+		private function setWaves(level:Level):void { 
 			for each (var xml_wave : XML in levelData.waves.wave) 
 			{
 				var wave:Wave = new Wave();
@@ -58,28 +52,20 @@ package massdefense.level
 				wave.timeToNextSpawn = wave.startAfterSecond;
 				wave.creepsToSpawn = xml_wave.creepsToSpawn;
 				
-				waves.push(wave);
+				level.waves.push(wave);
 			}
-			
-			return waves;
 		}
 		
-		private function setTowers(level:Level):void { level.towers = getTowers(); }
-		
-		private function getTowers():Vector.<Tower>
+		private function setTowers(level:Level):void
 		{
-			var towers : Vector.<Tower> = new Vector.<Tower>();
 			for each (var xml_tower : XML in levelData.towers.tower) 
 			{
-					var towerProperties : Dictionary = new Dictionary;
-					setTowerProperties(towerProperties, xml_tower);
-					
-					var tower : Tower = new Tower(towerProperties);
-					
-					towers.push(tower);
+				var towerProperties : Dictionary = new Dictionary;
+				setTowerProperties(towerProperties, xml_tower);
+				
+				var tower : Tower = new Tower(towerProperties);
+				Factory.addTower(towerProperties);
 			}
-			
-			return towers;
 		}
 		
 		private function setTowerProperties(towerProperties:Dictionary, xml_tower:XML):void 

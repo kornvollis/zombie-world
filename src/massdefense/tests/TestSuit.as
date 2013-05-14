@@ -18,6 +18,7 @@ package massdefense.tests
 		public var node:NodeTest;
 		public var grid:GridTest;
 		public var pathFinder:PathfinderTest;
+		public var creep:CreepTest;
 	}
 
 }

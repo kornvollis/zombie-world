@@ -153,7 +153,7 @@ package massdefense.units
 			
 			for each (var creep:Creep in targetList ) 
 			{				
-				if (Position.distance(creep.position, this.position) <= this.range && creep.health > 0 && !creep.isAtEndPosition()) {
+				if (Position.distance(creep.position, this.position) <= this.range && creep.health > 0 && !creep.isEscaped()) {
 					return creep;
 				}
 			}
