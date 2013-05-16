@@ -28,7 +28,7 @@ package massdefense
 		
 		private function spawnCreep():void 
 		{
-			var creepAttributes : Dictionary = new Dictionary();
+			var creepAttributes : Array = new Array();
 			creepAttributes["row"] = row;
 			creepAttributes["col"] = col;
 			

@@ -16,40 +16,33 @@ package massdefense
 		public static var numofdelete : uint = 0;
 		public function Factory() { }
 		
-		public static function spawnCreep(attributes : Dictionary) : void {
+		public static function spawnCreep(attributes : Array) : void {
 			var creep: Creep = new Creep();
 			creep.init(attributes);
 			
 			creep.pathfinder = level.pathfinder;
 			
 			creep.addGraphics();
+			
 			level.creeps.push(creep);
 			level.addChild(creep);
 		}
 		
-		public static function addTower(attributes : Dictionary) : void {
+		public static function addTower(attributes : Array) : void {
 			var tower: Tower = new Tower();
-			var type : String = attributes["type"];
-			var towerProps : XMLList = Game.units.tower.(@type == type);	
+			//var type : String = attributes["type"];
+			//var towerProps : XMLList = Game.units.tower.(@type == type);	
+			tower.init(attributes);
 			
-			tower.row = attributes["row"];
-			tower.col = attributes["col"];
-			tower.damage = towerProps.damage;
-			tower.reloadTime = towerProps.reloadTime;
-			
-
-			tower.setPositionRowCol(tower.row, tower.col);
-
 			tower.addGraphics();
 			
-			level.pathfinder.grid.getNode(tower.row, tower.col).close();
 			
-			tower.targetList = level.creeps;
+			//tower.targetList = level.creeps;
 			
 			level.towers.push(tower);
 			level.addChild(tower);
 			
-			level.pathfinder.calculateNodesDistances();
+			//level.pathfinder.calculateNodesDistances();
 		}
 		
 		public static function addProjectil(attributes : Dictionary) : void {

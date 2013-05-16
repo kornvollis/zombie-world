@@ -5,7 +5,7 @@ package massdefense
 	import massdefense.Game;
 	import starling.core.Starling;
 	
-	[SWF(width="1300", height="600", frameRate="60", backgroundColor="#8fc0f2")]
+	[SWF(width="1300", height="600", frameRate="60", backgroundColor="#ffffff")]
 	public class Main extends Sprite 
 	{
 		private var starling:Starling;

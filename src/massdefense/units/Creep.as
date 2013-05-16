@@ -33,9 +33,14 @@ package massdefense.units
 		private var healthBar		  : HealthBar = new HealthBar();
 		
 		
-		public function Creep() 
+		public function Creep() {}
+		
+		public function init(attributes:Array):void 
 		{
-			//addGraphics();
+			for (var item : Object in attributes) 
+			{
+				this[item] = attributes[item];
+			}
 		}
 		
 		public function setPositionXY(x:Number , y:Number) : void 
@@ -49,7 +54,7 @@ package massdefense.units
 		
 		public function setPositionRowCol(row:Number, col:Number):void 
 		{
-				setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
+			setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
 		}
 		
 		public function addGraphics():void 
@@ -118,23 +123,15 @@ package massdefense.units
 			return escaped;
 		}
 		
-		public function init(attributes:Dictionary):void 
-		{
-			var row : uint = attributes["row"];
-			var col : uint = attributes["col"];
-			setPositionRowCol(row, col);
-			
-			pathfinder = attributes["pathfinder"];
-		}
-		
 		public function get row():int 
 		{
 			return int(position.y / Node.NODE_SIZE);
 		}
 		
-		public function set row(value:int):void 
+		public function set row(row:int):void 
 		{
-			_row = value;
+			position.y = row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5;
+			_row = row;
 		}
 		
 		public function get col():int 
@@ -142,9 +139,10 @@ package massdefense.units
 			return int(position.x / Node.NODE_SIZE);
 		}
 		
-		public function set col(value:int):void 
+		public function set col(col:int):void 
 		{
-			_col = value;
+			position.x = col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5;
+			_col = col;
 		}
 		
 		public function get position():Position 

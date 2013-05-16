@@ -25,7 +25,6 @@ package massdefense.tests
 			pathfinder.calculateNodesDistances();
 			Assert.assertNotNull(pathfinder);
 		}
-	
 		[Test]  
 		public function testWithOneExit():void {  
 			
