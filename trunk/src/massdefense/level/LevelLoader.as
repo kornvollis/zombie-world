@@ -60,15 +60,14 @@ package massdefense.level
 		{
 			for each (var xml_tower : XML in levelData.towers.tower) 
 			{
-				var towerProperties : Dictionary = new Dictionary;
+				var towerProperties : Array = new Array;
 				setTowerProperties(towerProperties, xml_tower);
 				
-				var tower : Tower = new Tower(towerProperties);
 				Factory.addTower(towerProperties);
 			}
 		}
 		
-		private function setTowerProperties(towerProperties:Dictionary, xml_tower:XML):void 
+		private function setTowerProperties(towerProperties:Array, xml_tower:XML):void 
 		{
 			towerProperties["row"] = xml_tower.row;
 			towerProperties["col"] = xml_tower.col;

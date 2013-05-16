@@ -24,6 +24,7 @@ package massdefense.units
 		
 		private var _targetList : Vector.<Creep>;
 		private var target : Creep = null;
+		public var type : String = "";
 		public var angle : Number = 0;
 		
 		
@@ -42,14 +43,17 @@ package massdefense.units
 		private var baseImage:Image;
 		private var towerImage:Image;
 		
-		public function Tower(towerProperties : Dictionary = null) 
+		public function Tower() 
 		{
-			//addGraphics()
-			if (towerProperties != null)
-			{
-				
-			}
 			
+		}
+		
+		public function init(attributes:Array):void 
+		{
+			for (var item : Object in attributes) 
+			{
+				this[item] = attributes[item];
+			}
 		}
 		
 		public function addGraphics():void 
