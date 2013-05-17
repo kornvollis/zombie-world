@@ -17,6 +17,7 @@
  
       public function runMe():void
       {
+		TestSuit.isTestRun = true;
         core = new FlexUnitCore();
         core.addListener(new UIListener(uiListener));
         core.run(TestSuit); // Add all your Test Suite classes here.

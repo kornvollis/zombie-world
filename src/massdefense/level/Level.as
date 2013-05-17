@@ -5,6 +5,7 @@ package massdefense.level
 	import massdefense.pathfinder.Grid;
 	import massdefense.pathfinder.Node;
 	import massdefense.pathfinder.PathFinder;
+	import massdefense.tests.TestSuit;
 	import massdefense.ui.TimeControll;
 	import massdefense.units.Creep;
 	import massdefense.units.Projectil;
@@ -172,6 +173,27 @@ package massdefense.level
 			
 			drawDebugStartNodes();
 			drawDebugWalls();
+		}
+		
+		public function addTower(tower:Tower):void 
+		{
+			towers.push(tower);
+			
+			if (!TestSuit.isTestRun) {
+				tower.addGraphics();
+				addChild(tower);
+			}
+		}
+		
+		public function addCreep(creep:Creep):void 
+		{
+			creeps.push(creep);
+			creep.pathfinder = pathfinder;
+			
+			if (!TestSuit.isTestRun) {
+				creep.addGraphics();
+				addChild(creep);
+			}
 		}
 		
 		private function drawDebugWalls():void 

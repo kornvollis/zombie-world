@@ -6,10 +6,7 @@ package massdefense
 	import massdefense.units.Creep;
 	import massdefense.units.Projectil;
 	import massdefense.units.Tower;
-	/**
-	 * ...
-	 * @author OMLI
-	 */
+
 	public class Factory 
 	{
 		public static var level : Level = null;
@@ -19,13 +16,8 @@ package massdefense
 		public static function spawnCreep(attributes : Array) : void {
 			var creep: Creep = new Creep();
 			creep.init(attributes);
-			
-			creep.pathfinder = level.pathfinder;
-			
-			creep.addGraphics();
-			
-			level.creeps.push(creep);
-			level.addChild(creep);
+
+			level.addCreep(creep);
 		}
 		
 		public static function addTower(attributes : Array) : void {
@@ -34,15 +26,7 @@ package massdefense
 			//var towerProps : XMLList = Game.units.tower.(@type == type);	
 			tower.init(attributes);
 			
-			tower.addGraphics();
-			
-			
-			//tower.targetList = level.creeps;
-			
-			level.towers.push(tower);
-			level.addChild(tower);
-			
-			//level.pathfinder.calculateNodesDistances();
+			level.addTower(tower);
 		}
 		
 		public static function addProjectil(attributes : Dictionary) : void {
