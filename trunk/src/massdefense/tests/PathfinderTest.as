@@ -7,10 +7,6 @@ package massdefense.tests
 	import massdefense.pathfinder.Node;
 	import massdefense.pathfinder.PathFinder;
 	
-	/**
-	 * ...
-	 * @author OMLI
-	 */
 	public class PathfinderTest
 	{
 		private var pathfinder : PathFinder = new PathFinder();

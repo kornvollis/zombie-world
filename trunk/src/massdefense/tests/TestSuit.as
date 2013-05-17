@@ -12,6 +12,8 @@ package massdefense.tests
 	
 	public class TestSuit
 	{
+		public static var isTestRun : Boolean = false;
+		
 		public var t1:PositionTest;
 		public var t2:TowerTest;
 		public var levelLoader:LevelLoaderTest;

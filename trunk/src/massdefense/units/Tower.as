@@ -28,8 +28,8 @@ package massdefense.units
 		public var angle : Number = 0;
 		
 		
-		public var row : int;
-		public var col : int;
+		private var _row : int;
+		private var _col : int;
 		private var _showRange : Boolean = true;
 		
 		
@@ -81,16 +81,7 @@ package massdefense.units
 		public function setPositionRowCol(row:Number, col:Number):void 
 		{
 			// TODO REFACTOR
-			setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
-		}
-		
-		public function setPositionXY(x:Number , y:Number) : void 
-		{			
-			position.x = x;
-			position.y = y;
-			
-			this.x = position.x;
-			this.y = position.y;
+			// setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
 		}
 		
 		public function update(timeElapssed : Number) : void
@@ -189,6 +180,28 @@ package massdefense.units
 		public function set targetList(value:Vector.<Creep>):void 
 		{
 			_targetList = value;
+		}
+		
+		public function get row():int 
+		{
+			return _row;
+		}
+		
+		public function set row(value:int):void 
+		{
+			_row = value;
+			this.y = _row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5;
+		}
+		
+		public function get col():int 
+		{
+			return _col;
+		}
+		
+		public function set col(value:int):void 
+		{
+			_col = value;
+			this.x = _col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5;
 		}
 	}
 }

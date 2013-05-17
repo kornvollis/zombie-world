@@ -15,14 +15,9 @@ package massdefense.tests.tower
 		   tower = new Tower();
 		}
 		[Test]
-		public function setposXY():void {
-		    tower.setPositionXY(45, 98);
-			Assert.assertEquals(tower.x, 45);   
-			Assert.assertEquals(tower.y, 98); 
-		}
-		[Test]
 		public function setRowCol():void {
-		    tower.setPositionRowCol(3, 5);
+			tower.row = 3;
+			tower.col = 5;
 			Assert.assertEquals(tower.x, 5 * Node.NODE_SIZE + Node.NODE_SIZE*0.5);   
 			Assert.assertEquals(tower.y, 3 * Node.NODE_SIZE + Node.NODE_SIZE*0.5); 
 		}
@@ -40,7 +35,8 @@ package massdefense.tests.tower
 		}
 		[Test]
 		public function outOfRange():void {
-		    tower.setPositionXY(50, 50);
+			tower.x = 50;
+			tower.y = 50;
 			tower.range = 500;
 			var creep: Creep = new Creep();
 			creep.setPositionXY(55, 50);
