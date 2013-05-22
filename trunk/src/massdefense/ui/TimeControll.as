@@ -7,19 +7,19 @@ package massdefense.ui
 	import starling.events.Event;
 	import starling.events.TouchEvent;
 	
-	/**
-	 * ...
-	 * @author OMLI
-	 */
 	public class TimeControll extends Sprite 
 	{
+		public static const ON_STEP_CLICK : String = "ON_STEP_CLICK";
+		public static const ON_PLAY_CLICK : String = "ON_PLAY_CLICK";
+		public static const ON_PAUSE_CLICK : String = "ON_PAUSE_CLICK";
+		
 		private var play : Button;
 		private var pause : Button;
 		private var step : Button;
 		
 		private var level : Level;
 		
-		public function TimeControll(level : Level) 
+		public function TimeControll(level : Level = null) 
 		{
 			this.level = level;
 			
@@ -43,19 +43,21 @@ package massdefense.ui
 		
 		private function onStepClick(e:Event):void 
 		{
-			level.stepFrames = Level.STEP_FRAMES;
+			var event : Event = new Event(TimeControll.ON_STEP_CLICK);
+			dispatchEvent(event);
 		}
 		
 		private function onPlayClick(e:Event):void 
 		{
-			level.play();
+			var event : Event = new Event(TimeControll.ON_PLAY_CLICK);
+			dispatchEvent(event);
 		}
 		
 		private function onPauseClick(e:Event):void 
 		{
-			level.pause();
-			if (step.enabled) step.enabled = false;
-			else step.enabled = true;
+			var event : Event = new Event(TimeControll.ON_PAUSE_CLICK);
+			dispatchEvent(event);
+			step.enabled = !step.enabled;
 		}
 		
 	}

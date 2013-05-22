@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <units>
 	<tower type="simpleTower">
+		<cost>50</cost>
 		<damage>1</damage>
 		<reloadTime>3</reloadTime>		
 	</tower>
 	
-	
 	<creep type="simpleCreep">
-		<rewardMoney>15</rewardMoney>
-		<health>1</health>
-		
+		<rewardMoney>5</rewardMoney>
+		<health>2</health>
+		<maxHealth>2</maxHealth>
+		<speed>100</speed>
 	</creep>
 	
 </units>

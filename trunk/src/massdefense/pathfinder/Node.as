@@ -42,6 +42,7 @@ package massdefense.pathfinder
 		
 		public function close() : void {
 			this._open = false;
+			this.distance = INFINIT;
 		}
 		
 		public function open() : void {

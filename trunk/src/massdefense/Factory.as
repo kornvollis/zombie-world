@@ -20,13 +20,18 @@ package massdefense
 			level.addCreep(creep);
 		}
 		
-		public static function addTower(attributes : Array) : void {
-			var tower: Tower = new Tower();
-			//var type : String = attributes["type"];
-			//var towerProps : XMLList = Game.units.tower.(@type == type);	
-			tower.init(attributes);
-			
-			level.addTower(tower);
+		public static function addTower(row:int, col:int, type:String = "", isFree:Boolean = false ):void 
+		{
+			var cost : int = Game.units.tower.(@type == Tower.SIMPLE_TOWER).cost;
+			if(level.money >= cost || isFree)
+			{
+				var tower: Tower = new Tower();
+				tower.init(row, col, type);
+				
+				level.addTower(tower);
+				
+				if(!isFree) level.money -= cost;
+			}
 		}
 		
 		public static function addProjectil(attributes : Dictionary) : void {

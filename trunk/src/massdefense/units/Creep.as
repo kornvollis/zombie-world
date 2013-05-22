@@ -4,6 +4,7 @@ package massdefense.units
 	import flash.utils.Dictionary;
 	import massdefense.assets.Assets;
 	import massdefense.Factory;
+	import massdefense.Game;
 	import massdefense.misc.Position;
 	import massdefense.pathfinder.Node;
 	import massdefense.pathfinder.PathFinder;
@@ -16,14 +17,15 @@ package massdefense.units
 		public static const DEAD         : String = "dead";
 		public static const ALIVE        : String = "live";
 		public static const ESCAPED      : String = "escaped";
-		public var rewardMoney		     : int    = 15;	
 		
 		private var _position         : Position   = new Position();
 		private var _pathfinder       : PathFinder = null;
 		
+		public var type 			  : String = "";
 		public var pathPosition       : uint = 0;
 		public var state			  : String = ALIVE;
 		public var speed              : int = 90;
+		public var rewardMoney        : int = 5;
 		public var maxHealth          : int = 4;
 		private var _health           : int = 4;
 		public var distanceFromTarget : Number;
@@ -40,6 +42,20 @@ package massdefense.units
 			for (var item : Object in attributes) 
 			{
 				this[item] = attributes[item];
+			}
+			
+			setTypeSpecificAttributes();
+		}
+		
+		private function setTypeSpecificAttributes():void 
+		{
+			var creepProps : XMLList = Game.units.creep.(@type == type).children();
+			
+			for each(var typeSpecPropety : XML in creepProps) 
+			{
+				var propName  : String = typeSpecPropety.localName();
+				var propValue : Object= typeSpecPropety;
+				this[propName] = propValue;
 			}
 		}
 		
@@ -103,7 +119,8 @@ package massdefense.units
 			}
 		}
 		
-		public function distanceFromExit():uint {
+		public function distanceFromExit():uint 
+		{
 			var distance : uint = Node.INFINIT;
 			
 			if (pathfinder != null) {

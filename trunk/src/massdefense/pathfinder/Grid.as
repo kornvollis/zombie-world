@@ -65,7 +65,7 @@ package massdefense.pathfinder
 			return nodes;
 		}
 		
-		public function getNode(row:uint, col:uint):Node {
+		public function getNode(row:int, col:int):Node {
 			if (row > rows - 1 || col > cols - 1) return null;
 			if (row < 0        || col < 0       ) return null;
 			
@@ -130,6 +130,20 @@ package massdefense.pathfinder
 				line += "\n";
 			}
 			trace(line);
+		}
+		
+		public function resetDistances():void 
+		{
+			for (var i : int = 0; i < rows; i++)
+			{
+				for (var  j:int  = 0; j < cols; j++)
+				{
+					var node : Node = getNode(i, j);
+					if (node.distance > 0) {
+						node.distance = Node.INFINIT;
+					}
+				}
+			}
 		}
 	}
 

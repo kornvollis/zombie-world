@@ -3,7 +3,7 @@
 	<rows>20</rows>
 	<cols>20</cols>
 	<cellSize>32</cellSize>
-	<money>1</money>
+	<money>50</money>
 	<life>5</life>
 	
 	<start_nodes>
@@ -134,17 +134,13 @@
 			<row>8</row>
 			<col>8</col>
 		</tower>
-		<tower>
-			<type>simpleTower</type>
-			<row>8</row>
-			<col>6</col>
-		</tower>
 	</towers>
 	
 	<waves>
 		<wave>
 			<row>19</row>
 			<col>0</col>
+			<type>simpleCreep</type>
 			<startInSecond>0</startInSecond>
 			<creepsToSpawn>50</creepsToSpawn>
 			<delayBetweenSpansInSecond>2</delayBetweenSpansInSecond>

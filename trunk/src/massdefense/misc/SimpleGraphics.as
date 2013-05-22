@@ -104,10 +104,10 @@ package massdefense.misc
 			return image;
 		}
 		
-		static public function drawCircle(posX:Number, posY:Number, radius:Number, lineWidth : Number = 1, color: uint =  0x880000):Image 
+		static public function drawCircle(posX:Number, posY:Number, radius:Number, lineWidth : Number = 1, color: uint =  0x880000, alpha:Number = 1):Image 
 		{
 			var oldSprite : flash.display.Sprite = new flash.display.Sprite;
-			oldSprite.graphics.lineStyle(lineWidth, color);
+			oldSprite.graphics.lineStyle(lineWidth, color, alpha);
 			oldSprite.graphics.drawCircle(radius, radius, radius);
 			
 			var bData:BitmapData=new BitmapData(oldSprite.width, oldSprite.height,true,1);

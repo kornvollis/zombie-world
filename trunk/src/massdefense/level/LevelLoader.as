@@ -47,6 +47,7 @@ package massdefense.level
 				var wave:Wave = new Wave();
 				wave.row = xml_wave.row;
 				wave.col = xml_wave.col;
+				wave.type = xml_wave.type;
 				wave.startAfterSecond  = xml_wave.startInSecond;
 				wave.delayBetweenSpawns  = xml_wave.delayBetweenSpansInSecond;
 				wave.timeToNextSpawn = wave.startAfterSecond;
@@ -59,19 +60,9 @@ package massdefense.level
 		private function setTowers(level:Level):void
 		{
 			for each (var xml_tower : XML in levelData.towers.tower) 
-			{
-				var towerProperties : Array = new Array;
-				setTowerProperties(towerProperties, xml_tower);
-				
-				Factory.addTower(towerProperties);
+			{				
+				Factory.addTower(xml_tower.row, xml_tower.col, xml_tower.type, true);
 			}
-		}
-		
-		private function setTowerProperties(towerProperties:Array, xml_tower:XML):void 
-		{
-			towerProperties["row"] = xml_tower.row;
-			towerProperties["col"] = xml_tower.col;
-			towerProperties["type"] = xml_tower.type;	
 		}
 		
 		private function setupPathfinder(level:Level):void 

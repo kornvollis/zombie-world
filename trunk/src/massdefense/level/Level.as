@@ -12,12 +12,14 @@ package massdefense.level
 	import massdefense.units.Tower;
 	import massdefense.Wave;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	import starling.text.TextField;
 	
 
 	public class Level extends Sprite
 	{
 		public static const STEP_FRAMES : uint = 10;
+		public static const MONEY_CHANGED:String = "moneyChanged";
 		
 		// LEVEL LOADER
 		// private var _levelData : XML;
@@ -36,10 +38,6 @@ package massdefense.level
 		private var _towers      : Vector.<Tower> = new Vector.<Tower>;
 		private var _projectils  : Vector.<Projectil> = new Vector.<Projectil>;
 		private var _creeps      : Vector.<Creep> = new Vector.<Creep>;
-		
-		// STATE
-		public var paused : Boolean = false;
-		public var stepFrames : uint = 0;
 		
 		// GAME attributes
 		private var _life : int = 1;
@@ -82,45 +80,37 @@ package massdefense.level
 				
 				//return;
 			}
-			
-			if (!paused || stepFrames > 0) {
-				//trace("update");
 				
-				for each (var wave: Wave in waves) 
-				{
-					if(wave.remainingCreepsToSpawn > 0) {
-						wave.timeToNextSpawn -= passedTime;
-					}
+			for each (var wave: Wave in waves) 
+			{
+				if(wave.remainingCreepsToSpawn > 0) {
+					wave.timeToNextSpawn -= passedTime;
 				}
-				
-				for each (var tower: Tower in towers) 
-				{
-					tower.update(passedTime);
-				}
-				
-				for (i = projectils.length-1; i >= 0 ; i--) 
-				{
-					projectils[i].update(passedTime);
-				}
-				
-				for (var i:int = creeps.length-1; i >= 0 ; i--) 
-				{
-					creeps[i].update(passedTime);
-					if (creeps[i].health <= 0) {
-						money = money + creeps[i].rewardMoney;
-						removeChild(creeps[i]);
-						creeps.splice(creeps.indexOf(creeps[i]), 1);
-					} else if (creeps[i].isEscaped()) {
-						removeChild(creeps[i]);
-						creeps.splice(creeps.indexOf(creeps[i]), 1);
-						life--;
-					}
-				}
-				
-				if (stepFrames > 0) stepFrames--;
 			}
 			
+			for each (var tower: Tower in towers) 
+			{
+				tower.update(passedTime);
+			}
 			
+			for (i = projectils.length-1; i >= 0 ; i--) 
+			{
+				projectils[i].update(passedTime);
+			}
+			
+			for (var i:int = creeps.length-1; i >= 0 ; i--) 
+			{
+				creeps[i].update(passedTime);
+				if (creeps[i].health <= 0) {
+					money = money + creeps[i].rewardMoney;
+					removeChild(creeps[i]);
+					creeps.splice(creeps.indexOf(creeps[i]), 1);
+				} else if (creeps[i].isEscaped()) {
+					removeChild(creeps[i]);
+					creeps.splice(creeps.indexOf(creeps[i]), 1);
+					life--;
+				}
+			}	
 		}
 		
 		private function initUI():void 
@@ -178,6 +168,10 @@ package massdefense.level
 		public function addTower(tower:Tower):void 
 		{
 			towers.push(tower);
+			tower.targetList = creeps;
+			
+			pathfinder.grid.getNode(tower.row, tower.col).close();
+			pathfinder.calculateNodesDistances();
 			
 			if (!TestSuit.isTestRun) {
 				tower.addGraphics();
@@ -289,7 +283,8 @@ package massdefense.level
 		public function set money(value:int):void 
 		{
 			_money = value;
-			if(moneyDisplay != null) moneyDisplay.text = "Money: " + _money;
+			var event : Event = new Event(MONEY_CHANGED);
+			dispatchEvent(event);
 		}
 	}
 
