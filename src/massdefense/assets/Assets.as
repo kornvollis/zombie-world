@@ -15,6 +15,8 @@ package massdefense.assets
 		public static const Level_01 : Class;
 		
 		////////////
+		[Embed(source="images/gui/buttons/button_base.png")]
+		public static const BaseButton : Class;
 		[Embed(source = "images/gui/timecontroll/play.png")]
 		public static const PlayButton : Class;
 		[Embed(source = "images/gui/timecontroll/pause.png")]

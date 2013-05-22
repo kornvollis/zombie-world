@@ -13,13 +13,15 @@ package massdefense.pathfinder
 		public function calculateNodesDistances() : void {
 			var nodeQue  : Vector.<Node> = grid.exitNodes();
 			
+			grid.resetDistances();
+			
 			while (nodeQue.length > 0)
 			{
 				var startingNode : Node = nodeQue.shift();
 				
 				expandNodeQueWithNewNodes(nodeQue, startingNode);
 			}
-			_grid.print();
+			//_grid.print();
 		}
 		
 		private function expandNodeQueWithNewNodes(nodeQue : Vector.<Node>, processedNode : Node):void 

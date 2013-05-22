@@ -6,6 +6,7 @@ package massdefense.units
 	import flexunit.utils.ArrayList;
 	import massdefense.assets.Assets;
 	import massdefense.Factory;
+	import massdefense.Game;
 	import massdefense.misc.Position;
 	import massdefense.misc.SimpleGraphics;
 	import massdefense.pathfinder.Node;
@@ -14,12 +15,14 @@ package massdefense.units
 	
 	public class Tower extends Sprite 
 	{
+		public static const SIMPLE_TOWER : String = "simpleTower";
+		
 		
 		public static const IDLE   : String = "idle";
 		public static const FIRING : String = "firing";
 		
 		//Properties
-		public var position : Position = new Position();
+		private var _position : Position = new Position();
 		public var cost : int = 50;
 		
 		private var _targetList : Vector.<Creep>;
@@ -48,18 +51,31 @@ package massdefense.units
 			
 		}
 		
-		public function init(attributes:Array):void 
+		public function init(row:int, col:int, type:String = ""):void 
 		{
-			for (var item : Object in attributes) 
+			this.row  = row;
+			this.col  = col;
+			this.type = type;
+			
+			setTypeSpecificAttributes();
+		}
+		
+		private function setTypeSpecificAttributes():void 
+		{
+			var towerProps : XMLList = Game.units.tower.(@type == type).children();
+			
+			for each(var typeSpecPropety : XML in towerProps) 
 			{
-				this[item] = attributes[item];
+				var propName  : String = typeSpecPropety.localName();
+				var propValue : Object= typeSpecPropety;
+				this[propName] = propValue;
 			}
 		}
 		
 		public function addGraphics():void 
 		{
-			drawRange();
-			//baseImage = Util.bitmapToImage(BaseSprite);
+			//drawRange();
+			
 			baseImage = new Image(Assets.getTexture("BaseSprite"));
 			towerImage = new Image(Assets.getTexture("TowerSprite01"));
 			
@@ -74,7 +90,7 @@ package massdefense.units
 		
 		private function drawRange():void 
 		{
-			addChild(SimpleGraphics.drawCircle(-range, -range, this.range, 2));
+			addChild(SimpleGraphics.drawCircle(-range, -range, this.range, 3, 0x880000, 0.2));
 			
 		}
 		
@@ -198,10 +214,23 @@ package massdefense.units
 			return _col;
 		}
 		
-		public function set col(value:int):void 
+		public function set col(value:int):void
 		{
 			_col = value;
 			this.x = _col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5;
+		}
+		
+		public function get position():Position 
+		{
+			_position.x = x;
+			_position.y = y;
+			
+			return _position;
+		}
+		
+		public function set position(value:Position):void 
+		{
+			_position = value;
 		}
 	}
 }

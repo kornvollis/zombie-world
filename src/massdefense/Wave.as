@@ -3,10 +3,7 @@ package massdefense
 	import flash.events.TimerEvent;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
-	/**
-	 * ...
-	 * @author OMLI
-	 */
+
 	public class Wave 
 	{
 		private var _creepsToSpawn: uint
@@ -18,8 +15,7 @@ package massdefense
 		
 		public var row : int;
 		public var col : int;
-		public var TypeOfCreep  : Class;		
-		public var CreepAttributes  : Object;		
+		public var type  : String;		
 		
 		public function Wave() 
 		{
@@ -31,6 +27,7 @@ package massdefense
 			var creepAttributes : Array = new Array();
 			creepAttributes["row"] = row;
 			creepAttributes["col"] = col;
+			creepAttributes["type"] = type;
 			
 			Factory.spawnCreep(creepAttributes);
 		}
