@@ -14,7 +14,7 @@ package massdefense.assets
 		[Embed(source="images/levels/level_01.PNG")]
 		public static const Level_01 : Class;
 		
-		////////////
+		// BUTTONS
 		[Embed(source="images/gui/buttons/button_base.png")]
 		public static const BaseButton : Class;
 		[Embed(source = "images/gui/timecontroll/play.png")]
@@ -23,26 +23,22 @@ package massdefense.assets
 		public static const PauseButton : Class;
 		[Embed(source = "images/gui/timecontroll/play_step.png")]
 		public static const StepButton : Class;
-		/////////////
+		[Embed(source="images/gui/buttons/default-button.png")]
+		public static const ButtonDefaultBM:Class;
+		[Embed(source = "images/gui/buttons/build-button.png")]
+		public static const ButtonBuildBM:Class;
+		[Embed(source = "images/gui/buttons/delete-button.png")]
+		public static const ButtonDeleteBM:Class;
+		[Embed(source = "images/gui/buttons/small-icon.png")]
+		public static const ButtonSmallIcon:Class;
+		[Embed(source = "images/gui/buttons/wide-button.png")]
+		public static const ButtonWide:Class;
+		
 		
 		[Embed(source = "images/projectils/simple_bullet.png")]
 		public static const SimpleBullet : Class;
 		
-		[Embed(source="images/gui/buttons/default-button.png")]
-		public static const ButtonDefaultBM:Class;
-		
-		[Embed(source = "images/gui/buttons/build-button.png")]
-		public static const ButtonBuildBM:Class;
-		
-		[Embed(source = "images/gui/buttons/delete-button.png")]
-		public static const ButtonDeleteBM:Class;
-		
-		[Embed(source = "images/gui/buttons/small-icon.png")]
-		public static const ButtonSmallIcon:Class;
-		
-		[Embed(source = "images/gui/buttons/wide-button.png")]
-		public static const ButtonWide:Class;
-
+		// CREEP
 		[Embed(source = "images/creeps/simple_enemy.PNG")]
 		public static const SimpleEnemyBitmap : Class;
 
@@ -57,6 +53,8 @@ package massdefense.assets
 		
 		[Embed(source = "images/towers/turret_01.png")]
 		public static const TowerSprite01:Class;
+		[Embed(source = "images/towers/turret_02.png")]
+		public static const TowerSprite02:Class;
 		
 		[Embed(source = "images/exit/exit.png")]
 		public static const ExitBitmap : Class;

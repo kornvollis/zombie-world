@@ -11,8 +11,10 @@ package massdefense.ui
 	public class BasicUI extends Sprite
 	{
 		public static const SIMPLE_TOWER_CLICK : String = "SIMPLE_TOWER_CLICK";
+		public static const BLOCK_CLICK : String = "BLOCK_CLICK";
 		
 		private var simpleTower : Button;
+		private var block : Button;
 		private var money : TextField;
 		private var level:Level;
 		
@@ -21,14 +23,8 @@ package massdefense.ui
 		{
 			this.level = level;
 			addMoneyField();
-			addTowerButtons();	
-		}
-		
-		private function addTowerButtons():void 
-		{
-			simpleTower = new Button(Assets.getTexture("BaseButton"), "T");
-			addChild(simpleTower);
-			simpleTower.addEventListener(Event.TRIGGERED, onSimpleTowerClick);
+			addTowerButtons();
+			addBlockButton();
 		}
 		
 		private function addMoneyField():void 
@@ -41,9 +37,11 @@ package massdefense.ui
 			level.addEventListener(Level.MONEY_CHANGED, syncMoney);
 		}
 		
-		private function syncMoney(e:Event):void 
+		private function addTowerButtons():void 
 		{
-			money.text = "Money: " + level.money;
+			simpleTower = new Button(Assets.getTexture("BaseButton"), "T");
+			addChild(simpleTower);
+			simpleTower.addEventListener(Event.TRIGGERED, onSimpleTowerClick);
 		}
 		
 		private function onSimpleTowerClick(e:Event):void 
@@ -51,6 +49,27 @@ package massdefense.ui
 			var event : Event = new Event(SIMPLE_TOWER_CLICK);
 			dispatchEvent(event);
 		}
+		
+		private function addBlockButton():void 
+		{
+			block = new Button(Assets.getTexture("BaseButton"), "B");
+			block.x = 40;
+			addChild(block);
+			block.addEventListener(Event.TRIGGERED, onBlockClick);
+		}
+		
+		private function onBlockClick(e:Event):void 
+		{
+			var event : Event = new Event(BLOCK_CLICK);
+			dispatchEvent(event);
+		}
+		
+		private function syncMoney(e:Event):void 
+		{
+			money.text = "Money: " + level.money;
+		}
+		
+		
 		
 	}
 

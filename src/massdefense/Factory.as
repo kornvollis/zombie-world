@@ -6,6 +6,7 @@ package massdefense
 	import massdefense.units.Creep;
 	import massdefense.units.Projectil;
 	import massdefense.units.Tower;
+	import org.flexunit.runners.BlockFlexUnit4ClassRunner;
 
 	public class Factory 
 	{
@@ -20,10 +21,11 @@ package massdefense
 			level.addCreep(creep);
 		}
 		
-		public static function addTower(row:int, col:int, type:String = "", isFree:Boolean = false ):void 
+		public static function addTower(row:int, col:int, type:String, isFree:Boolean = false ):void 
 		{
-			var cost : int = Game.units.tower.(@type == Tower.SIMPLE_TOWER).cost;
-			if(level.money >= cost || isFree)
+			var cost : int = Game.units.tower.(@type == type).cost;
+
+			if(isOpenNode(row,col) && affordable(cost,isFree) )
 			{
 				var tower: Tower = new Tower();
 				tower.init(row, col, type);
@@ -34,6 +36,16 @@ package massdefense
 			}
 		}
 		
+		private static function isOpenNode(row:int, col:int):Boolean 
+		{
+			return (level != null && level.pathfinder.grid.getNode(row, col).isOpen());
+		}
+		
+		private static function affordable(cost:int, isFree:Boolean):Boolean 
+		{
+			return (level.money >= cost || isFree);
+		}
+		
 		public static function addProjectil(attributes : Dictionary) : void {
 			var posx : uint = attributes["posx"];
 			var posy : uint = attributes["posy"];
@@ -41,7 +53,6 @@ package massdefense
 			
 			var projectil : Projectil = new Projectil();
 			projectil.damage = attributes["damage"];
-			
 			
 			var position : Position = new Position;
 			position.x = posx;
@@ -61,6 +72,21 @@ package massdefense
 			level.removeChild(projectil);
 			level.projectils.splice(level.projectils.indexOf(projectil), 1);
 		}		
+		
+		static public function addBlock(row:int, col:int, type: String, isFree:Boolean = false ):void 
+		{
+			var cost : int = Game.units.block.(@type == type).cost;
+
+			if(isOpenNode(row,col) && affordable(cost,isFree) )
+			{			
+				var block : Block= new Block();
+				block.init(row, col, type);
+				
+				level.addBlock(block);
+				
+				level.money -= cost;
+			}
+		}
 	}
 
 }

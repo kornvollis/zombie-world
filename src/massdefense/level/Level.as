@@ -1,6 +1,7 @@
 package massdefense.level 
 {
 	import flash.utils.Dictionary;
+	import massdefense.Block;
 	import massdefense.misc.SimpleGraphics;
 	import massdefense.pathfinder.Grid;
 	import massdefense.pathfinder.Node;
@@ -36,6 +37,7 @@ package massdefense.level
 		// GAME OBJECTS
 		private var _waves       : Vector.<Wave> = new Vector.<Wave>;
 		private var _towers      : Vector.<Tower> = new Vector.<Tower>;
+		private var _blocks      : Vector.<Block> = new Vector.<Block>;
 		private var _projectils  : Vector.<Projectil> = new Vector.<Projectil>;
 		private var _creeps      : Vector.<Creep> = new Vector.<Creep>;
 		
@@ -190,6 +192,19 @@ package massdefense.level
 			}
 		}
 		
+		public function addBlock(block:Block):void 
+		{
+			blocks.push(block);
+			
+			pathfinder.grid.getNode(block.row, block.col).close();
+			pathfinder.calculateNodesDistances();
+			
+			if (!TestSuit.isTestRun) {
+				block.addGraphics();
+				addChild(block);
+			}
+		}
+		
 		private function drawDebugWalls():void 
 		{
 			for (var i:int = 0; i < pathfinder.grid.rows; i++) 
@@ -285,6 +300,16 @@ package massdefense.level
 			_money = value;
 			var event : Event = new Event(MONEY_CHANGED);
 			dispatchEvent(event);
+		}
+		
+		public function get blocks():Vector.<Block> 
+		{
+			return _blocks;
+		}
+		
+		public function set blocks(value:Vector.<Block>):void 
+		{
+			_blocks = value;
 		}
 	}
 
