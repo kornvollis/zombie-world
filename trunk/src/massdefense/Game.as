@@ -5,6 +5,7 @@ package massdefense
 	import massdefense.ui.BasicUI;
 	import massdefense.ui.TimeControll;
 	import starling.display.Sprite;
+	import starling.display.Stage;
 	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
 	
@@ -13,6 +14,7 @@ package massdefense
 	{
 		[Embed(source="config/units.xml", mimeType = "application/octet-stream")] 
 		public static const Units:Class;
+		public static var stage: Stage = null;
 		static public var units : XML = XML(new Units());
 		
 		private var inputManager : InputManager;
@@ -25,20 +27,26 @@ package massdefense
 		
 		public function Game() 
 		{
-			// TODO remove this juust for testing
 			var levelLoader : LevelLoader = new LevelLoader();
 			level = levelLoader.createLevel(LevelLoader.Level_01);
 			level.debugDraw();
-			
 			level.pathfinder.calculateNodesDistances();
-			addChild(level);
 			
-			addDebugTimeControll();
+			addEventListener(Event.ADDED_TO_STAGE, onAdd);
+		}
+		
+		private function onAdd(e:Event):void 
+		{
+			Game.stage = stage;
 			addUI();
+			removeEventListener(Event.ADDED_TO_STAGE, onAdd);
+			addEventListener(EnterFrameEvent.ENTER_FRAME, update);
 			
 			inputManager = new InputManager(level, ui);
 			
-			addEventListener(Event.ADDED_TO_STAGE, onAdd);
+			addChild(level);
+			addDebugTimeControll();
+			
 		}
 		
 		private function addUI():void 
@@ -89,12 +97,6 @@ package massdefense
 		
 		public function loadMenu() : void {
 			
-		}
-		
-		private function onAdd(e:Event):void 
-		{
-			removeEventListener(Event.ADDED_TO_STAGE, onAdd);
-			addEventListener(EnterFrameEvent.ENTER_FRAME, update);
 		}
 		
 		private function update(e:EnterFrameEvent):void 

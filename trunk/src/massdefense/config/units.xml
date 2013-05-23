@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <units>
 	<tower type="simpleTower">
-		<cost>50</cost>
-		<damage>1</damage>
-		<reloadTime>3</reloadTime>		
+		<level num="1">
+			<cost>50</cost>
+			<damage>1</damage>
+			<reloadTime>3</reloadTime>
+			<image>TowerSprite02</image>
+		</level>
 	</tower>
 	
 	<creep type="simpleCreep">
@@ -12,5 +15,9 @@
 		<maxHealth>2</maxHealth>
 		<speed>100</speed>
 	</creep>
+	
+	<block type="simpleBlock">
+		<cost>5</cost>
+	</block>
 	
 </units>

@@ -29,7 +29,7 @@ package massdefense.units
 		private var target : Creep = null;
 		public var type : String = "";
 		public var angle : Number = 0;
-		
+		public var image : String = "";
 		
 		private var _row : int;
 		private var _col : int;
@@ -62,7 +62,7 @@ package massdefense.units
 		
 		private function setTypeSpecificAttributes():void 
 		{
-			var towerProps : XMLList = Game.units.tower.(@type == type).children();
+			var towerProps : XMLList = Game.units.tower.(@type == type).level.(@num == "1").children();
 			
 			for each(var typeSpecPropety : XML in towerProps) 
 			{
