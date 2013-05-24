@@ -29,8 +29,9 @@ package massdefense
 		{
 			var levelLoader : LevelLoader = new LevelLoader();
 			level = levelLoader.createLevel(LevelLoader.Level_01);
+			level.init();
+			
 			level.debugDraw();
-			level.pathfinder.calculateNodesDistances();
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);
 		}

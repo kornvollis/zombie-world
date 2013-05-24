@@ -6,9 +6,10 @@ package massdefense
 	import massdefense.units.Creep;
 	import massdefense.units.Projectil;
 	import massdefense.units.Tower;
+	import massdefense.units.Units;
 	import org.flexunit.runners.BlockFlexUnit4ClassRunner;
 
-	public class Factory 
+	public class Factory
 	{
 		public static var level : Level = null;
 		public static var numofdelete : uint = 0;
@@ -23,7 +24,7 @@ package massdefense
 		
 		public static function addTower(row:int, col:int, type:String, isFree:Boolean = false ):void 
 		{
-			var cost : int = Game.units.tower.(@type == type).cost;
+			var cost : int = Units.getTowerCost(type);
 
 			if(isOpenNode(row,col) && affordable(cost,isFree) )
 			{

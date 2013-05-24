@@ -34,8 +34,16 @@ package massdefense
 			ui.addEventListener(BasicUI.SIMPLE_TOWER_CLICK, onSimpleTowerClick);
 			ui.addEventListener(BasicUI.BLOCK_CLICK, onBlockClick);
 			level.addEventListener(TouchEvent.TOUCH, onLevelTouch);
+			level.addEventListener(Tower.TOWER_CLICKED_EVENT, onTowerClick);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyUp);
+		}
+		
+		private function onTowerClick(e:Event):void 
+		{
+			trace("elkaptam!:)");
+			var tower : Tower = Tower(e.data);
+			tower.upgrade();
 		}
 		
 		private function onKeyUp(e:KeyboardEvent):void 

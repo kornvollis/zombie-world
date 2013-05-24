@@ -21,6 +21,7 @@ package massdefense.tests
 		public var grid:GridTest;
 		public var pathFinder:PathfinderTest;
 		public var creep:CreepTest;
+		public var units:UnitsTest;
 	}
 
 }
