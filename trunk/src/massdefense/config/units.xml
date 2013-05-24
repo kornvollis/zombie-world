@@ -1,23 +1,51 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <units>
+
 	<tower type="simpleTower">
-		<level num="1">
+		<upgradeLevel num="1">
 			<cost>50</cost>
 			<damage>1</damage>
 			<reloadTime>3</reloadTime>
+			<image>TowerSprite01</image>
+		</upgradeLevel>
+		<upgradeLevel num="2">
+			<cost>50</cost>
+			<damage>2</damage>
+			<reloadTime>3</reloadTime>
 			<image>TowerSprite02</image>
-		</level>
+		</upgradeLevel>
+	</tower>
+	
+	<tower type="test">
+		<upgradeLevel num="1">
+			<cost>50</cost>
+			<damage>10</damage>
+			<reloadTime>2</reloadTime>
+			<image>TowerSprite02</image>
+		</upgradeLevel>
+		<upgradeLevel num="2">
+			<cost>60</cost>
+			<damage>1</damage>
+			<reloadTime>3</reloadTime>
+			<image>TowerSprite02</image>
+		</upgradeLevel>
+		<upgradeLevel num="3">
+			<cost>70</cost>
+			<damage>100</damage>
+			<reloadTime>1</reloadTime>
+			<image>TowerSprite03</image>
+		</upgradeLevel>
 	</tower>
 	
 	<creep type="simpleCreep">
 		<rewardMoney>5</rewardMoney>
 		<health>2</health>
 		<maxHealth>2</maxHealth>
-		<speed>100</speed>
+		<speed>70</speed>
 	</creep>
 	
 	<block type="simpleBlock">
 		<cost>5</cost>
 	</block>
-	
+
 </units>

@@ -12,29 +12,35 @@ package massdefense.units
 	import massdefense.pathfinder.Node;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.Event;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	
 	public class Tower extends Sprite 
 	{
+		public static const TOWER_CLICKED_EVENT : String = "TOWER_CLICKED";
+		
 		public static const SIMPLE_TOWER : String = "simpleTower";
 		
 		
 		public static const IDLE   : String = "idle";
 		public static const FIRING : String = "firing";
 		
-		//Properties
-		private var _position : Position = new Position();
+		// Properties
+		public var angle : Number = 0;
 		public var cost : int = 50;
-		
+		private var _position : Position = new Position();
 		private var _targetList : Vector.<Creep>;
 		private var target : Creep = null;
 		public var type : String = "";
-		public var angle : Number = 0;
+		
 		public var image : String = "";
+		public var level : int = 1;
 		
 		private var _row : int;
 		private var _col : int;
 		private var _showRange : Boolean = true;
-		
 		
 		// RELOAD && FIRE
 		public var damage       : uint = 1;
@@ -43,8 +49,8 @@ package massdefense.units
 		public var reloadTime   : Number = 2; 					// IN SECOND
 		public var timeToReload : Number = 2;
 		
-		private var baseImage:Image;
-		private var towerImage:Image;
+		private var baseImage   : Image;
+		private var towerImage  : Image;
 		
 		public function Tower() 
 		{
@@ -62,7 +68,7 @@ package massdefense.units
 		
 		private function setTypeSpecificAttributes():void 
 		{
-			var towerProps : XMLList = Game.units.tower.(@type == type).level.(@num == "1").children();
+			var towerProps : XMLList = Units.getTowerTypeAtUpgradeLevel(type, level.toString());
 			
 			for each(var typeSpecPropety : XML in towerProps) 
 			{
@@ -72,20 +78,46 @@ package massdefense.units
 			}
 		}
 		
+		public function upgrade():void 
+		{
+			level++;
+			setTypeSpecificAttributes();
+			
+			removeChild(towerImage);
+			towerImage = new Image(Assets.getTexture(image));
+			towerImage.pivotX = 16;
+			towerImage.pivotY = 16;
+			addChild(towerImage);
+		}
+		
 		public function addGraphics():void 
 		{
 			//drawRange();
-			
 			baseImage = new Image(Assets.getTexture("BaseSprite"));
-			towerImage = new Image(Assets.getTexture("TowerSprite01"));
+			towerImage = new Image(Assets.getTexture(image));
 			
 			towerImage.pivotX = 16;
 			towerImage.pivotY = 16;
 			baseImage.pivotX = 16;
 			baseImage.pivotY = 16;
-
+			
 			addChild(baseImage);
 			addChild(towerImage);
+			
+			addEventListener(TouchEvent.TOUCH, onClick);
+		}
+		
+		private function onClick(e:TouchEvent):void 
+		{
+			var touch: Touch = e.getTouch(this);
+			
+			if (touch != null) 
+			{
+				if (touch.phase == TouchPhase.ENDED) {
+					var event : Event = new Event(TOWER_CLICKED_EVENT, true, this);
+					dispatchEvent(event);
+				}
+			}
 		}
 		
 		private function drawRange():void 

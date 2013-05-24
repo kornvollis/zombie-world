@@ -45,14 +45,20 @@ package massdefense.level
 		private var _life : int = 1;
 		private var _money : int = 0;
 		
-		public function Level() {
-			
-		}
+		// LAYERS
+		private var layer_0 : Sprite = new Sprite();
+		private var layer_1 : Sprite = new Sprite();
+		private var layer_2 : Sprite = new Sprite();
 		
-		public function init() : void{
-			timeControll = new TimeControll(this);
+		public function Level() {}
+		
+		public function init() : void 
+		{			
+			pathfinder.calculateNodesDistances();
 			
-			initUI();
+			addChild(layer_0);
+			addChild(layer_1);
+			addChild(layer_2);
 		}
 		
 		public function play() : void {
@@ -70,7 +76,7 @@ package massdefense.level
 			creep.setPositionRowCol(creepAttributes["row"], creepAttributes["col"]);
 			
 			creeps.push(creep);
-			addChild(creep);
+			layer_2.addChild(creep);
 		}
 		
 		public function update(passedTime : Number) : void 
@@ -105,45 +111,29 @@ package massdefense.level
 				creeps[i].update(passedTime);
 				if (creeps[i].health <= 0) {
 					money = money + creeps[i].rewardMoney;
-					removeChild(creeps[i]);
+					layer_2.removeChild(creeps[i]);
 					creeps.splice(creeps.indexOf(creeps[i]), 1);
 				} else if (creeps[i].isEscaped()) {
-					removeChild(creeps[i]);
+					layer_2.removeChild(creeps[i]);
 					creeps.splice(creeps.indexOf(creeps[i]), 1);
 					life--;
 				}
 			}	
 		}
 		
-		private function initUI():void 
-		{
-			lifeDisplay = new TextField(150, 50, "Life: " + this.life);
-			lifeDisplay.x = 600;
-			lifeDisplay.y = 60;
-			addChild(lifeDisplay);
-			
-			moneyDisplay = new TextField(150, 50, "Money: " + this.money);
-			moneyDisplay.x = 600;
-			moneyDisplay.y = 80;
-			addChild(moneyDisplay);
-			
-			timeControll.x = 650;
-			addChild(timeControll);
-		}
-		
 		private function clearLevel():void 
 		{
 			for each (var creep: Creep  in creeps ) 
 			{
-				removeChild(creep);
+				layer_2.removeChild(creep);
 			}
 			for each (var tower: Tower in towers) 
 			{
-				removeChild(tower);
+				layer_1.removeChild(tower);
 			}
 			for each (var projectil: Projectil in projectils) 
 			{
-				removeChild(projectil);
+				layer_1.removeChild(projectil);
 			}
 			
 			creeps      = new Vector.<Creep>;
@@ -160,10 +150,10 @@ package massdefense.level
 			}
 		}
 		
-		public function debugDraw() : void {
-			addChild(SimpleGraphics.drawGrid(pathfinder.grid.rows, pathfinder.grid.cols, Node.NODE_SIZE, 1, 0x880000, 0.3));
+		public function debugDraw() : void 
+		{
+			layer_0.addChild(SimpleGraphics.drawGrid(pathfinder.grid.rows, pathfinder.grid.cols, Node.NODE_SIZE, 1, 0x880000, 0.3));
 			
-			drawDebugStartNodes();
 			drawDebugWalls();
 		}
 		
@@ -177,7 +167,7 @@ package massdefense.level
 			
 			if (!TestSuit.isTestRun) {
 				tower.addGraphics();
-				addChild(tower);
+				layer_1.addChild(tower);
 			}
 		}
 		
@@ -188,7 +178,7 @@ package massdefense.level
 			
 			if (!TestSuit.isTestRun) {
 				creep.addGraphics();
-				addChild(creep);
+				layer_2.addChild(creep);
 			}
 		}
 		
@@ -201,7 +191,7 @@ package massdefense.level
 			
 			if (!TestSuit.isTestRun) {
 				block.addGraphics();
-				addChild(block);
+				layer_1.addChild(block);
 			}
 		}
 		
@@ -212,21 +202,10 @@ package massdefense.level
 				for (var j:int = 0; j < pathfinder.grid.rows; j++) 
 				{
 					if (!pathfinder.grid.getNode(i, j).isOpen()) {
-						addChild(SimpleGraphics.drawXatRowCol(i, j, Node.NODE_SIZE, 1, 0x880000, 0.3));
+						layer_0.addChild(SimpleGraphics.drawXatRowCol(i, j, Node.NODE_SIZE, 1, 0x880000, 0.3));
 					}
 				}
 			}
-		}
-		
-		private function drawDebugStartNodes():void 
-		{
-			/*
-			for (var i:int = 0; i < escapeNodes.length; i++) 
-			{
-				var currentNode : Node = escapeNodes[i];
-				addChild(SimpleGraphics.drawCircle(currentNode.col * Node.NODE_SIZE, currentNode.row * Node.NODE_SIZE, Node.NODE_SIZE * 0.5));
-			}
-			*/
 		}
 		
 		public function get pathfinder():PathFinder 
