@@ -104,11 +104,16 @@ package massdefense.units
 			addChild(baseImage);
 			addChild(towerImage);
 			
+			baseImage.useHandCursor = true;
+			towerImage.useHandCursor = true;
+			
 			addEventListener(TouchEvent.TOUCH, onClick);
 		}
 		
 		private function onClick(e:TouchEvent):void 
 		{
+			e.stopImmediatePropagation();
+			
 			var touch: Touch = e.getTouch(this);
 			
 			if (touch != null) 
