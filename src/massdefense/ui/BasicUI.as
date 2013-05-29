@@ -17,7 +17,7 @@ package massdefense.ui
 		private var block : Button;
 		private var money : TextField;
 		private var level:Level;
-		
+		private var _towerUpgrade : TowerUpgradePanel;
 		
 		public function BasicUI(level:Level)
 		{
@@ -25,6 +25,16 @@ package massdefense.ui
 			addMoneyField();
 			addTowerButtons();
 			addBlockButton();
+			
+			addTowerUpgradePanel();
+		}
+		
+		private function addTowerUpgradePanel():void 
+		{
+			towerUpgrade = new TowerUpgradePanel(level);
+			addChild(towerUpgrade);
+			// towerUpgrade.x = 600;
+			towerUpgrade.y = 80;
 		}
 		
 		private function addMoneyField():void 
@@ -67,6 +77,16 @@ package massdefense.ui
 		private function syncMoney(e:Event):void 
 		{
 			money.text = "Money: " + level.money;
+		}
+		
+		public function get towerUpgrade():TowerUpgradePanel 
+		{
+			return _towerUpgrade;
+		}
+		
+		public function set towerUpgrade(value:TowerUpgradePanel):void 
+		{
+			_towerUpgrade = value;
 		}
 		
 		

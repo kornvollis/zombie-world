@@ -33,7 +33,11 @@ package massdefense.units
 		private var _row 			  : int;
 		private var _col              : int;
 		private var healthBar		  : HealthBar = new HealthBar();
+		private var image			  : String = "";
+		private var creepGraphics     : Image;
+		private var graphicsPointing  : String = "right";
 		
+		private var previousPosition  : Point = new Point;
 		
 		public function Creep() {}
 		
@@ -75,26 +79,46 @@ package massdefense.units
 		
 		public function addGraphics():void 
 		{
-			var image : Image = Assets.getImage("SimpleEnemyBitmap");
+			creepGraphics = Assets.getImage(image);
+			creepGraphics.pivotX = creepGraphics.width  * 0.5;
+			creepGraphics.pivotY = creepGraphics.height * 0.5;
 			
-			image.x -= image.width * 0.5;
-			image.y -= image.height * 0.5;
-			
-			addChild(image);
+			addChild(creepGraphics);
 			
 			healthBar.x = -10;
-			healthBar.y = -16;
+			healthBar.y = -22;
 			healthBar.addGraphics();
-			addChild(healthBar);
+			//addChild(healthBar);
+			
+			creepGraphics.useHandCursor = true;
 		}
 		
 		public function update(passedTime : Number) : void 
 		{
+			setPreviousPosition(this.x, this.x); 
 			if (isAlive()) {
 				if(distanceFromExit() > 0) {
 					goToTheExit(passedTime);
 				}
+				setGraphicsDirection(previousPosition);
 			}
+		}
+		
+		private function setGraphicsDirection(previousPosition:Point):void 
+		{
+			if (previousPosition.x > this.x && graphicsPointing == "right") {
+				graphicsPointing = "left";
+				creepGraphics.scaleX = -1;
+			} else if (previousPosition.x < this.x && graphicsPointing == "left") {
+				graphicsPointing = "right";
+				creepGraphics.scaleX = 1;
+			}
+		}
+		
+		private function setPreviousPosition(x:Number, y:Number):void 
+		{
+			previousPosition.x = x;
+			previousPosition.y = y;
 		}
 		
 		private function isAlive():Boolean 

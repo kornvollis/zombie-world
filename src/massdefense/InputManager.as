@@ -41,9 +41,15 @@ package massdefense
 		
 		private function onTowerClick(e:Event):void 
 		{
-			trace("elkaptam!:)");
 			var tower : Tower = Tower(e.data);
-			tower.upgrade();
+			
+			ui.towerUpgrade.setUpgradeProperties(tower);
+			
+			ui.towerUpgrade.visible = true;
+			
+			// trace("tower click");
+			
+			// tower.upgrade();
 		}
 		
 		private function onKeyUp(e:KeyboardEvent):void 
@@ -70,6 +76,8 @@ package massdefense
 				
 				if (touch.phase == TouchPhase.ENDED) 
 				{
+					ui.towerUpgrade.hide();
+					
 					onLevelClick(clickPos);
 				} else if (touch != null && touch.phase == TouchPhase.MOVED && shiftDown) {
 					onLevelClick(clickPos);

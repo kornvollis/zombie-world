@@ -15,6 +15,8 @@ package massdefense.assets
 		public static const Level_01 : Class;
 		
 		// BUTTONS
+		[Embed(source = "images/gui/buttons/buy.png")]
+		public static const BuyButton : Class;
 		[Embed(source="images/gui/buttons/button_base.png")]
 		public static const BaseButton : Class;
 		[Embed(source = "images/gui/timecontroll/play.png")]
@@ -33,15 +35,31 @@ package massdefense.assets
 		public static const ButtonSmallIcon:Class;
 		[Embed(source = "images/gui/buttons/wide-button.png")]
 		public static const ButtonWide:Class;
-		
+		// BUTTONS
 		
 		[Embed(source = "images/projectils/simple_bullet.png")]
 		public static const SimpleBullet : Class;
 		
-		// CREEP
+		// IMAGES/CREEPS
+		[Embed(source = "images/creeps/cow.png")]
+		public static const CreepCow : Class;
+		[Embed(source="images/creeps/croco.png")]
+		public static const CreepCroco : Class;
+		[Embed(source = "images/creeps/deer.png")]
+		public static const CreepDeer : Class;
+		[Embed(source = "images/creeps/duck.png")]
+		public static const CreepDuck : Class;
+		[Embed(source = "images/creeps/giraffe.png")]
+		public static const CreepGiraffe : Class;
+		[Embed(source="images/creeps/goat.png")]
+		public static const CreepGoat : Class;
+		[Embed(source = "images/creeps/lion.png")]
+		public static const CreepLion : Class;
 		[Embed(source = "images/creeps/simple_enemy.PNG")]
 		public static const SimpleEnemyBitmap : Class;
-
+		// IMAGES/CREEPS
+		
+		
 		[Embed(source = "images/blocks/block_01.png")]
 		public static const Block01:Class;
 		
@@ -51,10 +69,14 @@ package massdefense.assets
 		[Embed(source = "images/towers/base.png")]
 		public static const BaseSprite:Class;
 		
+		// IMAGES/TOWERS
 		[Embed(source = "images/towers/turret_01.png")]
 		public static const TowerSprite01:Class;
 		[Embed(source = "images/towers/turret_02.png")]
 		public static const TowerSprite02:Class;
+		[Embed(source = "images/towers/turret_03.png")]
+		public static const TowerSprite03:Class;
+		// IMAGES/TOWERS
 		
 		[Embed(source = "images/exit/exit.png")]
 		public static const ExitBitmap : Class;
