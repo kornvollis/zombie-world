@@ -41,15 +41,7 @@ package massdefense
 		
 		private function onTowerClick(e:Event):void 
 		{
-			var tower : Tower = Tower(e.data);
-			
-			ui.towerUpgrade.setUpgradeProperties(tower);
-			
-			ui.towerUpgrade.visible = true;
-			
-			// trace("tower click");
-			
-			// tower.upgrade();
+			ui.towerUpgrade.show(Tower(e.data));
 		}
 		
 		private function onKeyUp(e:KeyboardEvent):void 

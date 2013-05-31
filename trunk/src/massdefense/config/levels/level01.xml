@@ -140,31 +140,7 @@
 		<wave>
 			<row>19</row>
 			<col>0</col>
-			<type>goat_00</type>
-			<startInSecond>0</startInSecond>
-			<creepsToSpawn>50</creepsToSpawn>
-			<delayBetweenSpansInSecond>2</delayBetweenSpansInSecond>
-		</wave>
-		<wave>
-			<row>19</row>
-			<col>0</col>
-			<type>goat_00</type>
-			<startInSecond>0</startInSecond>
-			<creepsToSpawn>50</creepsToSpawn>
-			<delayBetweenSpansInSecond>2</delayBetweenSpansInSecond>
-		</wave>
-		<wave>
-			<row>19</row>
-			<col>3</col>
-			<type>croco_00</type>
-			<startInSecond>0</startInSecond>
-			<creepsToSpawn>50</creepsToSpawn>
-			<delayBetweenSpansInSecond>2</delayBetweenSpansInSecond>
-		</wave>
-		<wave>
-			<row>19</row>
-			<col>6</col>
-			<type>deer_00</type>
+			<type>duck_00</type>
 			<startInSecond>0</startInSecond>
 			<creepsToSpawn>50</creepsToSpawn>
 			<delayBetweenSpansInSecond>2</delayBetweenSpansInSecond>
@@ -172,10 +148,10 @@
 		<wave>
 			<row>19</row>
 			<col>9</col>
-			<type>duck_00</type>
+			<type>goat_00</type>
 			<startInSecond>0</startInSecond>
-			<creepsToSpawn>50</creepsToSpawn>
-			<delayBetweenSpansInSecond>2</delayBetweenSpansInSecond>
+			<creepsToSpawn>10</creepsToSpawn>
+			<delayBetweenSpansInSecond>10</delayBetweenSpansInSecond>
 		</wave>
 	</waves>
 	
