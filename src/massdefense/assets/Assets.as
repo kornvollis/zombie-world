@@ -14,6 +14,13 @@ package massdefense.assets
 		[Embed(source="images/levels/level_01.PNG")]
 		public static const Level_01 : Class;
 		
+		// UI/TOWER
+		[Embed(source = "images/gui/tower/tower_prop.png")]
+		public static const TowerProp : Class;
+		[Embed(source = "images/gui/tower/tower_item_box.png")]
+		public static const TowerPropItem : Class;
+		// UI/TOWER
+		
 		// BUTTONS
 		[Embed(source = "images/gui/buttons/buy.png")]
 		public static const BuyButton : Class;

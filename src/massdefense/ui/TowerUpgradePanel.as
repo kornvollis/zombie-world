@@ -1,5 +1,6 @@
 package massdefense.ui 
 {
+	import flash.geom.Point;
 	import massdefense.assets.Assets;
 	import massdefense.level.Level;
 	import massdefense.misc.SimpleGraphics;
@@ -11,14 +12,15 @@ package massdefense.ui
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.utils.HAlign;
+	import starling.utils.VAlign;
 
 	public class TowerUpgradePanel extends Sprite 
 	{
 		private var buyUpgrade : Button;
-		
+		private var background : Image;
 		private var upgradeImage : Image = null;
 		private var priceText : TextField;
-		private var propertiesText : TextField;
+		private var damageText : TextField;
 		private var level:Level;
 		private var upgradeCost : int;
 		private var tower : Tower;
@@ -27,8 +29,7 @@ package massdefense.ui
 		{
 			this.level = level;
 			
-			var background : Image = SimpleGraphics.drawRectangle(150, 300, 0xffffff);
-			addChild(background);
+			drawingBackground();
 			
 			upgradeImage = Assets.getImage("TowerSprite02");
 			addChild(upgradeImage);
@@ -38,6 +39,12 @@ package massdefense.ui
 			addUpgradeButton();
 			
 			this.visible = false;
+		}
+		
+		private function drawingBackground():void 
+		{
+			background = Assets.getImage("TowerProp");
+			addChild(background);
 		}
 		
 		public function show(tower : Tower):void { 
@@ -67,13 +74,13 @@ package massdefense.ui
 			var nextLevelTowerRange      : int    = Units.getTowerRange(tower.type, nextLevel);
 			var nextLevelTowerReloadTime : Number = Units.getTowerReloadTime(tower.type, nextLevel);
 			
-			var text : String = "Damage: " + tower.damage + " > " + nextLevelTowerDamage;
-			text += "\nRange: " + tower.range + " > " + nextLevelTowerRange;
-			text += "\nReload time: " + tower.reloadTime + " > " + nextLevelTowerReloadTime;
+			var text : String = "Damage "; //+ tower.damage + " > " + nextLevelTowerDamage;
+			//text += "\nRange: " + tower.range + " > " + nextLevelTowerRange;
+			//text += "\nReload time: " + tower.reloadTime + " > " + nextLevelTowerReloadTime;
 			
 			upgradeCost = Units.getTowerUpgradeCost(tower.type, nextLevel);
 			
-			propertiesText.text = text;
+			damageText.text = text;
 			
 			priceText.text = upgradeCost + "$";
 			
@@ -109,13 +116,20 @@ package massdefense.ui
 		
 		private function addPropertiesField():void 
 		{
-			propertiesText = new TextField(140, 200, "", "Line Pixel-7", 20);
-			propertiesText.hAlign = HAlign.LEFT; 
-			propertiesText.text = "DAMAGE: 2 > 3 \n\n";
-			propertiesText.text += "Range: 120 > 135 \n";
+			damageText = new TextField(90, 20, "", "Line Pixel-7", 20);
+			damageText.hAlign = HAlign.LEFT; 
+			damageText.vAlign = VAlign.TOP;
+			damageText.text = "DAMAGE";
+			damageText.border = true;
 			
-			addChild(propertiesText);
-			propertiesText.y = 60;
+			var row : Image = Assets.getImage("TowerPropItem");
+			row.x = 4;
+			row.y = 44;
+			addChild(row);
+			
+			addChild(damageText);
+			damageText.y = 41;
+			damageText.x = 6;
 		}
 		
 		private function addPriceField():void 
