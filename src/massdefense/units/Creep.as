@@ -1,5 +1,6 @@
 package massdefense.units 
 {
+	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import massdefense.assets.Assets;

@@ -20,7 +20,6 @@ package massdefense.units
 	public class Tower extends Sprite 
 	{
 		public static const TOWER_CLICKED_EVENT : String = "TOWER_CLICKED";
-		
 		public static const SIMPLE_TOWER : String = "simpleTower";
 		
 		
@@ -68,7 +67,7 @@ package massdefense.units
 		
 		private function setTypeSpecificAttributes():void 
 		{
-			var towerProps : XMLList = Units.getTowerTypeAtUpgradeLevel(type, level.toString());
+			var towerProps : XMLList = Units.getTowerTypeAtUpgradeLevel(type, level);
 			
 			for each(var typeSpecPropety : XML in towerProps) 
 			{

@@ -16,7 +16,7 @@ package massdefense.ui
 	{
 		private var buyUpgrade : Button;
 		
-		private var _upgradeImage : Image;
+		private var upgradeImage : Image = null;
 		private var priceText : TextField;
 		private var propertiesText : TextField;
 		private var level:Level;
@@ -30,8 +30,8 @@ package massdefense.ui
 			var background : Image = SimpleGraphics.drawRectangle(150, 300, 0xffffff);
 			addChild(background);
 			
-			_upgradeImage = Assets.getImage("TowerSprite02");
-			addChild(_upgradeImage);
+			upgradeImage = Assets.getImage("TowerSprite02");
+			addChild(upgradeImage);
 			
 			addPriceField();
 			addPropertiesField();
@@ -40,19 +40,38 @@ package massdefense.ui
 			this.visible = false;
 		}
 		
-		public function show():void	{ this.visible = true; }
+		public function show(tower : Tower):void { 
+			this.visible = true;
+			initProperties(tower);
+		}
 		
 		public function hide():void { this.visible = false; }
 		
-		public function setUpgradeProperties(tower:Tower):void 
+		private function initProperties(tower:Tower):void 
 		{
 			this.tower = tower;
-			var nextLevelTowerDamage : int = Units.getTowerDamage(tower.type, tower.level+1);
+			var nextLevel : int = tower.level + 1;
+			if (tower.level == Units.getTowerMaxLevel(tower.type)) {
+				buyUpgrade.enabled = false;
+				buyUpgrade.text = "MAX";
+				nextLevel--;
+			}
+			
+			if (upgradeImage != null) {
+				removeChild(upgradeImage);
+				upgradeImage = Units.getTowerImage(tower.type, nextLevel);
+				addChild(upgradeImage);
+			}
+			
+			var nextLevelTowerDamage     : int    = Units.getTowerDamage(tower.type, nextLevel);
+			var nextLevelTowerRange      : int    = Units.getTowerRange(tower.type, nextLevel);
+			var nextLevelTowerReloadTime : Number = Units.getTowerReloadTime(tower.type, nextLevel);
 			
 			var text : String = "Damage: " + tower.damage + " > " + nextLevelTowerDamage;
-			text += "\nRange: " + tower.range;
+			text += "\nRange: " + tower.range + " > " + nextLevelTowerRange;
+			text += "\nReload time: " + tower.reloadTime + " > " + nextLevelTowerReloadTime;
 			
-			upgradeCost = Units.getTowerUpgradeCost(tower.type, tower.level + 1);
+			upgradeCost = Units.getTowerUpgradeCost(tower.type, nextLevel);
 			
 			propertiesText.text = text;
 			
@@ -73,21 +92,26 @@ package massdefense.ui
 		
 		private function onBuyClick(e:Event):void 
 		{
-			if (level.money > upgradeCost) {
-				tower.upgrade();
-				level.money -= upgradeCost;
-			}
-			
 			if (tower.level != Units.getTowerMaxLevel(tower.type)) {
-				setUpgradeProperties(tower);
+				
+				if (level.money > upgradeCost) {
+					tower.upgrade();
+					level.money -= upgradeCost;
+				}
+				
+				if (tower.level == Units.getTowerMaxLevel(tower.type)) {
+					hide();
+				} else {
+					initProperties(tower);
+				}
 			}
 		}
 		
 		private function addPropertiesField():void 
 		{
-			propertiesText = new TextField(140, 200, "");
+			propertiesText = new TextField(140, 200, "", "Line Pixel-7", 20);
 			propertiesText.hAlign = HAlign.LEFT; 
-			propertiesText.text = "Damage: 2 > 3 \n\n";
+			propertiesText.text = "DAMAGE: 2 > 3 \n\n";
 			propertiesText.text += "Range: 120 > 135 \n";
 			
 			addChild(propertiesText);
@@ -96,25 +120,11 @@ package massdefense.ui
 		
 		private function addPriceField():void 
 		{
-			priceText = new TextField(50, 50, "", "Verdana", 24);
+			priceText = new TextField(50, 50, "", "Line Pixel-7", 24);
 			priceText.text = "50$";
 			priceText.x = 80;
 			
 			addChild(priceText);
 		}
-		
-		public function get upgradeImage():Image 
-		{
-			return _upgradeImage;
-		}
-		
-		public function set upgradeImage(value:Image):void 
-		{
-			_upgradeImage = value;
-		}
-		
-		
-		
 	}
-
 }
