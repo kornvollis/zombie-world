@@ -1,0 +1,176 @@
+package massdefense.ui.tower 
+{
+	import massdefense.assets.Assets;
+	import massdefense.Game;
+	import starling.display.Button;
+	import starling.display.Image;
+	import starling.display.Sprite;
+	import starling.events.Event;
+	import starling.text.TextField;
+	import starling.utils.HAlign;
+	import starling.utils.VAlign;
+
+	public class TowerInformation extends Sprite 
+	{
+		public static const TOWER_SELL_EVENT:String = "TOWER_SELL_EVENT";
+		public static const UPGRADE_EVENT:String = "upgradeEvent";
+		public static const BUTTON_FONT_SIZE:uint = 20;
+		
+		private var towerName  : TextField;
+		private var towerLevel : TextField;
+		private var towerImage : Image;
+		
+		private var towerDamage    : TowerPropertyRow;
+		private var towerRange     : TowerPropertyRow;
+		private var towerFireRate  : TowerPropertyRow;
+		
+		private var sellButton : Button;
+		private var upgradeButton : Button;
+		
+		public function TowerInformation()
+		{
+			addChild(Assets.getImage("TowerInfo"));
+			
+			addTowerName();
+			addTowerLevel();
+			addTowerProperties();
+			addSellButton();
+			addUpgradeButton();
+		}
+		
+		private function addUpgradeButton():void 
+		{
+			upgradeButton = new Button(Assets.getTexture("UpgradeButton"), "Upgrade");
+			upgradeButton.fontName = Game.FONT;
+			upgradeButton.fontSize = BUTTON_FONT_SIZE;
+			upgradeButton.fontColor = 359705;
+			addChild(upgradeButton);
+			upgradeButton.x = 4;
+			upgradeButton.y = 173;
+			
+			upgradeButton.addEventListener(Event.TRIGGERED, onUpgradeClick);
+		}
+		
+		private function onUpgradeClick(e:Event):void 
+		{
+			dispatchEvent(new Event(UPGRADE_EVENT));
+		}
+		
+		private function addSellButton():void 
+		{
+			sellButton = new Button(Assets.getTexture("SellButton"), "Sell");
+			sellButton.fontName = Game.FONT;
+			sellButton.fontSize = BUTTON_FONT_SIZE;
+			sellButton.fontColor = 13737473;
+			addChild(sellButton);
+			sellButton.x = 106;
+			sellButton.y = 173;
+			
+			sellButton.addEventListener(Event.TRIGGERED, onSellClick);
+		}
+		
+		private function onSellClick(e:Event):void 
+		{
+			dispatchEvent(new Event(TOWER_SELL_EVENT));
+		}
+		
+		private function addTowerName():void 
+		{
+			towerName = new TextField(114, 20 , "Simple tower", Game.FONT, 20);
+			//towerName.border = true;
+			addChild(towerName);
+			towerName.x = 34;
+			towerName.y = 0;
+			towerName.hAlign = HAlign.CENTER;
+			towerName.vAlign = VAlign.TOP;
+		}
+		
+		private function addTowerLevel():void 
+		{
+			towerLevel = new TextField(114, 20 , "Level: 1", Game.FONT, 16);
+			//towerName.border = true;
+			addChild(towerLevel);
+			towerLevel.x = 34;
+			towerLevel.y = 20;
+			towerLevel.hAlign = HAlign.CENTER;
+			towerLevel.vAlign = VAlign.TOP;
+		}
+		
+		private function addTowerProperties():void 
+		{
+			var verticalGap :int = 13;
+			
+			towerDamage = new TowerPropertyRow();
+			towerDamage.setLeftText("Damage: ");
+			towerDamage.setRightText("2");
+			addChild(towerDamage);
+			towerDamage.x = 4; towerDamage.y = 43;
+			
+			towerRange = new TowerPropertyRow();
+			towerRange.setLeftText("Range: ");
+			towerRange.setRightText("100");
+			addChild(towerRange);
+			towerRange.x = towerDamage.x; towerRange.y = towerDamage.y + verticalGap;
+			
+			towerFireRate = new TowerPropertyRow();
+			towerFireRate.setLeftText("Speed: ");
+			towerFireRate.setRightText("10");
+			addChild(towerFireRate);
+			towerFireRate.x = towerDamage.x; towerFireRate.y = towerRange.y + verticalGap;
+		}
+		
+		public function setTowerImage(image : Image) : void {
+			if (towerImage != null) removeChild(towerImage);
+			this.towerImage = image;
+			towerImage.pivotX = 16;
+			towerImage.pivotY = 16;
+			addChild(towerImage);
+			towerImage.x = 20;
+			towerImage.y = 20;
+		}
+		
+		public function setTowerName(name : String) : void {
+			this.towerName.text = name;
+		}
+		
+		public function setTowerLevel(level : int) : void {
+			this.towerLevel.text = "Level: " + level;
+		}
+		
+		public function setTowerDamage(damage:uint):void 
+		{
+			towerDamage.setRightText(damage.toString());
+		}
+		
+		public function setTowerRange(range:uint):void 
+		{
+			towerRange.setRightText(range.toString());
+		}
+		
+		public function setTowerFireRate(reloadTime:Number):void 
+		{
+			towerFireRate.setRightText(reloadTime.toString());
+		}
+		
+		public function setSellPrice(price : String):void {
+			sellButton.text = "Sell for " + price + "$";
+		}
+		
+		public function upgradeEnable(price : String) :void {
+			upgradeButton.enabled = true;
+			upgradeButton.text = "Upgrade " + price;
+		}
+		
+		public function upgradeDisable() :void {
+			upgradeButton.enabled = false;
+			upgradeButton.text = "Upgrade";
+		}
+		
+		public function setUpgradeMaxed():void 
+		{
+			upgradeButton.enabled = false;
+			upgradeButton.text = "MAX";
+		}
+	}
+
+}

@@ -27,7 +27,7 @@ package massdefense.units
 		
 		public static function getTowerMaxLevel(type:String) : int 
 		{
-			var tower:XMLList = units.tower.(@type == type).children();
+			var tower:XMLList = units.tower.(@type == type).upgradeLevel;
 			
 			return tower.length();
 		}
@@ -56,6 +56,11 @@ package massdefense.units
 		static public function getTowerRange(type:String, level:int):int 
 		{
 			return int(units.tower.(@type == type).upgradeLevel.(@num == level.toString()).range);
+		}
+		
+		static public function getTowerName(type:String):String
+		{
+			return String(units.tower.(@type == type).name);
 		}
 		
 		static public function getTowerReloadTime(type:String, level:int):Number 

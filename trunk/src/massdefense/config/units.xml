@@ -2,6 +2,7 @@
 <units>
 
 	<tower type="simpleTower">
+		<name>Point deffense</name>
 		<upgradeLevel num="1">
 			<cost>50</cost>
 			<damage>1</damage>

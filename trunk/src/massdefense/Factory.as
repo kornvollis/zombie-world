@@ -37,6 +37,12 @@ package massdefense
 			}
 		}
 		
+		public static function sellTower(tower : Tower):void 
+		{
+			level.removeTower(tower);
+			level.money += tower.sellPrice;
+		}
+		
 		private static function isOpenNode(row:int, col:int):Boolean 
 		{
 			return (level != null && level.pathfinder.grid.getNode(row, col).isOpen());
