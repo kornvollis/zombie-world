@@ -28,7 +28,8 @@ package massdefense.units
 		
 		// Properties
 		public var angle : Number = 0;
-		public var cost : int = 50;
+		private var _cost : int = 50;
+		private var _sellPrice : int = 0;
 		private var _position : Position = new Position();
 		private var _targetList : Vector.<Creep>;
 		private var target : Creep = null;
@@ -267,6 +268,27 @@ package massdefense.units
 		public function set position(value:Position):void 
 		{
 			_position = value;
+		}
+		
+		public function get cost():int 
+		{
+			return _cost;
+		}
+		
+		public function set cost(value:int):void 
+		{
+			_cost = value;
+			sellPrice += value * 0.7;
+		}
+		
+		public function get sellPrice():int 
+		{
+			return _sellPrice;
+		}
+		
+		public function set sellPrice(value:int):void 
+		{
+			_sellPrice = value;
 		}
 	}
 }

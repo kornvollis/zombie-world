@@ -12,6 +12,10 @@ package massdefense
 
 	public class Game extends Sprite 
 	{
+		public static const FONT : String = "Pixel";
+		[Embed(source="assets/font/line_pixel-7.ttf", embedAsCFF="false", fontName="Pixel")]
+		private static const FONT_PIXEL:String;
+		
 		[Embed(source="config/units.xml", mimeType = "application/octet-stream")] 
 		public static const Units:Class;
 		public static var stage: Stage = null;

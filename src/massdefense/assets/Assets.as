@@ -15,15 +15,13 @@ package massdefense.assets
 		public static const Level_01 : Class;
 		
 		// UI/TOWER
-		[Embed(source = "images/gui/tower/tower_prop.png")]
-		public static const TowerProp : Class;
+		[Embed(source = "images/gui/tower/tower_info.png")]
+		public static const TowerInfo : Class;
 		[Embed(source = "images/gui/tower/tower_item_box.png")]
 		public static const TowerPropItem : Class;
 		// UI/TOWER
 		
 		// BUTTONS
-		[Embed(source = "images/gui/buttons/buy.png")]
-		public static const BuyButton : Class;
 		[Embed(source="images/gui/buttons/button_base.png")]
 		public static const BaseButton : Class;
 		[Embed(source = "images/gui/timecontroll/play.png")]
@@ -32,16 +30,10 @@ package massdefense.assets
 		public static const PauseButton : Class;
 		[Embed(source = "images/gui/timecontroll/play_step.png")]
 		public static const StepButton : Class;
-		[Embed(source="images/gui/buttons/default-button.png")]
-		public static const ButtonDefaultBM:Class;
-		[Embed(source = "images/gui/buttons/build-button.png")]
-		public static const ButtonBuildBM:Class;
-		[Embed(source = "images/gui/buttons/delete-button.png")]
-		public static const ButtonDeleteBM:Class;
-		[Embed(source = "images/gui/buttons/small-icon.png")]
-		public static const ButtonSmallIcon:Class;
-		[Embed(source = "images/gui/buttons/wide-button.png")]
-		public static const ButtonWide:Class;
+		[Embed(source = "images/gui/buttons/button_sell.png")]
+		public static const SellButton : Class;
+		[Embed(source = "images/gui/buttons/button_upgrade.png")]
+		public static const UpgradeButton : Class;
 		// BUTTONS
 		
 		[Embed(source = "images/projectils/simple_bullet.png")]

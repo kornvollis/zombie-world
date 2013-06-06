@@ -195,6 +195,12 @@ package massdefense.level
 			}
 		}
 		
+		public function removeTower(tower:Tower):void 
+		{
+			towers.splice(towers.indexOf(tower), 1);
+			layer_1.removeChild(tower);
+		}
+		
 		private function drawDebugWalls():void 
 		{
 			for (var i:int = 0; i < pathfinder.grid.rows; i++) 

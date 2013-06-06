@@ -2,6 +2,7 @@ package massdefense.ui
 {
 	import massdefense.assets.Assets;
 	import massdefense.level.Level;
+	import massdefense.ui.tower.TowerPanel;
 	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -17,7 +18,7 @@ package massdefense.ui
 		private var block : Button;
 		private var money : TextField;
 		private var level:Level;
-		private var _towerUpgrade : TowerUpgradePanel;
+		private var _towerUpgrade : TowerPanel;
 		
 		public function BasicUI(level:Level)
 		{
@@ -31,7 +32,7 @@ package massdefense.ui
 		
 		private function addTowerUpgradePanel():void 
 		{
-			towerUpgrade = new TowerUpgradePanel(level);
+			towerUpgrade = new TowerPanel(level);
 			addChild(towerUpgrade);
 			// towerUpgrade.x = 600;
 			towerUpgrade.y = 80;
@@ -79,12 +80,12 @@ package massdefense.ui
 			money.text = "Money: " + level.money;
 		}
 		
-		public function get towerUpgrade():TowerUpgradePanel 
+		public function get towerUpgrade():TowerPanel
 		{
 			return _towerUpgrade;
 		}
 		
-		public function set towerUpgrade(value:TowerUpgradePanel):void 
+		public function set towerUpgrade(value:TowerPanel):void 
 		{
 			_towerUpgrade = value;
 		}
