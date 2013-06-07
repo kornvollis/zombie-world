@@ -49,8 +49,10 @@ package massdefense.units
 		public var reloadTime   : Number = 2; 					// IN SECOND
 		public var timeToReload : Number = 2;
 		
+		// GRAPHICS
 		private var baseImage   : Image;
 		private var towerImage  : Image;
+		private var rangeGraphics : Sprite = new Sprite();
 		
 		public function Tower() 
 		{
@@ -81,20 +83,30 @@ package massdefense.units
 		public function upgrade():void 
 		{
 			level++;
+			
 			setTypeSpecificAttributes();
+			
+			updateRangeGraphics();
 			
 			removeChild(towerImage);
 			towerImage = new Image(Assets.getTexture(image));
 			towerImage.pivotX = 16;
 			towerImage.pivotY = 16;
+			towerImage.useHandCursor = true;
 			addChild(towerImage);
+		}
+		
+		private function updateRangeGraphics():void 
+		{
+			rangeGraphics.removeChildAt(0);
+			rangeGraphics.addChild(SimpleGraphics.drawCircle(-range, -range, range, 1, 0xff0000));
 		}
 		
 		public function addGraphics():void 
 		{
-			//drawRange();
 			baseImage = new Image(Assets.getTexture("BaseSprite"));
 			towerImage = new Image(Assets.getTexture(image));
+			addRangeGraphics();
 			
 			towerImage.pivotX = 16;
 			towerImage.pivotY = 16;
@@ -110,6 +122,14 @@ package massdefense.units
 			addEventListener(TouchEvent.TOUCH, onClick);
 		}
 		
+		private function addRangeGraphics():void 
+		{
+			addChild(rangeGraphics);
+			rangeGraphics.touchable = false;
+			rangeGraphics.visible = false;
+			rangeGraphics.addChild(SimpleGraphics.drawCircle(-range, -range, range, 1, 0xff0000));
+		}
+		
 		private function onClick(e:TouchEvent):void 
 		{
 			e.stopImmediatePropagation();
@@ -123,12 +143,6 @@ package massdefense.units
 					dispatchEvent(event);
 				}
 			}
-		}
-		
-		private function drawRange():void 
-		{
-			addChild(SimpleGraphics.drawCircle(-range, -range, this.range, 3, 0x880000, 0.2));
-			
 		}
 		
 		public function setPositionRowCol(row:Number, col:Number):void 
@@ -182,6 +196,16 @@ package massdefense.units
 					timeToReload = reloadTime;
 				}
 			}
+		}
+		
+		public function showRange():void 
+		{
+			rangeGraphics.visible = true;
+		}
+		
+		public function hideRange():void 
+		{
+			rangeGraphics.visible = false;
 		}
 		
 		private function rotateToTarget():void 

@@ -8,6 +8,8 @@ package massdefense.pathfinder
 	{
 		private var _grid : Grid = null; 
 		
+		private var waveStartNodes : Vector.<Node> = new Vector.<Node>;
+		
 		public function PathFinder() : void {}
 		
 		public function calculateNodesDistances() : void {
@@ -21,7 +23,16 @@ package massdefense.pathfinder
 				
 				expandNodeQueWithNewNodes(nodeQue, startingNode);
 			}
-			//_grid.print();
+		}
+		
+		public function isMazeBlocked(): Boolean {
+			for (var i:int = 0; i < waveStartNodes.length ; i++) 
+			{
+				if (waveStartNodes[i].distance == Node.INFINIT) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		private function expandNodeQueWithNewNodes(nodeQue : Vector.<Node>, processedNode : Node):void 
@@ -75,29 +86,44 @@ package massdefense.pathfinder
 		{
 			var actualNode : Node = grid.getNode(row, col);
 			
-			var targetNode : Node = null;
+			var targetNodes : Vector.<Node> = new Vector.<Node>;
 			
-			var nextLeft : Node = grid.leftNeighbourOfNode(actualNode);
-			if (nextLeft != null && nextLeft.distance < actualNode.distance) {
-				targetNode = nextLeft;
+			var neighbourLeft : Node = grid.leftNeighbourOfNode(actualNode);
+			if (neighbourLeft != null && neighbourLeft.distance < actualNode.distance) {
+				targetNodes.push(neighbourLeft);
 			}
 			
-			var nextRight : Node = grid.rightNeighbourOfNode(actualNode);
-			if (nextRight != null && nextRight.distance < actualNode.distance) {
-				targetNode = nextRight;
+			var neighbourRight : Node = grid.rightNeighbourOfNode(actualNode);
+			if (neighbourRight != null && neighbourRight.distance < actualNode.distance) {
+				targetNodes.push(neighbourRight);
 			}
 			
-			var nextBottom : Node = grid.bottomNeighbourOfNode(actualNode);
-			if (nextBottom != null && nextBottom.distance < actualNode.distance) {
-				targetNode = nextBottom;
+			var neighbourBottom : Node = grid.bottomNeighbourOfNode(actualNode);
+			if (neighbourBottom != null && neighbourBottom.distance < actualNode.distance) {
+				targetNodes.push(neighbourBottom);
 			}
 			
-			var nextTop : Node = grid.topNeighbourOfNode(actualNode);
-			if (nextTop != null && nextTop.distance < actualNode.distance) {
-				targetNode = nextTop;
+			var neighbourTop : Node = grid.topNeighbourOfNode(actualNode);
+			if (neighbourTop != null && neighbourTop.distance < actualNode.distance) {
+				targetNodes.push(neighbourTop);
 			}
 			
-			return targetNode;
+			return getRandomNode(targetNodes);
+		}
+		
+		public function addWaveStartNode(node:Node):void 
+		{
+			waveStartNodes.push(node);
+		}
+		
+		private function getRandomNode(targetNodes:Vector.<Node>):Node 
+		{
+			if (targetNodes.length == 0) return null;
+			if (targetNodes.length == 1) return targetNodes[0];
+			
+			var randomIndex : int = Math.floor(Math.random() * targetNodes.length);
+			
+			return targetNodes[randomIndex];
 		}
 		
 		private function getNextRandomClosestNodeOf(currentNode:Node):Node

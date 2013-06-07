@@ -39,6 +39,7 @@ package massdefense.units
 		private var graphicsPointing  : String = "right";
 		
 		private var previousPosition  : Point = new Point;
+		private var targetNode        : Node = null;
 		
 		public function Creep() {}
 		
@@ -132,14 +133,16 @@ package massdefense.units
 		{
 			if (pathfinder == null) return;
 			
-			var nextNode : Node = pathfinder.nextNode(this.row, this.col);
-			goToTheNextNode(nextNode, passedTime);
+			if(targetNode == null || (targetNode.row == row && targetNode.col == col) ) {
+				targetNode = pathfinder.nextNode(this.row, this.col);
+			}
+			goToTheNextNode(targetNode, passedTime);
 		}
 		
 		private function goToTheNextNode(nextNode:Node, passedTime : Number):void 
 		{
 			if (nextNode != null) {
-				var targetPosition : Position = pathfinder.nextNode(this.row, this.col).toPosition();
+				var targetPosition : Position = targetNode.toPosition();
 				position = Position.moveToPoint(this.position, targetPosition, this.speed, passedTime);
 			}
 		}

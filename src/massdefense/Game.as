@@ -19,25 +19,41 @@ package massdefense
 		[Embed(source="config/units.xml", mimeType = "application/octet-stream")] 
 		public static const Units:Class;
 		public static var stage: Stage = null;
-		static public var units : XML = XML(new Units());
+		public static var units : XML = XML(new Units());
 		
 		private var inputManager : InputManager;
 		private var level : Level = null;
 		private var debugUI : TimeControll = new TimeControll();
 		private var ui : BasicUI;
+		private var levelLoader:LevelLoader = new LevelLoader();
 		
 		public var paused : Boolean = false;
 		public var stepFrames : uint = 0;
 		
+		public var currentLevel : Class = LevelLoader.Level_01;
+		
 		public function Game() 
 		{
-			var levelLoader : LevelLoader = new LevelLoader();
-			level = levelLoader.createLevel(LevelLoader.Level_01);
+			level = levelLoader.createLevel(currentLevel);
 			level.init();
 			
 			level.debugDraw();
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);
+		}
+		
+		public function startGame() : void {
+			if (level != null) removeChild(level);
+			if (ui != null) removeChild(ui);
+			level = levelLoader.createLevel(currentLevel);
+			level.init();
+			
+			addUI();
+			
+			level.debugDraw();
+			addChild(level);
+			
+			inputManager = new InputManager(level, ui);
 		}
 		
 		private function onAdd(e:Event):void 
@@ -68,14 +84,14 @@ package massdefense
 			debugUI.y = 10;
 			addChild(debugUI);
 			
-			debugUI.addEventListener(TimeControll.ON_PLAY_CLICK, onTimeControllPlayClick);
+			debugUI.addEventListener(TimeControll.START_GAME_EVENT, onTimeControllStartClick);
 			debugUI.addEventListener(TimeControll.ON_PAUSE_CLICK, onTimeControllPauseClick);
 			debugUI.addEventListener(TimeControll.ON_STEP_CLICK, onTimeControllStepClick);
 		}
 		
-		private function onTimeControllPlayClick(e:Event):void 
+		private function onTimeControllStartClick(e:Event):void
 		{
-			trace("play");
+			startGame();
 		}
 		
 		private function onTimeControllPauseClick(e:Event):void 
@@ -94,10 +110,6 @@ package massdefense
 		
 		public function pauseGame() : void {
 			paused = !paused;
-		}
-		
-		public function startGame() : void {
-			
 		}
 		
 		public function loadMenu() : void {

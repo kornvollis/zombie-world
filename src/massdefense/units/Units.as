@@ -12,6 +12,19 @@ package massdefense.units
 		
 		public function Units() {}
 		
+		public static function getTowerTypes() : Vector.<String>
+		{
+			var towerTypes : Vector.<String> = new Vector.<String>;
+			
+			for each(var tower : XML in units.tower) 
+			{
+				var towerType : String = tower.attribute("type");
+				towerTypes.push(towerType);
+			}
+			
+			return towerTypes;
+		}
+		
 		public static function getTowerCost(type:String) : int  
 		{
 			return int(units.tower.(@type == type).upgradeLevel.(@num == "1").cost);
