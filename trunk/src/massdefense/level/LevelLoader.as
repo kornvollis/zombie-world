@@ -74,6 +74,12 @@ package massdefense.level
 			
 			pathfinder.grid = grid;
 			level.pathfinder = pathfinder;
+			
+			for each (var xml_wave : XML in levelData.waves.wave) 
+			{
+				var node : Node = grid.getNode(xml_wave.row, xml_wave.col);
+				pathfinder.addWaveStartNode(node);
+			}
 		}
 		
 		private function readAndSetClosedNodes(grid : Grid):void

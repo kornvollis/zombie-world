@@ -10,7 +10,7 @@ package massdefense.ui
 	public class TimeControll extends Sprite 
 	{
 		public static const ON_STEP_CLICK : String = "ON_STEP_CLICK";
-		public static const ON_PLAY_CLICK : String = "ON_PLAY_CLICK";
+		public static const START_GAME_EVENT : String = "ON_PLAY_CLICK";
 		public static const ON_PAUSE_CLICK : String = "ON_PAUSE_CLICK";
 		
 		private var play : Button;
@@ -35,7 +35,7 @@ package massdefense.ui
 			addChild(step);
 			
 			pause.addEventListener(Event.TRIGGERED, onPauseClick);
-			play.addEventListener(Event.TRIGGERED, onPlayClick);
+			play.addEventListener(Event.TRIGGERED, onStartClick);
 			step.addEventListener(Event.TRIGGERED, onStepClick);
 			
 			step.enabled = false;
@@ -47,9 +47,9 @@ package massdefense.ui
 			dispatchEvent(event);
 		}
 		
-		private function onPlayClick(e:Event):void 
+		private function onStartClick(e:Event):void 
 		{
-			var event : Event = new Event(TimeControll.ON_PLAY_CLICK);
+			var event : Event = new Event(TimeControll.START_GAME_EVENT);
 			dispatchEvent(event);
 		}
 		

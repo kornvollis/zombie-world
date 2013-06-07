@@ -156,20 +156,23 @@ package massdefense.ui.tower
 			sellButton.text = "Sell for " + price + "$";
 		}
 		
-		public function upgradeEnable(price : String) :void {
+		public function upgradeEnable() :void {
 			upgradeButton.enabled = true;
-			upgradeButton.text = "Upgrade " + price;
 		}
 		
 		public function upgradeDisable() :void {
 			upgradeButton.enabled = false;
-			upgradeButton.text = "Upgrade";
 		}
 		
 		public function setUpgradeMaxed():void 
 		{
 			upgradeButton.enabled = false;
 			upgradeButton.text = "MAX";
+		}
+		
+		public function setUpgradePrice(towerUpgradeCost:int):void 
+		{
+			upgradeButton.text = "Upgrade " + towerUpgradeCost.toString();
 		}
 	}
 

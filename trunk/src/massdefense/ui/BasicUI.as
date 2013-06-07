@@ -1,13 +1,17 @@
 package massdefense.ui 
 {
 	import massdefense.assets.Assets;
+	import massdefense.Game;
 	import massdefense.level.Level;
 	import massdefense.ui.tower.TowerPanel;
+	import massdefense.ui.tower.TowerShop;
 	import starling.display.Button;
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.utils.HAlign;
+	import starling.utils.VAlign;
 
 	public class BasicUI extends Sprite
 	{
@@ -18,41 +22,75 @@ package massdefense.ui
 		private var block : Button;
 		private var money : TextField;
 		private var level:Level;
-		private var _towerUpgrade : TowerPanel;
+		private var _towerPanel : TowerPanel;
+		private var towerShop : TowerShop;
 		
 		public function BasicUI(level:Level)
 		{
 			this.level = level;
-			addMoneyField();
-			addTowerButtons();
-			addBlockButton();
+			addMoneyField(0, 0);
+			addLifeField(0, 30);
+			addTowerButtons(170, 0);
+			addBlockButton(220, 0);
+			addTowerShop(0, 60);
+			addTowerPanel(0, 240);
+		}
+		
+		private function addTowerShop(posx : int, posy:int):void 
+		{
+			towerShop = new TowerShop();
+			addChild(towerShop);
+			towerShop.x = posx;
+			towerShop.y = posy;
+		}
+		
+		private function addLifeField(posx : int, posy:int):void 
+		{
+			var border : Image = Assets.getImage("BorderSmall");
+			border.x = posx;
+			border.y = posy;
+			addChild(border);
 			
-			addTowerUpgradePanel();
+			var hearts : Image = Assets.getImage("Hearts");
+			hearts.x = posx+3;
+			hearts.y = posy+5;
+			addChild(hearts);
 		}
 		
-		private function addTowerUpgradePanel():void 
+		private function addTowerPanel(posx : int, posy:int):void 
 		{
-			towerUpgrade = new TowerPanel(level);
-			addChild(towerUpgrade);
-			// towerUpgrade.x = 600;
-			towerUpgrade.y = 80;
+			towerPanel = new TowerPanel(level);
+			addChild(towerPanel);
+			// towerPanel.x = 600;
+			towerPanel.x = posx;
+			towerPanel.y = posy;
 		}
 		
-		private function addMoneyField():void 
+		private function addMoneyField(posx : int, posy:int):void 
 		{
-			money = new TextField(100, 30, "Money: " + level.money);
-			money.hAlign = HAlign.LEFT;
-			money.y = 50;
-			money.x = 0;
+			var border : Image = Assets.getImage("BorderSmall");
+			border.x = posx;
+			border.y = posy;
+			addChild(border);
+			
+			money = new TextField(150,26, "Money: " + level.money, Game.FONT, 26);
+			money.hAlign = HAlign.CENTER;
+			money.vAlign = VAlign.CENTER;
+			money.x = posx;
+			money.y = posy;
+			
+			//money.border = true;
 			addChild(money);
 			level.addEventListener(Level.MONEY_CHANGED, syncMoney);
 		}
 		
-		private function addTowerButtons():void 
+		private function addTowerButtons(posx:int , posy:int):void 
 		{
 			simpleTower = new Button(Assets.getTexture("BaseButton"), "T");
 			addChild(simpleTower);
 			simpleTower.addEventListener(Event.TRIGGERED, onSimpleTowerClick);
+			simpleTower.x = posx;
+			simpleTower.y = posy;
 		}
 		
 		private function onSimpleTowerClick(e:Event):void 
@@ -61,12 +99,14 @@ package massdefense.ui
 			dispatchEvent(event);
 		}
 		
-		private function addBlockButton():void 
+		private function addBlockButton(posx:int, posy:int):void 
 		{
 			block = new Button(Assets.getTexture("BaseButton"), "B");
-			block.x = 40;
+			block.x = posx;
+			block.y = posy;
 			addChild(block);
 			block.addEventListener(Event.TRIGGERED, onBlockClick);
+			
 		}
 		
 		private function onBlockClick(e:Event):void 
@@ -80,14 +120,14 @@ package massdefense.ui
 			money.text = "Money: " + level.money;
 		}
 		
-		public function get towerUpgrade():TowerPanel
+		public function get towerPanel():TowerPanel
 		{
-			return _towerUpgrade;
+			return _towerPanel;
 		}
 		
-		public function set towerUpgrade(value:TowerPanel):void 
+		public function set towerPanel(value:TowerPanel):void 
 		{
-			_towerUpgrade = value;
+			_towerPanel = value;
 		}
 		
 		

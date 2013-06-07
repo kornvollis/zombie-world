@@ -26,12 +26,14 @@ package massdefense
 		private var mouseDown : Boolean = false;
 		private var shiftDown : Boolean = false;
 		
+		private var selectedTower : Tower;
+		
 		public function InputManager(level:Level, ui:BasicUI)
 		{
 			this.ui = ui;
 			this.level = level;
 			
-			ui.addEventListener(BasicUI.SIMPLE_TOWER_CLICK, onSimpleTowerClick);
+			ui.addEventListener(BasicUI.SIMPLE_TOWER_CLICK, onTowerBuilderButtonClick);
 			ui.addEventListener(BasicUI.BLOCK_CLICK, onBlockClick);
 			level.addEventListener(TouchEvent.TOUCH, onLevelTouch);
 			level.addEventListener(Tower.TOWER_CLICKED_EVENT, onTowerClick);
@@ -41,7 +43,14 @@ package massdefense
 		
 		private function onTowerClick(e:Event):void 
 		{
-			ui.towerUpgrade.show(Tower(e.data));
+			var tower : Tower = Tower(e.data);
+			if (selectedTower != null && !(selectedTower.row == tower.row && selectedTower.col == tower.col) )
+			{
+				selectedTower.hideRange();
+			}
+			ui.towerPanel.show(Tower(e.data));
+			selectedTower = tower;
+			tower.showRange();
 		}
 		
 		private function onKeyUp(e:KeyboardEvent):void 
@@ -54,7 +63,7 @@ package massdefense
 			shiftDown = e.shiftKey;
 		}
 		
-		private function onSimpleTowerClick(e:Event):void {state = SIMPLE_TOWER_BUILD;}
+		private function onTowerBuilderButtonClick(e:Event):void {state = SIMPLE_TOWER_BUILD;}
 		
 		private function onBlockClick(e:Event):void {state = BLOCK_BUILDER}
 		
@@ -68,8 +77,8 @@ package massdefense
 				
 				if (touch.phase == TouchPhase.ENDED) 
 				{
-					ui.towerUpgrade.hide();
-					
+					ui.towerPanel.hide();
+					if(selectedTower != null) { selectedTower.hideRange(); }
 					onLevelClick(clickPos);
 				} else if (touch != null && touch.phase == TouchPhase.MOVED && shiftDown) {
 					onLevelClick(clickPos);

@@ -14,6 +14,24 @@ package massdefense.assets
 		[Embed(source="images/levels/level_01.PNG")]
 		public static const Level_01 : Class;
 		
+		// BORDER
+		[Embed(source = "images/gui/border_small.png")]
+		public static const BorderSmall : Class;
+		[Embed(source="images/gui/hearts.png")]
+		public static const Hearts : Class;
+		// BORDER
+		
+		// UI/TOWER_BUILD
+		[Embed(source = "images/gui/tower_build/menu_arrow.png")]
+		public static const MenuArrowUp : Class;
+		[Embed(source = "images/gui/tower_build/tower_buy_border.png")]
+		public static const TowerBuyBorder : Class;
+		[Embed(source="images/gui/tower_build/tower_buy_panel.png")]
+		public static const TowerBuilderBG : Class;
+		[Embed(source = "images/gui/tower_build/menu_arrow_down.png")]
+		public static const MenuArrowDown : Class;
+		// UI/TOWER_BUILD
+		
 		// UI/TOWER
 		[Embed(source = "images/gui/tower/tower_info.png")]
 		public static const TowerInfo : Class;
@@ -61,9 +79,6 @@ package massdefense.assets
 		
 		[Embed(source = "images/blocks/block_01.png")]
 		public static const Block01:Class;
-		
-		[Embed(source = "images/gui/popup.png")]
-		public static const PopUp:Class;
 		
 		[Embed(source = "images/towers/base.png")]
 		public static const BaseSprite:Class;

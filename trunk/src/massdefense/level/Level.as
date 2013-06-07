@@ -159,11 +159,17 @@ package massdefense.level
 		
 		public function addTower(tower:Tower):void 
 		{
-			towers.push(tower);
-			tower.targetList = creeps;
-			
 			pathfinder.grid.getNode(tower.row, tower.col).close();
 			pathfinder.calculateNodesDistances();
+			
+			if (pathfinder.isMazeBlocked()) {
+				pathfinder.grid.getNode(tower.row, tower.col).open();
+				pathfinder.calculateNodesDistances();
+				return;
+			}
+			
+			towers.push(tower);
+			tower.targetList = creeps;
 			
 			if (!TestSuit.isTestRun) {
 				tower.addGraphics();
@@ -184,10 +190,16 @@ package massdefense.level
 		
 		public function addBlock(block:Block):void 
 		{
-			blocks.push(block);
-			
 			pathfinder.grid.getNode(block.row, block.col).close();
 			pathfinder.calculateNodesDistances();
+			
+			if (pathfinder.isMazeBlocked()) {
+				pathfinder.grid.getNode(block.row, block.col).open();
+				pathfinder.calculateNodesDistances();
+				return;
+			}
+			
+			blocks.push(block);
 			
 			if (!TestSuit.isTestRun) {
 				block.addGraphics();
@@ -197,8 +209,12 @@ package massdefense.level
 		
 		public function removeTower(tower:Tower):void 
 		{
+			
 			towers.splice(towers.indexOf(tower), 1);
 			layer_1.removeChild(tower);
+			
+			pathfinder.grid.getNode(tower.row, tower.col).open();
+			pathfinder.calculateNodesDistances();
 		}
 		
 		private function drawDebugWalls():void 
