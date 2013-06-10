@@ -19,7 +19,7 @@ package massdefense.units
 	
 	public class Tower extends Sprite 
 	{
-		public static const TOWER_CLICKED_EVENT : String = "TOWER_CLICKED";
+		public static const CLICK : String = "TOWER_CLICKED";
 		public static const SIMPLE_TOWER : String = "simpleTower";
 		
 		
@@ -139,7 +139,7 @@ package massdefense.units
 			if (touch != null) 
 			{
 				if (touch.phase == TouchPhase.ENDED) {
-					var event : Event = new Event(TOWER_CLICKED_EVENT, true, this);
+					var event : Event = new Event(CLICK, true, this);
 					dispatchEvent(event);
 				}
 			}

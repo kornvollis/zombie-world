@@ -37,7 +37,8 @@ package massdefense.ui.tower
 			
 			for (var i:int = 0; i < towerTypes.length ; i++) 
 			{
-				towerButtons[i].addChild(Units.getTowerImage(towerTypes[0], 1));
+				towerButtons[i].addChild(Units.getTowerImage(towerTypes[i], 1));
+				towerButtons[i].type = towerTypes[i];
 			}
 		}
 		

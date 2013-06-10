@@ -21,6 +21,7 @@ package massdefense.level
 	{
 		public static const STEP_FRAMES : uint = 10;
 		public static const MONEY_CHANGED:String = "moneyChanged";
+		static public const LIFE_LOST:String = "lifeLost";
 		
 		// LEVEL LOADER
 		// private var _levelData : XML;
@@ -288,7 +289,7 @@ package massdefense.level
 		public function set life(value:uint):void 
 		{
 			_life = value;
-			if(lifeDisplay != null)	lifeDisplay.text = "Life: " + _life;
+			dispatchEvent(new Event(LIFE_LOST));
 		}
 		
 		public function get money():int 

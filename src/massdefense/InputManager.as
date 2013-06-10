@@ -5,6 +5,7 @@ package massdefense
 	import massdefense.misc.Position;
 	import massdefense.pathfinder.Node;
 	import massdefense.ui.BasicUI;
+	import massdefense.ui.tower.TowerShopButton;
 	import massdefense.units.Tower;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -27,6 +28,7 @@ package massdefense
 		private var shiftDown : Boolean = false;
 		
 		private var selectedTower : Tower;
+		private var towerToBuild : String = "";
 		
 		public function InputManager(level:Level, ui:BasicUI)
 		{
@@ -35,10 +37,17 @@ package massdefense
 			
 			ui.addEventListener(BasicUI.SIMPLE_TOWER_CLICK, onTowerBuilderButtonClick);
 			ui.addEventListener(BasicUI.BLOCK_CLICK, onBlockClick);
+			ui.addEventListener(TowerShopButton.CLICK, onTowerBuyClick);
 			level.addEventListener(TouchEvent.TOUCH, onLevelTouch);
-			level.addEventListener(Tower.TOWER_CLICKED_EVENT, onTowerClick);
+			level.addEventListener(Tower.CLICK, onTowerClick);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyUp);
+		}
+		
+		private function onTowerBuyClick(e:Event):void 
+		{
+			state = SIMPLE_TOWER_BUILD;
+			towerToBuild = String(e.data);
 		}
 		
 		private function onTowerClick(e:Event):void 
@@ -92,7 +101,7 @@ package massdefense
 			var clickedCol : int = int(clickPos.x / Node.NODE_SIZE);
 			
 			if (state == SIMPLE_TOWER_BUILD) {
-				Factory.addTower(clickedRow, clickedCol, "simpleTower");
+				Factory.addTower(clickedRow, clickedCol, towerToBuild);
 			} else if (state == BLOCK_BUILDER) {
 				Factory.addBlock(clickedRow, clickedCol, "simpleBlock");
 			}
