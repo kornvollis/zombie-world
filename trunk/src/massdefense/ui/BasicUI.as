@@ -1,5 +1,6 @@
 package massdefense.ui 
 {
+	import flash.geom.Point;
 	import massdefense.assets.Assets;
 	import massdefense.Game;
 	import massdefense.level.Level;
@@ -24,6 +25,7 @@ package massdefense.ui
 		private var level:Level;
 		private var _towerPanel : TowerPanel;
 		private var towerShop : TowerShop;
+		private var hearts:Image;
 		
 		public function BasicUI(level:Level)
 		{
@@ -34,6 +36,14 @@ package massdefense.ui
 			addBlockButton(220, 0);
 			addTowerShop(0, 60);
 			addTowerPanel(0, 240);
+			
+			level.addEventListener(Level.LIFE_LOST, onLifeLost);
+		}
+		
+		private function onLifeLost(e:Event):void 
+		{
+			hearts.setTexCoords(1, new Point(0, 0.5));
+			hearts.setTexCoords(2,new Point(1,0.5));
 		}
 		
 		private function addTowerShop(posx : int, posy:int):void 
@@ -51,7 +61,7 @@ package massdefense.ui
 			border.y = posy;
 			addChild(border);
 			
-			var hearts : Image = Assets.getImage("Hearts");
+			hearts = Assets.getImage("Hearts");
 			hearts.x = posx+3;
 			hearts.y = posy+5;
 			addChild(hearts);
