@@ -2,7 +2,9 @@ package massdefense.units
 {
 	import massdefense.assets.Assets;
 	import massdefense.Factory;
+	import massdefense.Game;
 	import massdefense.misc.Position;
+	import massdefense.Utils;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	
@@ -12,32 +14,32 @@ package massdefense.units
 	 */
 	public class Projectil extends Sprite 
 	{
-		
 		public var target : Creep = null;
-		public var speed : Number = 350;
-		public var damage : uint = 1;
 		private var _position : Position = new Position;
+		public var bulletProperties : BulletProperties;
 		
-		public function Projectil() 
+		public function Projectil(target : Creep, position : Position, bulletProperties : BulletProperties) 
 		{
+			this.bulletProperties = bulletProperties;
+			this.position = position;
+			this.target = target;
 			
 		}
-		
+
 		public function update(passedTime:Number) : void {
 			if (target != null)
 			{
-				
-				position  = Position.moveToPoint(this.position, target.position, speed, passedTime);
+				position  = Position.moveToPoint(this.position, target.position, bulletProperties.speed, passedTime);
 				
 				if (Position.distance(this.position, target.position) < 6) {
-					target.health -= this.damage;
-					Factory.removeProjectil(this);
+					Factory.calculateBulletHitOn(this,target);
 				}
 			}
 		}
 		
 		public function addGraphics() : void {
-			var bullet : Image = new Image(Assets.getTexture("SimpleBullet"));
+			var bullet : Image = Assets.getImage(bulletProperties.image);
+			Utils.centerPivot(bullet);
 			addChild(bullet);
 		}
 		

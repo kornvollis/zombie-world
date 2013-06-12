@@ -2,6 +2,7 @@ package massdefense.ui.tower
 {
 	import massdefense.assets.Assets;
 	import massdefense.Game;
+	import massdefense.Utils;
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -119,11 +120,27 @@ package massdefense.ui.tower
 			towerFireRate.x = towerDamage.x; towerFireRate.y = towerRange.y + verticalGap;
 		}
 		
+		public function hideUpgradeButton() : void {
+			upgradeButton.visible = false;
+		}
+		
+		public function hideSellButton() : void {
+			sellButton.visible = false;
+		}
+		
+		public function showUpgradeButton() : void {
+			upgradeButton.visible = true;
+		}
+		
+		public function showSellButton() : void {
+			sellButton.visible = true;
+		}
+		
 		public function setTowerImage(image : Image) : void {
 			if (towerImage != null) removeChild(towerImage);
 			this.towerImage = image;
-			towerImage.pivotX = 16;
-			towerImage.pivotY = 16;
+			Utils.centerPivot(this.towerImage);
+			
 			addChild(towerImage);
 			towerImage.x = 20;
 			towerImage.y = 20;

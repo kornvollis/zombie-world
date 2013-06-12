@@ -10,17 +10,16 @@ package massdefense
 		private var _timeToNextSpawn : Number;
 		
 		private var _remainingCreepsToSpawn : uint;
-		public var startAfterSecond : int;
+		public var startAfterSecond : Number;
 		public var delayBetweenSpawns : Number;
 		
 		public var row : int;
 		public var col : int;
 		public var type  : String;		
+		public var repeat : int;
+		public var repeatAfter : Number;
 		
-		public function Wave() 
-		{
-			
-		}
+		public function Wave() { }
 		
 		private function spawnCreep():void 
 		{
@@ -32,14 +31,23 @@ package massdefense
 			Factory.spawnCreep(creepAttributes);
 		}
 		
-		private function startWave(e:TimerEvent):void 
+		public function update(passedTime:Number):void 
 		{
-			//spawnTimer.start();
-		}
-		
-		public function reset() : void {
-			remainingCreepsToSpawn = creepsToSpawn;
-			timeToNextSpawn = startAfterSecond;
+			if (repeat > 0) {
+				timeToNextSpawn -= passedTime;
+				
+				if (_timeToNextSpawn < 0 && remainingCreepsToSpawn > 0) {
+					spawnCreep();
+					timeToNextSpawn = delayBetweenSpawns;
+					remainingCreepsToSpawn--;
+				}
+				
+				if (remainingCreepsToSpawn == 0) {
+					repeat--;
+					timeToNextSpawn = repeatAfter;
+					remainingCreepsToSpawn = creepsToSpawn;
+				}
+			}
 		}
 		
 		public function get timeToNextSpawn():Number 
@@ -47,16 +55,9 @@ package massdefense
 			return _timeToNextSpawn;
 		}
 		
-		public function set timeToNextSpawn(value:Number):void 
+		public function set timeToNextSpawn(timePassed:Number):void 
 		{
-			_timeToNextSpawn = value;
-			
-			if (_timeToNextSpawn < 0 && remainingCreepsToSpawn > 0) {
-				spawnCreep();
-				_timeToNextSpawn = delayBetweenSpawns;
-				remainingCreepsToSpawn--;
-			}
-			
+			_timeToNextSpawn = timePassed;
 		}
 		
 		public function get creepsToSpawn():uint 
@@ -67,7 +68,6 @@ package massdefense
 		public function set creepsToSpawn(numberOfCreeps:uint):void 
 		{
 			_creepsToSpawn = numberOfCreeps;
-			remainingCreepsToSpawn = numberOfCreeps;
 		}
 		
 		public function get remainingCreepsToSpawn():uint 

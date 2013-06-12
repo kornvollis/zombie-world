@@ -12,7 +12,7 @@ package massdefense.ui.tower
 	{
 		private var towerInformation : TowerInformation;
 
-		private var tower : Tower;
+		private var _tower : Tower;
 		private var level:Level;
 		
 		public function TowerPanel(level:Level)
@@ -44,7 +44,7 @@ package massdefense.ui.tower
 		{
 			tower.upgrade();
 			level.money -= tower.cost;
-			updateTowerInformations(tower);
+			updateTowerInformations(tower.type, tower.level);
 		}
 		
 		private function onTowerSell(e:Event):void 
@@ -53,35 +53,64 @@ package massdefense.ui.tower
 			hide();
 		}
 		
-		public function show(tower:Tower):void 
+		public function show(type : String, level:uint):void 
 		{
 			this.visible = true;
-			this.tower = tower;
-			updateTowerInformations(tower);
+			updateTowerInformations(type, level);
 		}
 		
-		private function updateTowerInformations(tower:Tower):void 
+		private function updateTowerInformations(type:String, level:uint):void 
 		{
-			if (tower.level == Units.getTowerMaxLevel(tower.type)) {
+			if (level == Units.getTowerMaxLevel(type)) {
 				towerInformation.setUpgradeMaxed();
 			} else {
-				towerInformation.setUpgradePrice(Units.getTowerUpgradeCost(tower.type, tower.level + 1));
+				towerInformation.setUpgradePrice(Units.getTowerUpgradeCost(type, level + 1));
 				onMoneyChange(null);
 			}
 			
-			towerInformation.setTowerName(Units.getTowerName(tower.type));
-			towerInformation.setTowerLevel(tower.level);
-			towerInformation.setTowerImage(Units.getTowerImage(tower.type, tower.level));
+			towerInformation.setTowerName(Units.getTowerName(type));
+			towerInformation.setTowerLevel(level);
+			towerInformation.setTowerImage(Units.getTowerImage(type, level));
 			
-			towerInformation.setTowerDamage(tower.damage);
-			towerInformation.setTowerRange(tower.range);
-			towerInformation.setTowerFireRate(tower.reloadTime);
+			towerInformation.setTowerDamage(Units.getTowerDamage(type, level));
+			towerInformation.setTowerRange(Units.getTowerRange(type, level));
+			towerInformation.setTowerFireRate(Units.getTowerReloadTime(type, level));
 			//towerInformation.setSellPrice(tower.sellPrice.toString());
 		}
 		
 		public function hide():void 
 		{
 			this.visible = false;
+		}
+		
+		public function hideUpgradeButton():void 
+		{
+			towerInformation.hideUpgradeButton();
+		}
+		
+		public function hideSellButton():void 
+		{
+			towerInformation.hideSellButton();
+		}
+		
+		public function showUpgradeButton():void 
+		{
+			towerInformation.showUpgradeButton();
+		}
+		
+		public function showSellButton():void 
+		{
+			towerInformation.showSellButton();
+		}
+		
+		public function get tower():Tower 
+		{
+			return _tower;
+		}
+		
+		public function set tower(value:Tower):void 
+		{
+			_tower = value;
 		}
 		
 	}

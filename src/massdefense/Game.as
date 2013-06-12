@@ -2,7 +2,7 @@ package massdefense
 {
 	import massdefense.level.Level;
 	import massdefense.level.LevelLoader;
-	import massdefense.ui.BasicUI;
+	import massdefense.ui.UI;
 	import massdefense.ui.TimeControll;
 	import starling.display.Sprite;
 	import starling.display.Stage;
@@ -24,7 +24,7 @@ package massdefense
 		private var inputManager : InputManager;
 		private var level : Level = null;
 		private var debugUI : TimeControll = new TimeControll();
-		private var ui : BasicUI;
+		private var ui : UI;
 		private var levelLoader:LevelLoader = new LevelLoader();
 		
 		public var paused : Boolean = false;
@@ -72,7 +72,7 @@ package massdefense
 		
 		private function addUI():void 
 		{
-			ui = new BasicUI(level);
+			ui = new UI(level);
 			ui.x = 650;
 			ui.y = 50;
 			addChild(ui);
