@@ -128,30 +128,36 @@
 		<node row = '14' col = '19' />
 	</closed_nodes>
 	
-	<towers>
-		<tower>
-			<type>simpleTower</type>
-			<row>8</row>
-			<col>8</col>
-		</tower>
-	</towers>
-	
 	<waves>
 		<wave>
 			<row>19</row>
 			<col>0</col>
 			<type>duck_00</type>
-			<startInSecond>0</startInSecond>
-			<creepsToSpawn>50</creepsToSpawn>
-			<delayBetweenSpansInSecond>2</delayBetweenSpansInSecond>
+			<repeat>10</repeat>
+			<repeatAfter>10</repeatAfter>
+			<startInSecond>3</startInSecond>
+			<creepsToSpawn>15</creepsToSpawn>
+			<delayBetweenSpansInSecond>0.2</delayBetweenSpansInSecond>
 		</wave>
 		<wave>
 			<row>19</row>
-			<col>9</col>
-			<type>goat_00</type>
-			<startInSecond>0</startInSecond>
-			<creepsToSpawn>10</creepsToSpawn>
-			<delayBetweenSpansInSecond>10</delayBetweenSpansInSecond>
+			<col>10</col>
+			<type>deer_00</type>
+			<repeat>10</repeat>
+			<repeatAfter>10</repeatAfter>
+			<startInSecond>6</startInSecond>
+			<creepsToSpawn>5</creepsToSpawn>
+			<delayBetweenSpansInSecond>0.6</delayBetweenSpansInSecond>
+		</wave>
+		<wave>
+			<row>19</row>
+			<col>8</col>
+			<type>croco_00</type>
+			<repeat>10</repeat>
+			<repeatAfter>10</repeatAfter>
+			<startInSecond>15</startInSecond>
+			<creepsToSpawn>3</creepsToSpawn>
+			<delayBetweenSpansInSecond>1</delayBetweenSpansInSecond>
 		</wave>
 	</waves>
 	

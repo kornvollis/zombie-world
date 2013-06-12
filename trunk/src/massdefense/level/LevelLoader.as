@@ -52,6 +52,9 @@ package massdefense.level
 				wave.delayBetweenSpawns  = xml_wave.delayBetweenSpansInSecond;
 				wave.timeToNextSpawn = wave.startAfterSecond;
 				wave.creepsToSpawn = xml_wave.creepsToSpawn;
+				wave.remainingCreepsToSpawn = xml_wave.creepsToSpawn;
+				wave.repeat = xml_wave.repeat;
+				wave.repeatAfter = xml_wave.repeatAfter;
 				
 				level.waves.push(wave);
 			}

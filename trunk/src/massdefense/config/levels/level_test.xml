@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<level>
+	<rows>20</rows>
+	<cols>20</cols>
+	<cellSize>32</cellSize>
+	<money>200</money>
+	<life>5</life>
+	
+	<start_nodes>
+		<node row = '0' col = '0' />
+		<node row = '1' col = '0' />
+		<node row = '2' col = '0' />
+	</start_nodes>
+	
+	<closed_nodes>
+		<node row = '5' col = '0' />
+		<node row = '5' col = '1' />
+		<node row = '5' col = '2' />
+		<node row = '5' col = '3' />
+		<node row = '5' col = '4' />
+		<node row = '5' col = '5' />
+		<node row = '5' col = '6' />
+		<node row = '5' col = '7' />
+		<node row = '5' col = '8' />
+		<node row = '5' col = '9' />
+		<node row = '5' col = '10' />
+		<node row = '5' col = '11' />
+		<node row = '5' col = '12' />
+		<node row = '5' col = '13' />
+		<node row = '5' col = '14' />
+		<node row = '5' col = '15' />
+		<node row = '5' col = '18' />
+		<node row = '5' col = '19' />
+		
+		<node row = '6' col = '0' />
+		<node row = '6' col = '1' />
+		<node row = '6' col = '2' />
+		<node row = '6' col = '3' />
+		<node row = '6' col = '4' />
+		<node row = '6' col = '5' />
+		<node row = '6' col = '6' />
+		<node row = '6' col = '7' />
+		<node row = '6' col = '8' />
+		<node row = '6' col = '9' />
+		<node row = '6' col = '10' />
+		<node row = '6' col = '11' />
+		<node row = '6' col = '12' />
+		<node row = '6' col = '13' />
+		<node row = '6' col = '14' />
+		<node row = '6' col = '15' />
+		<node row = '6' col = '18' />
+		<node row = '6' col = '19' />
+		
+		<node row = '7' col = '0' />
+		<node row = '7' col = '1' />
+		<node row = '7' col = '2' />
+		<node row = '7' col = '3' />
+		<node row = '7' col = '4' />
+		<node row = '7' col = '5' />
+		<node row = '7' col = '6' />
+		<node row = '7' col = '7' />
+		<node row = '7' col = '8' />
+		<node row = '7' col = '9' />
+		<node row = '7' col = '10' />
+		<node row = '7' col = '11' />
+		<node row = '7' col = '12' />
+		<node row = '7' col = '13' />
+		<node row = '7' col = '14' />
+		<node row = '7' col = '15' />
+		<node row = '7' col = '18' />
+		<node row = '7' col = '19' />
+		
+		<node row = '16' col = '0' />
+		<node row = '16' col = '1' />
+		<node row = '16' col = '4' />
+		<node row = '16' col = '5' />
+		<node row = '16' col = '6' />
+		<node row = '16' col = '7' />
+		<node row = '16' col = '8' />
+		<node row = '16' col = '9' />
+		<node row = '16' col = '10' />
+		<node row = '16' col = '11' />
+		<node row = '16' col = '12' />
+		<node row = '16' col = '13' />
+		<node row = '16' col = '14' />
+		<node row = '16' col = '15' />
+		<node row = '16' col = '16' />
+		<node row = '16' col = '17' />
+		<node row = '16' col = '18' />
+		<node row = '16' col = '19' />
+		
+		<node row = '15' col = '0' />
+		<node row = '15' col = '1' />
+		<node row = '15' col = '4' />
+		<node row = '15' col = '5' />
+		<node row = '15' col = '6' />
+		<node row = '15' col = '7' />
+		<node row = '15' col = '8' />
+		<node row = '15' col = '9' />
+		<node row = '15' col = '10' />
+		<node row = '15' col = '11' />
+		<node row = '15' col = '12' />
+		<node row = '15' col = '13' />
+		<node row = '15' col = '14' />
+		<node row = '15' col = '15' />
+		<node row = '15' col = '16' />
+		<node row = '15' col = '17' />
+		<node row = '15' col = '18' />
+		<node row = '15' col = '19' />
+		
+		<node row = '14' col = '0' />
+		<node row = '14' col = '1' />
+		<node row = '14' col = '4' />
+		<node row = '14' col = '5' />
+		<node row = '14' col = '6' />
+		<node row = '14' col = '7' />
+		<node row = '14' col = '8' />
+		<node row = '14' col = '9' />
+		<node row = '14' col = '10' />
+		<node row = '14' col = '11' />
+		<node row = '14' col = '12' />
+		<node row = '14' col = '13' />
+		<node row = '14' col = '14' />
+		<node row = '14' col = '15' />
+		<node row = '14' col = '16' />
+		<node row = '14' col = '17' />
+		<node row = '14' col = '18' />
+		<node row = '14' col = '19' />
+	</closed_nodes>
+	
+	<towers>
+		<tower>
+			<type>beamTower</type>
+			<row>8</row>
+			<col>8</col>
+		</tower>
+	</towers>
+	
+	<waves>
+		<wave>
+			<row>19</row>
+			<col>0</col>
+			<type>duck_00</type>
+			<startInSecond>0</startInSecond>
+			<creepsToSpawn>10</creepsToSpawn>
+			<delayBetweenSpansInSecond>0.5</delayBetweenSpansInSecond>
+		</wave>
+	</waves>
+	
+	<exits>
+	</exits>	
+	
+</level>

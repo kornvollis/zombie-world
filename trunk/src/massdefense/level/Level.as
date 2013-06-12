@@ -1,5 +1,6 @@
 package massdefense.level 
 {
+	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import massdefense.Block;
 	import massdefense.misc.SimpleGraphics;
@@ -60,6 +61,8 @@ package massdefense.level
 			addChild(layer_0);
 			addChild(layer_1);
 			addChild(layer_2);
+			
+			addChild(SimpleGraphics.drawLineFromTo(new Point(0, 0), new Point(0, 100), 1, 0x990000));
 		}
 		
 		public function play() : void {
@@ -92,9 +95,10 @@ package massdefense.level
 				
 			for each (var wave: Wave in waves) 
 			{
-				if(wave.remainingCreepsToSpawn > 0) {
-					wave.timeToNextSpawn -= passedTime;
-				}
+				wave.update(passedTime)
+				//if(wave.remainingCreepsToSpawn > 0) {
+				//	wave.timeToNextSpawn -= passedTime;
+				//}
 			}
 			
 			for each (var tower: Tower in towers) 
@@ -141,14 +145,6 @@ package massdefense.level
 			towers      = new Vector.<Tower>;
 			projectils  = new Vector.<Projectil>;
 			waves       = new Vector.<Wave>;
-		}
-		
-		private function resetWaves():void 
-		{
-			for each (var wave: Wave in waves) 
-			{
-				wave.reset();
-			}
 		}
 		
 		public function debugDraw() : void 
@@ -216,6 +212,22 @@ package massdefense.level
 			
 			pathfinder.grid.getNode(tower.row, tower.col).open();
 			pathfinder.calculateNodesDistances();
+		}
+		
+		public function addProjectil(projectil : Projectil):void 
+		{
+			projectils.push(projectil);
+			
+			if (!TestSuit.isTestRun) {
+				layer_1.addChild(projectil);
+				projectil.addGraphics();
+			}
+		}
+		
+		public function removeProjectil(projectil:Projectil):void 
+		{
+			projectils.splice(projectils.indexOf(projectil), 1);
+			layer_1.removeChild(projectil);
 		}
 		
 		private function drawDebugWalls():void 
@@ -289,7 +301,7 @@ package massdefense.level
 		public function set life(value:uint):void 
 		{
 			_life = value;
-			dispatchEvent(new Event(LIFE_LOST));
+			dispatchEvent(new Event(LIFE_LOST, true, _life));
 		}
 		
 		public function get money():int 

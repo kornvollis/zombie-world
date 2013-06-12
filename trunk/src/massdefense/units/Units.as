@@ -37,6 +37,11 @@ package massdefense.units
 			
 			return image;
 		}
+			
+		public static function getTowerFireType(type:String):String
+		{
+			return String(units.tower.(@type == type).fireType);
+		}
 		
 		public static function getTowerMaxLevel(type:String) : int 
 		{

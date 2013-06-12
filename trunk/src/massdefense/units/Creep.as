@@ -23,12 +23,11 @@ package massdefense.units
 		private var _pathfinder       : PathFinder = null;
 		
 		public var type 			  : String = "";
-		public var pathPosition       : uint = 0;
 		public var state			  : String = ALIVE;
 		public var speed              : int = 90;
 		public var rewardMoney        : int = 5;
-		public var maxHealth          : int = 4;
-		private var _health           : int = 4;
+		public var maxHealth          : Number = 4;
+		private var _health           : Number = 4;
 		public var distanceFromTarget : Number;
 		
 		private var _row 			  : int;
@@ -90,7 +89,8 @@ package massdefense.units
 			healthBar.x = -10;
 			healthBar.y = -22;
 			healthBar.addGraphics();
-			//addChild(healthBar);
+			addChild(healthBar);
+			healthBar.visible = false;
 			
 			creepGraphics.useHandCursor = true;
 		}
@@ -202,15 +202,16 @@ package massdefense.units
 			this.y = pos.y;
 		}
 		
-		public function get health():int 
+		public function get health():Number 
 		{
 			return _health;
 		}
 		
-		public function set health(value:int):void 
+		public function set health(value:Number):void 
 		{
 			_health = value;
 			healthBar.setHpPercent(health / maxHealth);
+			if (_health < maxHealth) healthBar.visible = true;
 		}
 		
 		public function get pathfinder():PathFinder 

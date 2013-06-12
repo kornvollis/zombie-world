@@ -1,15 +1,20 @@
 package massdefense.units 
 {
 	import adobe.utils.ProductManager;
+	import com.greensock.TweenLite;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import flexunit.utils.ArrayList;
 	import massdefense.assets.Assets;
+	import massdefense.bullets.Beam;
 	import massdefense.Factory;
 	import massdefense.Game;
 	import massdefense.misc.Position;
 	import massdefense.misc.SimpleGraphics;
 	import massdefense.pathfinder.Node;
+	import starling.animation.Transitions;
+	import starling.animation.Tween;
+	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -19,6 +24,11 @@ package massdefense.units
 	
 	public class Tower extends Sprite 
 	{
+		// FIRE TYPES
+		public static const FT_POINT     : String = "ft_point";
+		public static const FT_BEAM      : String = "ft_beam";
+		public static const FT_DIRECTION : String = "ft_direction";
+		
 		public static const CLICK : String = "TOWER_CLICKED";
 		public static const SIMPLE_TOWER : String = "simpleTower";
 		
@@ -32,6 +42,8 @@ package massdefense.units
 		private var _sellPrice : int = 0;
 		private var _position : Position = new Position();
 		private var _targetList : Vector.<Creep>;
+		private var splash : Boolean = false;
+		private var splashRange : int = 0;
 		private var target : Creep = null;
 		public var type : String = "";
 		
@@ -43,21 +55,22 @@ package massdefense.units
 		private var _showRange : Boolean = true;
 		
 		// RELOAD && FIRE
-		public var damage       : uint = 1;
+		public var fireType     : String = FT_POINT;
+		public var damage       : Number = 1;
 		public var range        : uint = 250;
 		public var reloaded     : Boolean = true;
 		public var reloadTime   : Number = 2; 					// IN SECOND
 		public var timeToReload : Number = 2;
+		// BEAM
+		private var beam : Beam = null;
 		
 		// GRAPHICS
 		private var baseImage   : Image;
 		private var towerImage  : Image;
 		private var rangeGraphics : Sprite = new Sprite();
+		private var bulletGraphics : String = "";
 		
-		public function Tower() 
-		{
-			
-		}
+		public function Tower() {}
 		
 		public function init(row:int, col:int, type:String = ""):void 
 		{
@@ -66,11 +79,17 @@ package massdefense.units
 			this.type = type;
 			
 			setTypeSpecificAttributes();
+			
+			if (fireType == FT_BEAM) {
+				beam = new Beam(position);
+			}
 		}
 		
 		private function setTypeSpecificAttributes():void 
 		{
 			var towerProps : XMLList = Units.getTowerTypeAtUpgradeLevel(type, level);
+			
+			fireType = Units.getTowerFireType(type);
 			
 			for each(var typeSpecPropety : XML in towerProps) 
 			{
@@ -90,8 +109,8 @@ package massdefense.units
 			
 			removeChild(towerImage);
 			towerImage = new Image(Assets.getTexture(image));
-			towerImage.pivotX = 16;
-			towerImage.pivotY = 16;
+			towerImage.pivotX = towerImage.width*0.5;
+			towerImage.pivotY = towerImage.height*0.5;
 			towerImage.useHandCursor = true;
 			addChild(towerImage);
 		}
@@ -108,13 +127,15 @@ package massdefense.units
 			towerImage = new Image(Assets.getTexture(image));
 			addRangeGraphics();
 			
-			towerImage.pivotX = 16;
-			towerImage.pivotY = 16;
+			towerImage.pivotX = towerImage.width*0.5;
+			towerImage.pivotY = towerImage.height*0.5;
 			baseImage.pivotX = 16;
 			baseImage.pivotY = 16;
 			
 			addChild(baseImage);
+			if(fireType == FT_BEAM) addChild(beam);
 			addChild(towerImage);
+			
 			
 			baseImage.useHandCursor = true;
 			towerImage.useHandCursor = true;
@@ -158,12 +179,17 @@ package massdefense.units
 			
 			if(target == null || outOfRange(target) || target.health <= 0 ) {
 				target = findTheFirstTargetInRange();
+				if (fireType == FT_BEAM) {
+					
+				}
 			}
 			
 			if (target != null) {
-				rotateToTarget();
-				if(reloaded) fire();
+				rotateTurretToTarget();
+				if (reloaded) fire(timeElapssed);
 			}
+			
+			if (beam != null) beam.update(timeElapssed);
 		}
 		
 		private function checkIfTargetIsAlive():void 
@@ -208,7 +234,7 @@ package massdefense.units
 			rangeGraphics.visible = false;
 		}
 		
-		private function rotateToTarget():void 
+		private function rotateTurretToTarget():void 
 		{
 			var vect : Point = new Point;
 			vect.x = target.x - this.x;
@@ -233,17 +259,39 @@ package massdefense.units
 			return null;
 		}
 		
-		private function fire():void 
+		private function fire(timeElapssed:Number):void 
 		{
-			// target.life -= this.damage;
-			var projAttr : Dictionary = new Dictionary();
-			projAttr["posx"] = this.x;
-			projAttr["posy"] = this.y;
-			projAttr["target"] = target;
-			projAttr["damage"] = this.damage;
+			switch (fireType) 
+			{
+				case FT_POINT:
+					pointFire();
+				break;
+				case FT_BEAM:
+					beamFire(timeElapssed);
+				break;
+				default:
+			}
+		}
+		
+		private function beamFire(timeElapssed:Number):void 
+		{
+			beam.beamReleased = true;
+			beam.target = target;
+
+			target.health -= damage * timeElapssed;
+		}
+		
+		private function pointFire():void 
+		{
+			var towerPosition : Position = new Position;
+			towerPosition.x = x; towerPosition.y = y;
+			var bulletPorperties : BulletProperties = new BulletProperties;
+			bulletPorperties.damage = damage;
+			bulletPorperties.image = bulletGraphics;
+			bulletPorperties.splash = splash;
+			bulletPorperties.splashRange = this.splashRange;
 			
-			Factory.addProjectil(projAttr);
-			//target.life -= 1;
+			Factory.addProjectil(target, towerPosition, bulletPorperties);
 			
 			reloaded = false;
 			timeToReload = reloadTime;

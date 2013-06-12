@@ -4,8 +4,8 @@ package massdefense
 	import massdefense.level.Level;
 	import massdefense.misc.Position;
 	import massdefense.pathfinder.Node;
-	import massdefense.ui.BasicUI;
-	import massdefense.ui.tower.TowerShopButton;
+	import massdefense.ui.UI;
+	import massdefense.ui.tower.ShopButton;
 	import massdefense.units.Tower;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -22,7 +22,7 @@ package massdefense
 		
 		private var state : String = IDLE;
 		private var level:Level;
-		private var ui:BasicUI;
+		private var ui:UI;
 		
 		private var mouseDown : Boolean = false;
 		private var shiftDown : Boolean = false;
@@ -30,14 +30,14 @@ package massdefense
 		private var selectedTower : Tower;
 		private var towerToBuild : String = "";
 		
-		public function InputManager(level:Level, ui:BasicUI)
+		public function InputManager(level:Level, ui: UI)
 		{
 			this.ui = ui;
 			this.level = level;
 			
-			ui.addEventListener(BasicUI.SIMPLE_TOWER_CLICK, onTowerBuilderButtonClick);
-			ui.addEventListener(BasicUI.BLOCK_CLICK, onBlockClick);
-			ui.addEventListener(TowerShopButton.CLICK, onTowerBuyClick);
+			//ui.addEventListener(UI.SIMPLE_TOWER_CLICK, onTowerBuilderButtonClick);
+			//ui.addEventListener(UI.BLOCK_CLICK, onBlockClick);
+			ui.addEventListener(ShopButton.CLICK, onTowerBuyClick);
 			level.addEventListener(TouchEvent.TOUCH, onLevelTouch);
 			level.addEventListener(Tower.CLICK, onTowerClick);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -48,16 +48,18 @@ package massdefense
 		{
 			state = SIMPLE_TOWER_BUILD;
 			towerToBuild = String(e.data);
+			ui.showTowerInformation(towerToBuild, 1);
 		}
 		
 		private function onTowerClick(e:Event):void 
 		{
 			var tower : Tower = Tower(e.data);
+			ui.setSelecetedTower(tower);
 			if (selectedTower != null && !(selectedTower.row == tower.row && selectedTower.col == tower.col) )
 			{
 				selectedTower.hideRange();
 			}
-			ui.towerPanel.show(Tower(e.data));
+			ui.showTowerUpgradeInformation(tower.type, tower.level);
 			selectedTower = tower;
 			tower.showRange();
 		}
@@ -86,7 +88,7 @@ package massdefense
 				
 				if (touch.phase == TouchPhase.ENDED) 
 				{
-					ui.towerPanel.hide();
+					ui.hideTowerPanel();
 					if(selectedTower != null) { selectedTower.hideRange(); }
 					onLevelClick(clickPos);
 				} else if (touch != null && touch.phase == TouchPhase.MOVED && shiftDown) {

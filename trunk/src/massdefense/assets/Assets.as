@@ -17,8 +17,8 @@ package massdefense.assets
 		// BORDER
 		[Embed(source = "images/gui/border_small.png")]
 		public static const BorderSmall : Class;
-		[Embed(source="images/gui/hearts.png")]
-		public static const Hearts : Class;
+		[Embed(source = "images/gui/heart.png")]
+		public static const Heart : Class;
 		// BORDER
 		
 		// UI/TOWER_BUILD
@@ -56,7 +56,8 @@ package massdefense.assets
 		
 		[Embed(source = "images/projectils/simple_bullet.png")]
 		public static const SimpleBullet : Class;
-		
+		[Embed(source="images/projectils/bullet_01.PNG")]
+		public static const Bullet01 : Class;
 		// IMAGES/CREEPS
 		[Embed(source = "images/creeps/cow.png")]
 		public static const CreepCow : Class;
@@ -90,8 +91,16 @@ package massdefense.assets
 		public static const TowerSprite02:Class;
 		[Embed(source = "images/towers/turret_03.png")]
 		public static const TowerSprite03:Class;
+		[Embed(source = "images/towers/laser_01.PNG")]
+		public static const Laser01:Class;
+		[Embed(source = "images/towers/cannon_01.PNG")]
+		public static const Cannon01:Class;
 		// IMAGES/TOWERS
 		
+		// IMAGES/PROJECTILS
+		[Embed(source="images/projectils/laserBig.PNG")]
+		public static const Laser : Class;
+		// IMAGES/PROJECTILS
 		[Embed(source = "images/exit/exit.png")]
 		public static const ExitBitmap : Class;
 		

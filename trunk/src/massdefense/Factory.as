@@ -3,6 +3,7 @@ package massdefense
 	import flash.utils.Dictionary;
 	import massdefense.level.Level;
 	import massdefense.misc.Position;
+	import massdefense.units.BulletProperties;
 	import massdefense.units.Creep;
 	import massdefense.units.Projectil;
 	import massdefense.units.Tower;
@@ -36,7 +37,7 @@ package massdefense
 				if(!isFree) level.money -= cost;
 			}
 		}
-		
+
 		public static function sellTower(tower : Tower):void 
 		{
 			level.removeTower(tower);
@@ -53,31 +54,15 @@ package massdefense
 			return (level.money >= cost || isFree);
 		}
 		
-		public static function addProjectil(attributes : Dictionary) : void {
-			var posx : uint = attributes["posx"];
-			var posy : uint = attributes["posy"];
-			var target : Creep = attributes["target"];
+		public static function addProjectil(target:Creep, position:Position, bulletProperties : BulletProperties) : void {		
+			var projectil : Projectil = new Projectil(target,position,bulletProperties);
 			
-			var projectil : Projectil = new Projectil();
-			projectil.damage = attributes["damage"];
-			
-			var position : Position = new Position;
-			position.x = posx;
-			position.y = posy;
-			
-			projectil.position = position;
-			projectil.target = target;
-			
-			projectil.addGraphics();
-			
-			level.projectils.push(projectil);
-			level.addChild(projectil);
+			level.addProjectil(projectil);
 		}
 		
 		static public function removeProjectil(projectil:Projectil):void 
 		{
-			level.removeChild(projectil);
-			level.projectils.splice(level.projectils.indexOf(projectil), 1);
+			level.removeProjectil(projectil);
 		}		
 		
 		static public function addBlock(row:int, col:int, type: String, isFree:Boolean = false ):void 
@@ -92,6 +77,21 @@ package massdefense
 				level.addBlock(block);
 				
 				level.money -= cost;
+			}
+		}
+		
+		static public function calculateBulletHitOn(projectil:Projectil, target:Creep):void 
+		{
+			target.health -= projectil.bulletProperties.damage;
+			Factory.removeProjectil(projectil);
+			
+			if (projectil.bulletProperties.splash) {
+				for (var i:int = 0; i < level.creeps.length; i++) 
+				{
+					if (Position.distance(level.creeps[i].position, projectil.position) <= projectil.bulletProperties.splashRange) {
+						level.creeps[i].health -= projectil.bulletProperties.damage;
+					}
+				}
 			}
 		}
 	}
