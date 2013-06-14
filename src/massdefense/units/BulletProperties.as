@@ -6,6 +6,8 @@ package massdefense.units
 		public var speed  : int = 300;
 		public var splash : Boolean = false;
 		public var splashRange : int = 0;
+		public var slowEffect   : Number = 1;
+		public var slowDuration : Number = 0;
 		public var image : String;
 		
 		public function BulletProperties() 

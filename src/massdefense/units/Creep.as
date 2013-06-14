@@ -40,6 +40,9 @@ package massdefense.units
 		private var previousPosition  : Point = new Point;
 		private var targetNode        : Node = null;
 		
+		public var slowEffect   : Number = 1;
+		public var slowDuration : Number = 0;
+		
 		public function Creep() {}
 		
 		public function init(attributes:Array):void 
@@ -104,6 +107,12 @@ package massdefense.units
 				}
 				setGraphicsDirection(previousPosition);
 			}
+			
+			if (slowDuration >= 0) {
+				slowDuration -= passedTime;
+			} else {
+				slowEffect = 1;
+			}
 		}
 		
 		private function setGraphicsDirection(previousPosition:Point):void 
@@ -143,7 +152,7 @@ package massdefense.units
 		{
 			if (nextNode != null) {
 				var targetPosition : Position = targetNode.toPosition();
-				position = Position.moveToPoint(this.position, targetPosition, this.speed, passedTime);
+				position = Position.moveToPoint(this.position, targetPosition, this.speed * slowEffect, passedTime);
 			}
 		}
 		
@@ -166,6 +175,17 @@ package massdefense.units
 				escaped = true;
 			}
 			return escaped;
+		}
+		
+		public function slow(slowDuration:Number, slowEffect:Number):void 
+		{
+			if (slowDuration > 0 && slowEffect < 1) {
+				if (slowEffect < this.slowEffect) {
+					this.slowDuration = slowDuration;
+					this.slowEffect= slowEffect;
+				}
+			}
+			
 		}
 		
 		public function get row():int 

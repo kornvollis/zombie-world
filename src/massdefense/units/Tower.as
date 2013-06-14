@@ -12,6 +12,7 @@ package massdefense.units
 	import massdefense.misc.Position;
 	import massdefense.misc.SimpleGraphics;
 	import massdefense.pathfinder.Node;
+	import massdefense.Utils;
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
 	import starling.core.Starling;
@@ -61,6 +62,8 @@ package massdefense.units
 		public var reloaded     : Boolean = true;
 		public var reloadTime   : Number = 2; 					// IN SECOND
 		public var timeToReload : Number = 2;
+		public var slowEffect   : Number = 1;
+		public var slowDuration : Number = 0;
 		// BEAM
 		private var beam : Beam = null;
 		
@@ -127,8 +130,8 @@ package massdefense.units
 			towerImage = new Image(Assets.getTexture(image));
 			addRangeGraphics();
 			
-			towerImage.pivotX = towerImage.width*0.5;
-			towerImage.pivotY = towerImage.height*0.5;
+			Utils.centerPivot(towerImage);
+			
 			baseImage.pivotX = 16;
 			baseImage.pivotY = 16;
 			
@@ -279,6 +282,7 @@ package massdefense.units
 			beam.target = target;
 
 			target.health -= damage * timeElapssed;
+			target.slow(slowDuration, slowEffect);
 		}
 		
 		private function pointFire():void 
@@ -290,6 +294,8 @@ package massdefense.units
 			bulletPorperties.image = bulletGraphics;
 			bulletPorperties.splash = splash;
 			bulletPorperties.splashRange = this.splashRange;
+			bulletPorperties.slowDuration = slowDuration;
+			bulletPorperties.slowEffect = slowEffect;
 			
 			Factory.addProjectil(target, towerPosition, bulletPorperties);
 			
