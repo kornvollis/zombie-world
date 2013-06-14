@@ -85,11 +85,15 @@ package massdefense
 			target.health -= projectil.bulletProperties.damage;
 			Factory.removeProjectil(projectil);
 			
+			target.slow(projectil.bulletProperties.slowDuration, projectil.bulletProperties.slowEffect);
+			
 			if (projectil.bulletProperties.splash) {
 				for (var i:int = 0; i < level.creeps.length; i++) 
 				{
-					if (Position.distance(level.creeps[i].position, projectil.position) <= projectil.bulletProperties.splashRange) {
-						level.creeps[i].health -= projectil.bulletProperties.damage;
+					var creep : Creep = level.creeps[i];
+					if (Position.distance(creep.position, projectil.position) <= projectil.bulletProperties.splashRange) {
+						creep.health -= projectil.bulletProperties.damage;
+						creep.slow(projectil.bulletProperties.slowDuration, projectil.bulletProperties.slowEffect);
 					}
 				}
 			}

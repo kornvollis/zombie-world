@@ -38,6 +38,8 @@
 			<damage>1</damage>
 			<range>150</range>
 			<image>Laser01</image>
+			<slowEffect>0.5</slowEffect>
+			<slowDuration>2</slowDuration>
 		</upgradeLevel>
 		<upgradeLevel num="2">
 			<cost>120</cost>
