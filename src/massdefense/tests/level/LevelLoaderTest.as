@@ -3,10 +3,7 @@ package massdefense.tests.level
 	import flexunit.framework.Assert;
 	import massdefense.level.Level;
 	import massdefense.level.LevelLoader;
-	/**
-	 * ...
-	 * @author OMLI
-	 */
+
 	public class LevelLoaderTest 
 	{
 		[Test]

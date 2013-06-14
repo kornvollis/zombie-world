@@ -24,7 +24,6 @@ package massdefense.level
 			var level : Level = new Level();
 			
 			Factory.level = level;
-			
 			levelData = XML(new LevelClass());
 			
 			setStartingMoney(level);
@@ -72,8 +71,7 @@ package massdefense.level
 		{
 			var pathfinder : PathFinder = new PathFinder();
 			var grid : Grid = new Grid(getRows(), getCols() );
-			readAndSetClosedNodes(grid);
-			readAndSetExitNodes(grid);
+			readAndSetClosedNodesAndExitNodes(grid);
 			
 			pathfinder.grid = grid;
 			level.pathfinder = pathfinder;
@@ -85,25 +83,36 @@ package massdefense.level
 			}
 		}
 		
-		private function readAndSetClosedNodes(grid : Grid):void
+		private function readAndSetClosedNodesAndExitNodes(grid : Grid):void
 		{
-			for each (var xml_node : XML in levelData.closed_nodes.node) 
+			var rowIndex : int = 0;
+			for each (var row : XML in levelData.closed_nodes.row) 
 			{
-				var row : int = int(xml_node.attribute("row"));
-				var col : int = int(xml_node.attribute("col"));
+				var rowRepresentation : String = row.toString();;
 				
-				grid.getNode(row,col).close();
+				parseRowRepresentation(rowRepresentation, rowIndex, grid);
+				rowIndex++;
 			}
+			
 		}
 		
-		private function readAndSetExitNodes(grid : Grid):void
+		private function parseRowRepresentation(rowRepresentation:String, rowNum: int, grid:Grid):void 
 		{
-			for each (var xml_node : XML in levelData.start_nodes.node) 
+			var array : Array = rowRepresentation.split("|");
+			rowRepresentation = array.join('');
+			for (var i:int = 0; i < rowRepresentation.length; i++)
 			{
-				var row : int = int(xml_node.attribute("row"));
-				var col : int = int(xml_node.attribute("col"));
-				
-				grid.getNode(row, col).exit = true;
+				var code : String = rowRepresentation.charAt(i);
+				switch (code) 
+				{
+					case "X" :
+						grid.getNode(rowNum,i).close();
+					break;
+					case "E" :
+						grid.getNode(rowNum,i).exit = true;
+					break;
+					default:
+				}
 			}
 		}
 		

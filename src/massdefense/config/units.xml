@@ -13,7 +13,7 @@
 			<bulletGraphics>SimpleBullet</bulletGraphics>
 		</upgradeLevel>
 		<upgradeLevel num="2">
-			<cost>55</cost>
+			<cost>60</cost>
 			<damage>1</damage>
 			<range>180</range>
 			<reloadTime>0.7</reloadTime>
@@ -53,14 +53,14 @@
 		<name>Cannon Tower</name>
 		<fireType>ft_point</fireType>
 		<upgradeLevel num="1">
-			<cost>100</cost>
+			<cost>65</cost>
 			<damage>4</damage>
-			<range>100</range>
-			<reloadTime>5</reloadTime>
+			<range>130</range>
+			<reloadTime>4</reloadTime>
 			<image>Cannon01</image>
 			<bulletGraphics>Bullet01</bulletGraphics>
 			<splash>true</splash>
-			<splashRange>50</splashRange>
+			<splashRange>60</splashRange>
 		</upgradeLevel>
 	</tower>
 	
@@ -79,14 +79,14 @@
 		<image>CreepCroco</image>
 	</creep>
 	<creep type="deer_00">
-		<rewardMoney>2</rewardMoney>
+		<rewardMoney>5</rewardMoney>
 		<health>5</health>
 		<maxHealth>5</maxHealth>
-		<speed>65</speed>
+		<speed>50</speed>
 		<image>CreepDeer</image>
 	</creep>
 	<creep type="duck_00">
-		<rewardMoney>1</rewardMoney>
+		<rewardMoney>2</rewardMoney>
 		<health>1</health>
 		<maxHealth>1</maxHealth>
 		<speed>70</speed>
