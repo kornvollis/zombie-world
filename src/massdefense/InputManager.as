@@ -40,8 +40,21 @@ package massdefense
 			ui.addEventListener(ShopButton.CLICK, onTowerBuyClick);
 			level.addEventListener(TouchEvent.TOUCH, onLevelTouch);
 			level.addEventListener(Tower.CLICK, onTowerClick);
+			level.addEventListener(Tower.HOVER, onTowerHover);
+			level.addEventListener(Tower.HOVER_OUT, onTowerHoverOut);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyUp);
+		}
+		
+		private function onTowerHoverOut(e:Event):void 
+		{
+			UI.popUp.hide();
+		}
+		
+		private function onTowerHover(e:Event):void 
+		{
+			var tower:Tower = Tower(e.data);
+			UI.popUp.show(tower.x, tower.y);
 		}
 		
 		private function onTowerBuyClick(e:Event):void 
@@ -53,15 +66,13 @@ package massdefense
 		
 		private function onTowerClick(e:Event):void 
 		{
+			if (UI.selectedTower != null) UI.selectedTower.deselect();
+			
 			var tower : Tower = Tower(e.data);
-			ui.setSelecetedTower(tower);
-			if (selectedTower != null && !(selectedTower.row == tower.row && selectedTower.col == tower.col) )
-			{
-				selectedTower.hideRange();
-			}
+			UI.selectedTower = tower;
+			UI.selectedTower.select();
+			
 			ui.showTowerUpgradeInformation(tower.type, tower.level);
-			selectedTower = tower;
-			tower.showRange();
 		}
 		
 		private function onKeyUp(e:KeyboardEvent):void 
@@ -88,8 +99,6 @@ package massdefense
 				
 				if (touch.phase == TouchPhase.ENDED) 
 				{
-					ui.hideTowerPanel();
-					if(selectedTower != null) { selectedTower.hideRange(); }
 					onLevelClick(clickPos);
 				} else if (touch != null && touch.phase == TouchPhase.MOVED && shiftDown) {
 					onLevelClick(clickPos);
@@ -106,7 +115,11 @@ package massdefense
 				Factory.addTower(clickedRow, clickedCol, towerToBuild);
 			} else if (state == BLOCK_BUILDER) {
 				Factory.addBlock(clickedRow, clickedCol, "simpleBlock");
-			}
+			} 
+			
+			ui.hideTowerPanel();
+			if (UI.selectedTower != null) UI.selectedTower.deselect();
+			//ui.deselectTower();
 			
 			if(!shiftDown) state = IDLE;
 		}

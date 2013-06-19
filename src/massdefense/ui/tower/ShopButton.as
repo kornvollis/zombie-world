@@ -1,5 +1,6 @@
 package massdefense.ui.tower 
 {
+	import com.basicgui.BButton;
 	import massdefense.assets.Assets;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -8,7 +9,7 @@ package massdefense.ui.tower
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	
-	public class ShopButton extends Sprite 
+	public class ShopButton extends BButton 
 	{
 
 		public static const CLICK : String = "tower_buy_click";
@@ -17,8 +18,9 @@ package massdefense.ui.tower
 		
 		public function ShopButton() 
 		{
+			super();
 			borderimage = Assets.getImage("TowerBuyBorder");
-			addChild(borderimage);
+			addGraphcis(borderimage);
 			this.useHandCursor = true;
 			addEventListener(TouchEvent.TOUCH, onClick);
 		}
@@ -34,7 +36,7 @@ package massdefense.ui.tower
 			towerImage.scaleX = 0.8;
 			towerImage.scaleX = 0.8;
 			
-			addChild(towerImage);
+			addGraphcis(towerImage);
 		}
 		
 		private function onClick(e:TouchEvent):void 

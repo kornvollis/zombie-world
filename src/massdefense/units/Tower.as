@@ -12,6 +12,7 @@ package massdefense.units
 	import massdefense.misc.Position;
 	import massdefense.misc.SimpleGraphics;
 	import massdefense.pathfinder.Node;
+	import massdefense.ui.tower.TowerSelection;
 	import massdefense.Utils;
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
@@ -29,30 +30,31 @@ package massdefense.units
 		public static const FT_POINT     : String = "ft_point";
 		public static const FT_BEAM      : String = "ft_beam";
 		public static const FT_DIRECTION : String = "ft_direction";
-		
-		public static const CLICK : String = "TOWER_CLICKED";
+		public static const CLICK        : String = "TOWER_CLICKED";
 		public static const SIMPLE_TOWER : String = "simpleTower";
 		
 		
 		public static const IDLE   : String = "idle";
 		public static const FIRING : String = "firing";
+		static public const HOVER  : String = "hover";
+		static public const HOVER_OUT:String = "hoverOut";
 		
 		// Properties
-		public var angle : Number = 0;
-		private var _cost : int = 50;
-		private var _sellPrice : int = 0;
-		private var _position : Position = new Position();
-		private var _targetList : Vector.<Creep>;
-		private var splash : Boolean = false;
-		private var splashRange : int = 0;
-		private var target : Creep = null;
-		public var type : String = "";
+		public var angle          : Number = 0;
+		private var _cost         : int = 50;
+		private var _sellPrice    : int = 0;
+		private var _position     : Position = new Position();
+		private var _targetList   : Vector.<Creep>;
+		private var splash        : Boolean = false;
+		private var splashRange   : int = 0;
+		private var target        : Creep = null;
+		public var type           : String = "";
 		
 		public var image : String = "";
 		public var level : int = 1;
 		
-		private var _row : int;
-		private var _col : int;
+		private var _row       : int;
+		private var _col       : int;
 		private var _showRange : Boolean = true;
 		
 		// RELOAD && FIRE
@@ -65,13 +67,14 @@ package massdefense.units
 		public var slowEffect   : Number = 1;
 		public var slowDuration : Number = 0;
 		// BEAM
-		private var beam : Beam = null;
+		private var beam        : Beam = null;
 		
 		// GRAPHICS
-		private var baseImage   : Image;
-		private var towerImage  : Image;
-		private var rangeGraphics : Sprite = new Sprite();
-		private var bulletGraphics : String = "";
+		private var baseImage            : Image;
+		private var towerImage           : Image;
+		private var rangeGraphics        : Sprite = new Sprite();
+		private var bulletGraphics       : String = "";
+		private var towerSelection       : TowerSelection = new TowerSelection();
 		
 		public function Tower() {}
 		
@@ -86,6 +89,8 @@ package massdefense.units
 			if (fireType == FT_BEAM) {
 				beam = new Beam(position);
 			}
+			
+			addChild(towerSelection);
 		}
 		
 		private function setTypeSpecificAttributes():void 
@@ -128,6 +133,7 @@ package massdefense.units
 		{
 			baseImage = new Image(Assets.getTexture("BaseSprite"));
 			towerImage = new Image(Assets.getTexture(image));
+			towerImage.touchable = false;
 			addRangeGraphics();
 			
 			Utils.centerPivot(towerImage);
@@ -165,14 +171,20 @@ package massdefense.units
 				if (touch.phase == TouchPhase.ENDED) {
 					var event : Event = new Event(CLICK, true, this);
 					dispatchEvent(event);
-				}
+				} else if (touch.phase == TouchPhase.HOVER) {
+					event = new Event(HOVER, true, this);
+					dispatchEvent(event);
+				} 
+			} else if (!e.getTouch(this, TouchPhase.HOVER)) {
+				//trace("hover out");
+				event = new Event(HOVER_OUT, true, this);
+				dispatchEvent(event);
 			}
 		}
 		
 		public function setPositionRowCol(row:Number, col:Number):void 
 		{
-			// TODO REFACTOR
-			// setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
+			
 		}
 		
 		public function update(timeElapssed : Number) : void
@@ -237,6 +249,18 @@ package massdefense.units
 			rangeGraphics.visible = false;
 		}
 		
+		public function select():void 
+		{
+			showRange();
+			towerSelection.show();
+		}
+		
+		public function deselect():void 
+		{
+			hideRange();
+			towerSelection.hide();
+		}
+		
 		private function rotateTurretToTarget():void 
 		{
 			var vect : Point = new Point;
@@ -272,8 +296,16 @@ package massdefense.units
 				case FT_BEAM:
 					beamFire(timeElapssed);
 				break;
+				case FT_BEAM:
+					directionFire();
+				break;
 				default:
 			}
+		}
+		
+		private function directionFire():void 
+		{
+			Factory.fireToDirection(point:Point, this);
 		}
 		
 		private function beamFire(timeElapssed:Number):void 

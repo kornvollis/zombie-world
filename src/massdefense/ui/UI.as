@@ -1,5 +1,8 @@
 package massdefense.ui 
 {
+	import com.basicgui.BPopUp;
+	import com.greensock.easing.Back;
+	import com.greensock.TweenLite;
 	import flash.geom.Point;
 	import massdefense.assets.Assets;
 	import massdefense.Game;
@@ -8,7 +11,9 @@ package massdefense.ui
 	import massdefense.ui.life_panel.LifePanel;
 	import massdefense.ui.tower.TowerPanel;
 	import massdefense.ui.tower.Shop;
+	import massdefense.ui.tower.TowerSelection;
 	import massdefense.units.Tower;
+	import starling.core.Starling;
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -18,31 +23,39 @@ package massdefense.ui
 	import starling.utils.VAlign;
 
 	public class UI extends Sprite
-	{
-		private var money       : TextField;
-		private var towerPanel : TowerPanel;
-		private var shop        : Shop;
-		private var lifePanel   : LifePanel;
+	{ 
+		public static var popUp          : BPopUp;
+		public static var selectedTower  : Tower;
+		private var money                : TextField;
+		private var towerPanel           : TowerPanel;
+		private var shop                 : Shop;
+		private var lifePanel            : LifePanel;
+		private var level                : Level;
 		
-		private var level:Level;
 		
 		public function UI(level:Level)
 		{
 			this.level = level;
+			addTowerPanel(0, 240);
 			addMoneyField(0, 0);
 			addLifePanel(0, 30);
 			addShop(0, 60);
-			addTowerPanel(0, 240);
+			addPopUp();
 			
 			level.addEventListener(Level.LIFE_LOST, onLifeLost);
 		}
 		
-		public function setSelecetedTower(tower : Tower) : void {
-			towerPanel.tower = tower;
+		private function addPopUp():void 
+		{
+			popUp = new BPopUp();
+			addChild(popUp);
 		}
 		
 		public function showTowerUpgradeInformation(type:String, level:int):void 
 		{
+			towerPanel.y     = 100;
+			towerPanel.alpha = 0;
+			TweenLite.to(towerPanel, 0.5, {y : 240 , alpha : 1 , ease:Back.easeOut } );
 			towerPanel.show(type, level);
 			towerPanel.showUpgradeButton();
 			towerPanel.showSellButton();
