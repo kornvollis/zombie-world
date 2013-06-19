@@ -1,6 +1,8 @@
 package massdefense 
 {
+	import flash.geom.Point;
 	import flash.utils.Dictionary;
+	import massdefense.assets.Assets;
 	import massdefense.level.Level;
 	import massdefense.misc.Position;
 	import massdefense.units.BulletProperties;
@@ -9,6 +11,8 @@ package massdefense
 	import massdefense.units.Tower;
 	import massdefense.units.Units;
 	import org.flexunit.runners.BlockFlexUnit4ClassRunner;
+	import starling.core.Starling;
+	import starling.extensions.PDParticleSystem;
 
 	public class Factory
 	{
@@ -34,7 +38,9 @@ package massdefense
 				
 				level.addTower(tower);
 				
-				if(!isFree) level.money -= cost;
+				if (!isFree) level.money -= cost;
+				
+				// tower.select();
 			}
 		}
 
@@ -54,7 +60,7 @@ package massdefense
 			return (level.money >= cost || isFree);
 		}
 		
-		public static function addProjectil(target:Creep, position:Position, bulletProperties : BulletProperties) : void {		
+		public static function addProjectil(target:Creep, position:Position, bulletProperties : BulletProperties) : void {
 			var projectil : Projectil = new Projectil(target,position,bulletProperties);
 			
 			level.addProjectil(projectil);
@@ -88,6 +94,9 @@ package massdefense
 			target.slow(projectil.bulletProperties.slowDuration, projectil.bulletProperties.slowEffect);
 			
 			if (projectil.bulletProperties.splash) {
+				
+				addExplosionEffect(projectil);
+				
 				for (var i:int = 0; i < level.creeps.length; i++) 
 				{
 					var creep : Creep = level.creeps[i];
@@ -97,6 +106,28 @@ package massdefense
 					}
 				}
 			}
+		}
+		
+		static public function fireToDirection(point:Point, tower:Tower):void 
+		{
+			// var projectil = new Projectil(
+		}
+		
+		static private function addExplosionEffect(projectil:Projectil):void 
+		{
+			// create particle system
+			var drugsConfig:XML = XML(new Assets.ParticleConfig());
+			
+			var  mParticleSystem :PDParticleSystem = new PDParticleSystem(drugsConfig, Assets.getTexture("ParticleTexure"));
+			mParticleSystem.emitterX = projectil.x;
+			mParticleSystem.emitterY = projectil.y;
+
+			// start emitting particles
+			mParticleSystem.start(0.2);
+			
+			// add it to the stage and the juggler
+			level.addChild(mParticleSystem);
+			Starling.juggler.add(mParticleSystem);
 		}
 	}
 

@@ -10,6 +10,13 @@ package massdefense.assets
 
 	public class Assets
 	{
+		// PARTICLE
+		[Embed(source="particle/drugs.pex", mimeType="application/octet-stream")]
+        public static const DrugsConfig:Class;		
+		[Embed(source="particle/particle.pex", mimeType="application/octet-stream")]
+		public static const ParticleConfig:Class;
+		[Embed(source = "particle/texture.png")]
+		public static const ParticleTexure:Class;
 		// LEVELS
 		[Embed(source="images/levels/level_01.PNG")]
 		public static const Level_01 : Class;
@@ -30,6 +37,8 @@ package massdefense.assets
 		public static const TowerBuilderBG : Class;
 		[Embed(source = "images/gui/tower_build/menu_arrow_down.png")]
 		public static const MenuArrowDown : Class;
+		[Embed(source = "images/gui/tower/tower_select.PNG")]
+		public static const TowerSelection : Class;
 		// UI/TOWER_BUILD
 		
 		// UI/TOWER
@@ -37,6 +46,7 @@ package massdefense.assets
 		public static const TowerInfo : Class;
 		[Embed(source = "images/gui/tower/tower_item_box.png")]
 		public static const TowerPropItem : Class;
+		
 		// UI/TOWER
 		
 		// BUTTONS
