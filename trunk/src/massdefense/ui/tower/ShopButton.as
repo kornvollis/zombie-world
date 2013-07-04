@@ -16,11 +16,11 @@ package massdefense.ui.tower
 		private var borderimage:Image;
 		public var type : String;
 		
-		public function ShopButton() 
+		public function ShopButton(image: Image, disabled: Image = null) 
 		{
-			super();
-			borderimage = Assets.getImage("TowerBuyBorder");
-			addGraphcis(borderimage);
+			super(image, disabled);
+			//borderimage = Assets.getImage("TowerBuyBorder");
+			//addGraphcis(borderimage);
 			this.useHandCursor = true;
 			addEventListener(TouchEvent.TOUCH, onClick);
 		}
@@ -30,13 +30,13 @@ package massdefense.ui.tower
 			towerImage.pivotX = towerImage.width * 0.5;
 			towerImage.pivotY = towerImage.height * 0.5;
 			
-			towerImage.x = borderimage.width * 0.5;
-			towerImage.y = borderimage.height * 0.5;
+			towerImage.x = 20;
+			towerImage.y = 20;
 			
 			towerImage.scaleX = 0.8;
 			towerImage.scaleX = 0.8;
 			
-			addGraphcis(towerImage);
+			addChild(towerImage);
 		}
 		
 		private function onClick(e:TouchEvent):void 

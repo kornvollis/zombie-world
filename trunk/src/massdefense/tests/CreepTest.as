@@ -6,15 +6,10 @@ package massdefense.tests
 	public class CreepTest 
 	{
 		private var creep: Creep;
-		private var attributes : Array = new Array();
-		public function CreepTest() 
-		{
-			
-		}
+		private var properties : Object = new Object();
 		
 		[Before]
 		public function init():void {
-			attributes = new Array();
 			creep = new Creep();
 		}
 		[Test]
@@ -29,29 +24,25 @@ package massdefense.tests
 		}
 		[Test]
 		public function	testInitRow(): void {
-			attributes["row"] = 5;
-			creep.init(attributes);
+			creep.injectProperties( { row:5 } );
 			
 			Assert.assertEquals(5, creep.row);
 		}
 		[Test]
 		public function	testInitCol(): void {
-			attributes["col"] = 4;
-			creep.init(attributes);
+			creep.injectProperties( { col:4 } );
 			
 			Assert.assertEquals(4, creep.col);
 		}
 		[Test]
 		public function	testInitMaxHealth(): void {
-			attributes["maxHealth"] = 10;
-			creep.init(attributes);
+			creep.injectProperties( { maxHealth:10 } );
 			
 			Assert.assertEquals(10, creep.maxHealth);
 		}
 		[Test]
 		public function	testInitHealth(): void {
-			attributes["health"] = 10;
-			creep.init(attributes);
+			creep.injectProperties( { health:10 } );
 			
 			Assert.assertEquals(10, creep.health);
 		}

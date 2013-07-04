@@ -46,7 +46,14 @@ package massdefense.assets
 		public static const TowerInfo : Class;
 		[Embed(source = "images/gui/tower/tower_item_box.png")]
 		public static const TowerPropItem : Class;
-		
+		[Embed(source="images/gui/tower/upgrade.png")]
+		public static const TowerUpgrade : Class;
+		[Embed(source = "images/gui/tower/upgrade_disabled.png")]
+		public static const TowerUpgradeDisabled : Class;
+		[Embed(source = "images/gui/tower/sell_tower.png")]
+		public static const TowerSell: Class;
+		[Embed(source = "images/gui/tower/upgrade_indicator.png")]
+		public static const TowerUpgradeIndicator: Class;
 		// UI/TOWER
 		
 		// BUTTONS
@@ -86,11 +93,8 @@ package massdefense.assets
 		[Embed(source = "images/creeps/simple_enemy.PNG")]
 		public static const SimpleEnemyBitmap : Class;
 		// IMAGES/CREEPS
-		
-		
 		[Embed(source = "images/blocks/block_01.png")]
 		public static const Block01:Class;
-		
 		[Embed(source = "images/towers/base.png")]
 		public static const BaseSprite:Class;
 		
@@ -107,6 +111,11 @@ package massdefense.assets
 		public static const Cannon01:Class;
 		// IMAGES/TOWERS
 		
+		// IMAGES/FORTRESS
+		[Embed(source = "images/fortress/fortress.png")]
+		public static const Fortress : Class;
+		// IMAGES/FORTRESS
+		
 		// IMAGES/PROJECTILS
 		[Embed(source="images/projectils/laserBig.PNG")]
 		public static const Laser : Class;
@@ -116,7 +125,7 @@ package massdefense.assets
 		
 		public static var gameTextures:Dictionary = new Dictionary();
 		public static var gameTextureAtlas:TextureAtlas;
-		
+
 		//FONT
 		[Embed(source="font/astera_font.fnt", mimeType="application/octet-stream")]
 		public static const FontXml:Class;
@@ -124,11 +133,12 @@ package massdefense.assets
 		[Embed(source="font/astera_font_0.png")]
 		public static const FontTexture:Class;
 		
-		/*
-		[Embed(source="../media/graphics/mySpritesheet.png")]
+		
+		
+		[Embed(source="images/creeps/test.png")]
 		public static const AtlasTextureGame:Class;
 		
-		[Embed(source="../media/graphics/mySpritesheet.xml", mimeType="application/octet-stream")]
+		[Embed(source="images/creeps/test.xml", mimeType="application/octet-stream")]
 		public static const AtlasXmlGame:Class;
 		
 		public static function getAtlas():TextureAtlas
@@ -141,9 +151,7 @@ package massdefense.assets
 			}
 			return gameTextureAtlas;
 		}
-		*/
 		
-
 		public static function getTexture(name:String):Texture
 		{
 			if (gameTextures[name] == undefined)

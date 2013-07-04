@@ -3,7 +3,7 @@
 	<rows>20</rows>
 	<cols>20</cols>
 	<cellSize>32</cellSize>
-	<money>130</money>
+	<money>230</money>
 	<life>5</life>
 	
 	<start_nodes>
@@ -12,13 +12,18 @@
 		<node row = '2' col = '0' />
 	</start_nodes>
 	
+	<Fortress>
+		<width>2</width>
+		<height>3</height>
+	</Fortress>
+	
 	<closed_nodes>
-		<row>E|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>E|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>X|X|X|X|X|X|X|X|0|0|0|X|X|X|X|X|X|X|X|X</row>
 		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|0|0|0|X|X|X|X|X|X|X|X|X|X|X|X|0|0|0|0</row>
 		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|F|E|0|0|0|0|0|X|0|0|X|X|X|X|X|X|X|X|X</row>
+		<row>0|E|E|0|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|E|E|0|0|0|X|X|X|X|X|X|X|X|X|X|0|0|0|0</row>
+		<row>0|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
 		<row>X|X|X|X|X|0|0|0|0|0|0|0|0|0|0|X|X|X|X|X</row>
 		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0</row>
 		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0</row>
@@ -49,7 +54,7 @@
 		<wave>
 			<row>19</row>
 			<col>19</col>
-			<type>deer_00</type>
+			<type>duck_00</type>
 			<repeat>3</repeat>
 			<repeatAfter>20</repeatAfter>
 			<startInSecond>43</startInSecond>

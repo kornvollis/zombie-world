@@ -22,13 +22,8 @@ package massdefense
 		public function Wave() { }
 		
 		private function spawnCreep():void 
-		{
-			var creepAttributes : Array = new Array();
-			creepAttributes["row"] = row;
-			creepAttributes["col"] = col;
-			creepAttributes["type"] = type;
-			
-			Factory.spawnCreep(creepAttributes);
+		{			
+			Factory.newCreep(row,col,type);
 		}
 		
 		public function update(passedTime:Number):void 

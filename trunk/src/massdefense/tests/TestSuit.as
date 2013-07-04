@@ -22,6 +22,8 @@ package massdefense.tests
 		public var pathFinder:PathfinderTest;
 		public var creep:CreepTest;
 		public var units:UnitsTest;
+		public var gameObject:GameObjectTest;
+		
 	}
 
 }

@@ -85,5 +85,20 @@ package massdefense.units
 		{
 			return Number(units.tower.(@type == type).upgradeLevel.(@num == level.toString()).reloadTime);
 		}
+		
+		static public function getCreepProperties(type:String):Object
+		{
+			var properties : Object = new Object;
+			//.attribute("type")
+			
+			for each(var creepAttributeNode : XML in units.creep.(@type == type).children()) 
+			{
+				var attributeName  : String = creepAttributeNode.localName();
+				var attributeValue : Object = creepAttributeNode.attribute("value");
+				properties[attributeName] = attributeValue;
+			}
+			
+			return properties;
+		}
 	}
 }

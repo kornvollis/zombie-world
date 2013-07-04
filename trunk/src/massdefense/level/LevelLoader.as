@@ -36,6 +36,11 @@ package massdefense.level
 			return level;
 		}	
 		
+		private function setFortress(row:int, col:int):void 
+		{
+			Factory.createFortress(row, col, levelData.fortress.width, levelData.fortress.height);
+		}
+		
 		private function setStartingMoney(level:Level):void { level.money = int(levelData.money); }
 		
 		private function setLife(level:Level):void { level.life = levelData.life; }
@@ -71,7 +76,7 @@ package massdefense.level
 		{
 			var pathfinder : PathFinder = new PathFinder();
 			var grid : Grid = new Grid(getRows(), getCols() );
-			readAndSetClosedNodesAndExitNodes(grid);
+			configureMap(grid);
 			
 			pathfinder.grid = grid;
 			level.pathfinder = pathfinder;
@@ -83,7 +88,7 @@ package massdefense.level
 			}
 		}
 		
-		private function readAndSetClosedNodesAndExitNodes(grid : Grid):void
+		private function configureMap(grid : Grid):void
 		{
 			var rowIndex : int = 0;
 			for each (var row : XML in levelData.closed_nodes.row) 
@@ -110,6 +115,10 @@ package massdefense.level
 					break;
 					case "E" :
 						grid.getNode(rowNum,i).exit = true;
+					break;
+					case "F" :
+						grid.getNode(rowNum,i).exit = true;
+						setFortress(rowNum,i);
 					break;
 					default:
 				}

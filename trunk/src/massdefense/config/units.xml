@@ -65,32 +65,30 @@
 	</tower>
 	
 	<creep type="goat_00">
-		<rewardMoney>3</rewardMoney>
-		<health>4</health>
-		<maxHealth>4</maxHealth>
-		<speed>50</speed>
-		<image>CreepGoat</image>
+		<rewardMoney	value="3" />
+		<health      	value="4" />		
+		<speed       	value="50" />
+		<image       	value="goat" />
 	</creep>
 	<creep type="croco_00">
-		<rewardMoney>10</rewardMoney>
-		<health>5</health>
-		<maxHealth>5</maxHealth>
-		<speed>30</speed>
-		<image>CreepCroco</image>
+		<rewardMoney	value="10" />
+		<health      	value="5" />		
+		<maxHealth      value="5" />		
+		<speed       	value="30" />
+		<image       	value="croco" />
 	</creep>
 	<creep type="deer_00">
-		<rewardMoney>5</rewardMoney>
-		<health>5</health>
-		<maxHealth>5</maxHealth>
-		<speed>50</speed>
-		<image>CreepDeer</image>
+		<rewardMoney	value="5" />
+		<health      	value="5" />		
+		<maxHealth      value="5" />		
+		<speed       	value="50" />
+		<image       	value="deer" />
 	</creep>
 	<creep type="duck_00">
-		<rewardMoney>2</rewardMoney>
-		<health>1</health>
-		<maxHealth>1</maxHealth>
-		<speed>70</speed>
-		<image>CreepDuck</image>
+		<rewardMoney	value="2" />
+		<health      	value="1" />		
+		<speed       	value="70" />
+		<image       	value="duck" />
 	</creep>
 	
 	<block type="simpleBlock">

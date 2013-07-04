@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:088d0f8a4932431a718373e0eec04534$ -->
+<TextureAtlas imagePath="test.png">
+    <SubTexture name="cow" x="2" y="2" width="32" height="32"/>
+    <SubTexture name="croco" x="36" y="2" width="32" height="32"/>
+    <SubTexture name="deer" x="70" y="2" width="32" height="32"/>
+    <SubTexture name="duck" x="2" y="36" width="32" height="32"/>
+    <SubTexture name="duck_die_01" x="36" y="36" width="32" height="32"/>
+    <SubTexture name="duck_die_02" x="70" y="36" width="32" height="32"/>
+    <SubTexture name="duck_die_03" x="2" y="70" width="32" height="32"/>
+    <SubTexture name="duck_die_04" x="36" y="70" width="32" height="32"/>
+    <SubTexture name="duck_run_01" x="70" y="70" width="32" height="32"/>
+    <SubTexture name="duck_run_02" x="2" y="104" width="32" height="32"/>
+    <SubTexture name="giraffe" x="36" y="104" width="32" height="32"/>
+    <SubTexture name="goat" x="70" y="104" width="32" height="32"/>
+    <SubTexture name="lion" x="2" y="138" width="32" height="32"/>
+    <SubTexture name="simple_enemy" x="36" y="138" width="32" height="32"/>
+</TextureAtlas>

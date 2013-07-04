@@ -11,32 +11,56 @@ package com.basicgui
 
 	public class BButton extends Sprite
 	{
-		private var background : Sprite = new Sprite;
+		public static const CLICK : String = "CLICK";
 		
-		public function BButton()
+		private var image : Image = null ;
+		private var disabledImage : Image = null;
+		
+		private var enabled : Boolean = true;
+		
+		public function BButton(image: Image, disabled: Image = null)
 		{
-			addChild(background);
+			this.image = image;
+			this.disabledImage = disabled;
+			addChild(this.image);
+			if(disabled != null) addChild(this.disabledImage);
 			addEventListener(TouchEvent.TOUCH, onTouch);
 		}
 		
-		public function addGraphcis(image:Image):void {
-			background.addChild(image);
+		public function enable() : void {
+			image.visible = true;
+			enabled = true;
+			
+			if (disabledImage != null) {
+				disabledImage.visible = false;
+			}
+		}
+		
+		public function disable() : void {
+			enabled = false;
+			
+			if (disabledImage != null) {
+				image.visible = false;
+				disabledImage.visible = true;
+			}
 		}
 		
 		private function onTouch(e:TouchEvent):void 
 		{
 			var touch: Touch = e.getTouch(this);
 			
-			if (touch != null) 
+			if (touch != null && enabled) 
 			{
 				var clickPos:Point = touch.getLocation(this);
 				
 				if (touch.phase == TouchPhase.ENDED) 
 				{
-					TweenLite.to(background, 0.1, { x:0, y:0});
+					var clickEvent: Event = new Event(CLICK, true, this);
+					dispatchEvent(clickEvent);
+					TweenLite.to(image, 0.1, { x:0, y:0});
 				} else if (touch.phase == TouchPhase.BEGAN) 
 				{
-					TweenLite.to(background, 0.1, { x:2, y: 2});
+					TweenLite.to(image, 0.1, { x:2, y: 2});
 				} 
 			}
 		}
