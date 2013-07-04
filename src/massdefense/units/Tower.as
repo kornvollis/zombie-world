@@ -1,7 +1,9 @@
 package massdefense.units 
 {
 	import adobe.utils.ProductManager;
+	import com.greensock.easing.Linear;
 	import com.greensock.TweenLite;
+	import com.greensock.TweenMax;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import flexunit.utils.ArrayList;
@@ -33,14 +35,13 @@ package massdefense.units
 		public static const CLICK        : String = "TOWER_CLICKED";
 		public static const SIMPLE_TOWER : String = "simpleTower";
 		
-		
 		public static const IDLE   : String = "idle";
 		public static const FIRING : String = "firing";
 		static public const HOVER  : String = "hover";
 		static public const HOVER_OUT:String = "hoverOut";
 		
 		// Properties
-		public var angle          : Number = 0;
+		public  var angle         : Number = 0;
 		private var _cost         : int = 50;
 		private var _sellPrice    : int = 0;
 		private var _position     : Position = new Position();
@@ -71,10 +72,12 @@ package massdefense.units
 		
 		// GRAPHICS
 		private var baseImage            : Image;
+		private var upgradeIndicator     : Image;
 		private var towerImage           : Image;
 		private var rangeGraphics        : Sprite = new Sprite();
 		private var bulletGraphics       : String = "";
 		private var towerSelection       : TowerSelection = new TowerSelection();
+		
 		
 		public function Tower() {}
 		
@@ -150,6 +153,27 @@ package massdefense.units
 			towerImage.useHandCursor = true;
 			
 			addEventListener(TouchEvent.TOUCH, onClick);
+			addUpgradeIndicator();
+		}
+		
+		private function addUpgradeIndicator():void 
+		{
+			upgradeIndicator = Assets.getImage("TowerUpgradeIndicator");
+			upgradeIndicator.y = -20;
+			Utils.centerPivot(upgradeIndicator);
+			addChild(upgradeIndicator);
+			upgradeIndicator.visible = false;
+			TweenMax.to(upgradeIndicator, 0.5, { y: -30,yoyo :true, repeat: -1 , ease:Linear.easeNone} );
+		}
+		
+		public function showUpgradeIndicator():void 
+		{
+			upgradeIndicator.visible = true;
+		}
+		
+		public function hideUpgradeIndicator():void 
+		{
+			upgradeIndicator.visible = false;
 		}
 		
 		private function addRangeGraphics():void 
@@ -157,7 +181,7 @@ package massdefense.units
 			addChild(rangeGraphics);
 			rangeGraphics.touchable = false;
 			rangeGraphics.visible = false;
-			rangeGraphics.addChild(SimpleGraphics.drawCircle(-range, -range, range, 1, 0xff0000));
+			rangeGraphics.addChild(SimpleGraphics.drawCircle( -range, -range, range, 1, 0xff0000));
 		}
 		
 		private function onClick(e:TouchEvent):void 
@@ -261,6 +285,21 @@ package massdefense.units
 			towerSelection.hide();
 		}
 		
+		public function maxLevel() : int {
+			return Units.getTowerMaxLevel(type);
+		}
+		
+		public function isMaxLevel() : Boolean {
+			if (maxLevel() == level) return true;
+			else return false;
+		}
+		
+		public function upgradeCost() : int {
+			if (level == maxLevel()) return -1;
+			
+			return Units.getTowerUpgradeCost(type, level + 1);
+		}
+		
 		private function rotateTurretToTarget():void 
 		{
 			var vect : Point = new Point;
@@ -305,7 +344,7 @@ package massdefense.units
 		
 		private function directionFire():void 
 		{
-			Factory.fireToDirection(point:Point, this);
+			//Factory.fireToDirection(point:Point, this);
 		}
 		
 		private function beamFire(timeElapssed:Number):void 

@@ -7,6 +7,7 @@ package massdefense
 	import massdefense.misc.Position;
 	import massdefense.units.BulletProperties;
 	import massdefense.units.Creep;
+	import massdefense.units.Fortress;
 	import massdefense.units.Projectil;
 	import massdefense.units.Tower;
 	import massdefense.units.Units;
@@ -20,10 +21,13 @@ package massdefense
 		public static var numofdelete : uint = 0;
 		public function Factory() { }
 		
-		public static function spawnCreep(attributes : Array) : void {
+		public static function newCreep(row:int, col:int, type:String):void {
 			var creep: Creep = new Creep();
-			creep.init(attributes);
-
+			//creep.injectAttributesFromXML(Units.getCreepAttibutes(type));
+			creep.injectProperties(Units.getCreepProperties(type));
+			creep.row = row;
+			creep.col = col;
+			
 			level.addCreep(creep);
 		}
 		
@@ -39,8 +43,6 @@ package massdefense
 				level.addTower(tower);
 				
 				if (!isFree) level.money -= cost;
-				
-				// tower.select();
 			}
 		}
 
@@ -73,7 +75,7 @@ package massdefense
 		
 		static public function addBlock(row:int, col:int, type: String, isFree:Boolean = false ):void 
 		{
-			var cost : int = Game.units.block.(@type == type).cost;
+			var cost : int = 0;//Game.units.block.(@type == type).cost;
 
 			if(isOpenNode(row,col) && affordable(cost,isFree) )
 			{			
@@ -111,6 +113,24 @@ package massdefense
 		static public function fireToDirection(point:Point, tower:Tower):void 
 		{
 			// var projectil = new Projectil(
+		}
+		
+		static public function createFortress(row:int, col:int, width:int, height:int):void 
+		{
+			var fortress : Fortress = new Fortress(width, height);
+			fortress.x = col * 32;
+			fortress.y = row * 32;
+			
+			level.addFortress(fortress);
+		}
+		
+		static public function upgradeTower(selectedTower:Tower):void 
+		{
+			var upgradeCost : int = Units.getTowerUpgradeCost(selectedTower.type, selectedTower.level + 1);
+			if (upgradeCost <= level.money) {
+				selectedTower.upgrade();
+				level.money -= upgradeCost;
+			}
 		}
 		
 		static private function addExplosionEffect(projectil:Projectil):void 

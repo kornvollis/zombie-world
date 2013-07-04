@@ -19,13 +19,12 @@ package massdefense
 		[Embed(source="assets/font/line_pixel-7.ttf", embedAsCFF="false", fontName="Pixel")]
 		private static const FONT_PIXEL:String;
 		
-		[Embed(source="config/units.xml", mimeType = "application/octet-stream")] 
-		public static const Units:Class;
 		public static var stage: Stage = null;
-		public static var units : XML = XML(new Units());
 		
 		private var inputManager : InputManager;
+		
 		private var level : Level = null;
+		
 		private var debugUI : TimeControll = new TimeControll();
 		private var ui : UI;
 		private var levelLoader:LevelLoader = new LevelLoader();
@@ -37,12 +36,12 @@ package massdefense
 		
 		public function Game() 
 		{
-			level = levelLoader.createLevel(currentLevel);
-			level.init();
-			
-			level.debugDraw();
-			
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);
+		}
+		
+		private function test():void 
+		{
+			
 		}
 		
 		public function startGame() : void {
@@ -51,34 +50,26 @@ package massdefense
 			level = levelLoader.createLevel(currentLevel);
 			level.init();
 			
-			addUI();
+			ui = new UI(level);
+			ui.x = 650;	ui.y = 50;
+			
 			
 			level.debugDraw();
-			addChild(level);
+			
 			
 			inputManager = new InputManager(level, ui);
+			addChild(level);
+			addChild(ui);
 		}
 		
 		private function onAdd(e:Event):void 
 		{
 			Game.stage = stage;
-			addUI();
+			
 			removeEventListener(Event.ADDED_TO_STAGE, onAdd);
 			addEventListener(EnterFrameEvent.ENTER_FRAME, update);
 			
-			inputManager = new InputManager(level, ui);
-			
-			addChild(level);
-			addDebugTimeControll();
-			
-		}
-		
-		private function addUI():void 
-		{
-			ui = new UI(level);
-			ui.x = 650;
-			ui.y = 50;
-			addChild(ui);
+			startGame();
 		}
 		
 		private function addDebugTimeControll():void 

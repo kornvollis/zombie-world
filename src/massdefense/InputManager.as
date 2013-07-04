@@ -7,6 +7,7 @@ package massdefense
 	import massdefense.ui.UI;
 	import massdefense.ui.tower.ShopButton;
 	import massdefense.units.Tower;
+	import massdefense.units.Units;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.KeyboardEvent;
@@ -38,12 +39,28 @@ package massdefense
 			//ui.addEventListener(UI.SIMPLE_TOWER_CLICK, onTowerBuilderButtonClick);
 			//ui.addEventListener(UI.BLOCK_CLICK, onBlockClick);
 			ui.addEventListener(ShopButton.CLICK, onTowerBuyClick);
+			ui.addEventListener(UI.TOWER_UPGRADE, onTowerUpgrade);
+			ui.addEventListener(UI.TOWER_SELL, onTowerSell);
 			level.addEventListener(TouchEvent.TOUCH, onLevelTouch);
 			level.addEventListener(Tower.CLICK, onTowerClick);
 			level.addEventListener(Tower.HOVER, onTowerHover);
 			level.addEventListener(Tower.HOVER_OUT, onTowerHoverOut);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyUp);
+		}
+		
+		private function onTowerSell(e:Event):void 
+		{
+			Factory.sellTower(Tower(e.data));
+			ui.hideTowerSell();
+			ui.hideTowerUpgrade();
+		}
+		
+		private function onTowerUpgrade(e:Event):void 
+		{
+			if (Units.getTowerUpgradeCost(UI.selectedTower.type, UI.selectedTower.level + 1) <= level.money) {
+				Factory.upgradeTower(UI.selectedTower);
+			}
 		}
 		
 		private function onTowerHoverOut(e:Event):void 
@@ -54,7 +71,7 @@ package massdefense
 		private function onTowerHover(e:Event):void 
 		{
 			var tower:Tower = Tower(e.data);
-			UI.popUp.show(tower.x, tower.y);
+			// UI.popUp.show(tower.x, tower.y);
 		}
 		
 		private function onTowerBuyClick(e:Event):void 
@@ -70,8 +87,9 @@ package massdefense
 			
 			var tower : Tower = Tower(e.data);
 			UI.selectedTower = tower;
-			UI.selectedTower.select();
-			
+			// UI.selectedTower.select();
+			if(!tower.isMaxLevel()) ui.showTowerUpgrade();
+			ui.showTowerSell();
 			ui.showTowerUpgradeInformation(tower.type, tower.level);
 		}
 		
@@ -117,9 +135,13 @@ package massdefense
 				Factory.addBlock(clickedRow, clickedCol, "simpleBlock");
 			} 
 			
-			ui.hideTowerPanel();
-			if (UI.selectedTower != null) UI.selectedTower.deselect();
-			//ui.deselectTower();
+			//ui.hideTowerPanel();
+			if (UI.selectedTower != null) {
+				UI.selectedTower.deselect();
+				ui.hideTowerUpgrade();
+				ui.hideTowerSell();
+			}
+			
 			
 			if(!shiftDown) state = IDLE;
 		}

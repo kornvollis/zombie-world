@@ -70,7 +70,7 @@ package massdefense.ui.tower
 			{
 				for (var col:int = 0; col < COL; col++)
 				{
-					var towerButton : ShopButton = new ShopButton();
+					var towerButton : ShopButton = new ShopButton(Assets.getImage("TowerBuyBorder"));
 					towerButtons.push(towerButton);
 					addChild(towerButton);
 					towerButton.x = col * 40 + col * GAP + OFFSET_X;

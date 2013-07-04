@@ -10,31 +10,41 @@ package massdefense.units
 	import massdefense.pathfinder.Node;
 	import massdefense.pathfinder.PathFinder;
 	import massdefense.tests.creeptest.CreepTestFakeMain;
+	import massdefense.Utils;
+	import starling.core.Starling;
 	import starling.display.Image;
+	import starling.display.MovieClip;
 	import starling.display.Sprite;
+	import starling.events.Event;
+	import starling.textures.Texture;
 	
-	public class Creep extends Sprite
+	public class Creep extends GameObject
 	{
-		public static const DEAD         : String = "dead";
-		public static const ALIVE        : String = "live";
-		public static const ESCAPED      : String = "escaped";
+		public static const DIE         : String = "DIE";
+		public static const RUN         : String = "RUN";
+		public static const IDLE        : String = "IDLE";
+		public static const ATTACK      : String = "ATTACK";
 		
 		private var _position         : Position   = new Position();
 		private var _pathfinder       : PathFinder = null;
 		
 		public var type 			  : String = "";
-		public var state			  : String = ALIVE;
-		public var speed              : int = 90;
-		public var rewardMoney        : int = 5;
+		public var state			  : String = IDLE;
+		public var speed              : int    = 90;
+		public var rewardMoney        : int    = 5;
 		public var maxHealth          : Number = 4;
 		private var _health           : Number = 4;
 		public var distanceFromTarget : Number;
+		public var image			  : String = "";
 		
 		private var _row 			  : int;
 		private var _col              : int;
 		private var healthBar		  : HealthBar = new HealthBar();
-		private var image			  : String = "";
-		private var creepGraphics     : Image;
+		
+		// ANIMATIONS
+		private var runAnimation      : MovieClip;
+		private var dieAnimation      : MovieClip;
+		
 		private var graphicsPointing  : String = "right";
 		
 		private var previousPosition  : Point = new Point;
@@ -44,28 +54,6 @@ package massdefense.units
 		public var slowDuration : Number = 0;
 		
 		public function Creep() {}
-		
-		public function init(attributes:Array):void 
-		{
-			for (var item : Object in attributes) 
-			{
-				this[item] = attributes[item];
-			}
-			
-			setTypeSpecificAttributes();
-		}
-		
-		private function setTypeSpecificAttributes():void 
-		{
-			var creepProps : XMLList = Game.units.creep.(@type == type).children();
-			
-			for each(var typeSpecPropety : XML in creepProps) 
-			{
-				var propName  : String = typeSpecPropety.localName();
-				var propValue : Object= typeSpecPropety;
-				this[propName] = propValue;
-			}
-		}
 		
 		public function setPositionXY(x:Number , y:Number) : void 
 		{			
@@ -81,13 +69,23 @@ package massdefense.units
 			setPositionXY(col * Node.NODE_SIZE + Node.NODE_SIZE * 0.5, row * Node.NODE_SIZE + Node.NODE_SIZE * 0.5);
 		}
 		
-		public function addGraphics():void 
+		override public function addGraphics():void 
 		{
-			creepGraphics = Assets.getImage(image);
-			creepGraphics.pivotX = creepGraphics.width  * 0.5;
-			creepGraphics.pivotY = creepGraphics.height * 0.5;
+			var runTextures : Vector.<Texture> = Assets.getAtlas().getTextures(image + "_run");
+			var dieTextures : Vector.<Texture> = Assets.getAtlas().getTextures(image+"_die");
 			
-			addChild(creepGraphics);
+			runAnimation = new MovieClip(runTextures);
+			dieAnimation = new MovieClip(dieTextures);
+			dieAnimation.addEventListener(Event.COMPLETE, finishDieAnimation);
+			
+			Utils.centerPivot(runAnimation);
+			Utils.centerPivot(dieAnimation);
+			
+			addChild(runAnimation);
+			addChild(dieAnimation);
+			dieAnimation.visible = false;
+			// animate it
+			Starling.juggler.add(runAnimation);
 			
 			healthBar.x = -10;
 			healthBar.y = -22;
@@ -95,34 +93,80 @@ package massdefense.units
 			addChild(healthBar);
 			healthBar.visible = false;
 			
-			creepGraphics.useHandCursor = true;
+			runAnimation.useHandCursor = true;
+		}
+		
+		private function finishDieAnimation(e:Event):void 
+		{
+			// tween
+			
+			Starling.juggler.remove(dieAnimation);
+			
+			this.removeFromParent(true);
 		}
 		
 		public function update(passedTime : Number) : void 
 		{
-			setPreviousPosition(this.x, this.x); 
-			if (isAlive()) {
-				if(distanceFromExit() > 0) {
-					goToTheExit(passedTime);
-				}
-				setGraphicsDirection(previousPosition);
+			switch (state) 
+			{
+				case IDLE: 
+					findPath();
+				break;
+				case RUN: 
+					run(passedTime);
+				break;
+				case DIE: 
+					
+				break;
+				case ATTACK: 
+					
+				break;
+				default:
+			}
+		}
+		
+		private function findPath():void 
+		{
+			if (pathfinder == null) return;
+			
+			if (pathfinder.nextNode(this.row, this.col) != null) {
+				state = RUN;
+			}
+		}
+		
+		private function run(passedTime:Number):void 
+		{
+			setPreviousPosition(this.x, this.y); 
+			//if (isAlive()) {
+			//	if(distanceFromExit() > 0) {
+			goToTheExit(passedTime);
+			//	}
+			setCreepFacing(previousPosition);
+			//}
+			
+			if (distanceFromExit() < 1) {
+				state = ATTACK;
 			}
 			
+			/*
 			if (slowDuration >= 0) {
 				slowDuration -= passedTime;
 			} else {
 				slowEffect = 1;
 			}
+			*/
 		}
 		
-		private function setGraphicsDirection(previousPosition:Point):void 
+		private function setCreepFacing(previousPosition:Point):void 
 		{
 			if (previousPosition.x > this.x && graphicsPointing == "right") {
 				graphicsPointing = "left";
-				creepGraphics.scaleX = -1;
+				runAnimation.scaleX = -1;
+				dieAnimation.scaleX = -1;
 			} else if (previousPosition.x < this.x && graphicsPointing == "left") {
 				graphicsPointing = "right";
-				creepGraphics.scaleX = 1;
+				runAnimation.scaleX = 1;
+				dieAnimation.scaleX = 1;
 			}
 		}
 		
@@ -232,6 +276,19 @@ package massdefense.units
 			_health = value;
 			healthBar.setHpPercent(health / maxHealth);
 			if (_health < maxHealth) healthBar.visible = true;
+			
+			if (health <= 0) die();
+		}
+		
+		private function die():void 
+		{
+			state = DIE;
+			runAnimation.visible = false;
+			healthBar.visible = false;
+			dieAnimation.visible = true;
+			
+			Starling.juggler.remove(runAnimation);
+			Starling.juggler.add(dieAnimation);
 		}
 		
 		public function get pathfinder():PathFinder 

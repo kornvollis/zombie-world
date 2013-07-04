@@ -2,13 +2,10 @@ package massdefense
 {
 	import massdefense.assets.Assets;
 	import massdefense.pathfinder.Node;
+	import massdefense.units.Units;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	
-	/**
-	 * ...
-	 * @author OMLI
-	 */
 	public class Block extends Sprite 
 	{
 		private var _row : int = 0;
@@ -27,7 +24,8 @@ package massdefense
 			this.row = row;
 			this.col = col;
 			
-			var blockProps : XMLList = Game.units.block.(@type == type).children();
+			//var blockProps : XMLList = Units..units.block.(@type == type).children();
+			var blockProps : XMLList = null;
 			
 			for each(var property : XML in blockProps) 
 			{
