@@ -86,6 +86,10 @@ package massdefense.pathfinder
 		{
 			var actualNode : Node = grid.getNode(row, col);
 			
+			if (actualNode == null) {
+				throw new Error("grid.getNode(row,col)" + row + ", "+  col + " is null");
+			}
+			
 			var targetNodes : Vector.<Node> = new Vector.<Node>;
 			
 			var neighbourLeft : Node = grid.leftNeighbourOfNode(actualNode);

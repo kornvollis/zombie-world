@@ -4,6 +4,8 @@ package massdefense
 	import massdefense.level.Level;
 	import massdefense.misc.Position;
 	import massdefense.pathfinder.Node;
+	import massdefense.ui.MyShop;
+	import massdefense.ui.MyUI;
 	import massdefense.ui.UI;
 	import massdefense.ui.tower.ShopButton;
 	import massdefense.units.Tower;
@@ -38,6 +40,7 @@ package massdefense
 			
 			//ui.addEventListener(UI.SIMPLE_TOWER_CLICK, onTowerBuilderButtonClick);
 			//ui.addEventListener(UI.BLOCK_CLICK, onBlockClick);
+			
 			ui.addEventListener(ShopButton.CLICK, onTowerBuyClick);
 			ui.addEventListener(UI.TOWER_UPGRADE, onTowerUpgrade);
 			ui.addEventListener(UI.TOWER_SELL, onTowerSell);
@@ -134,6 +137,9 @@ package massdefense
 			} else if (state == BLOCK_BUILDER) {
 				Factory.addBlock(clickedRow, clickedCol, "simpleBlock");
 			} 
+			
+			// CLOSE SHOP
+			MyShop.instance.close();
 			
 			//ui.hideTowerPanel();
 			if (UI.selectedTower != null) {

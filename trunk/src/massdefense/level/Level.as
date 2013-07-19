@@ -104,9 +104,6 @@ package massdefense.level
 			for each (var wave: Wave in waves) 
 			{
 				wave.update(passedTime)
-				//if(wave.remainingCreepsToSpawn > 0) {
-				//	wave.timeToNextSpawn -= passedTime;
-				//}
 			}
 			
 			for each (var tower: Tower in towers) 
@@ -136,7 +133,11 @@ package massdefense.level
 					money = money + creeps[i].rewardMoney;
 					//layer_2.removeChild(creeps[i]);
 					creeps.splice(creeps.indexOf(creeps[i]), 1);
-				} 
+				} else if (creeps[i].state == Creep.ATTACK) {
+					layer_2.removeChild(creeps[i]);
+					creeps.splice(creeps.indexOf(creeps[i]), 1);
+					life--;
+				}
 			}	
 		}
 		
@@ -259,7 +260,7 @@ package massdefense.level
 		{
 			for (var i:int = 0; i < pathfinder.grid.rows; i++) 
 			{
-				for (var j:int = 0; j < pathfinder.grid.rows; j++) 
+				for (var j:int = 0; j < pathfinder.grid.cols; j++) 
 				{
 					if (!pathfinder.grid.getNode(i, j).isOpen()) {
 						layer_0.addChild(SimpleGraphics.drawXatRowCol(i, j, Node.NODE_SIZE, 1, 0x880000, 0.3));

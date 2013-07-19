@@ -53,6 +53,7 @@
     <element path="lib\flexunit-4.1.0-8-as3_4.1.0.16076.swc" />
     <element path="lib\flexunit-uilistener-4.1.0-8-4.1.0.16076.swc" />
     <element path="lib\starling.swc" />
+    <element path="lib\feathers.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

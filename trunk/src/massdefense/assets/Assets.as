@@ -28,6 +28,38 @@ package massdefense.assets
 		public static const Heart : Class;
 		// BORDER
 		
+		// MAIN_MENU 
+		[Embed(source = "images/main_menu/menu_bg.png")]
+		public static const MainMenuBG : Class;
+		[Embed(source = "images/main_menu/menu_about.PNG")]
+		public static const MainMenuAbout : Class;
+		[Embed(source = "images/main_menu/menu_about_over.PNG")]
+		public static const MainMenuAboutOver : Class;
+		[Embed(source = "images/main_menu/menu_load_game.PNG")]
+		public static const MainMenuLoad : Class;
+		[Embed(source = "images/main_menu/menu_load_game_over.PNG")]
+		public static const MainMenuLoadOver : Class;
+		[Embed(source = "images/main_menu/menu_new_game.PNG")]
+		public static const MainMenuNewGame : Class;
+		[Embed(source = "images/main_menu/menu_new_game_over.PNG")]
+		public static const MainMenuNewGameOver : Class;
+		
+		//SHOP
+		[Embed(source="images/gui/shop/shop_bg.PNG")]
+		public static const ShopBG : Class;
+		[Embed(source="images/gui/shop/shop_card.png")]
+		public static const ShopCard : Class;
+		[Embed(source = "images/gui/shop/shop_card_list.PNG")]
+		public static const ShopCardList : Class;
+		[Embed(source = "images/gui/shop/shop_buy.png")]
+		public static const ShopBuy : Class;
+		[Embed(source = "images/gui/shop/shop_buy_over.png")]
+		public static const ShopBuyOver : Class;
+		
+		// SHOP/ABILITIES
+		[Embed(source="images/gui/shop/abilities/target.png")]
+		public static const TargetIcon : Class;
+		
 		// UI/TOWER_BUILD
 		[Embed(source = "images/gui/tower_build/menu_arrow.png")]
 		public static const MenuArrowUp : Class;
@@ -111,11 +143,6 @@ package massdefense.assets
 		public static const Cannon01:Class;
 		// IMAGES/TOWERS
 		
-		// IMAGES/FORTRESS
-		[Embed(source = "images/fortress/fortress.png")]
-		public static const Fortress : Class;
-		// IMAGES/FORTRESS
-		
 		// IMAGES/PROJECTILS
 		[Embed(source="images/projectils/laserBig.PNG")]
 		public static const Laser : Class;
@@ -129,6 +156,7 @@ package massdefense.assets
 		//FONT
 		[Embed(source="font/astera_font.fnt", mimeType="application/octet-stream")]
 		public static const FontXml:Class;
+			
 		
 		[Embed(source="font/astera_font_0.png")]
 		public static const FontTexture:Class;

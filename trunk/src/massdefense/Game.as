@@ -1,8 +1,14 @@
 package massdefense 
 {
+	import feathers.controls.text.TextFieldTextRenderer;
+	import feathers.core.FeathersControl;
+	import feathers.core.ITextRenderer;
+	import flash.text.AntiAliasType;
 	import massdefense.assets.Assets;
 	import massdefense.level.Level;
 	import massdefense.level.LevelLoader;
+	import massdefense.screens.MainMenu;
+	import massdefense.ui.MyUI;
 	import massdefense.ui.UI;
 	import massdefense.ui.TimeControll;
 	import starling.core.Starling;
@@ -16,7 +22,8 @@ package massdefense
 	public class Game extends Sprite 
 	{
 		public static const FONT : String = "Pixel";
-		[Embed(source="assets/font/line_pixel-7.ttf", embedAsCFF="false", fontName="Pixel")]
+		[Embed(source="assets/font/prstart.ttf", embedAsCFF = "false", fontName = "Pixel")]
+		//[Embed(source="assets/font/line_pixel-7.ttf", embedAsCFF="false", fontName="Pixel")]
 		private static const FONT_PIXEL:String;
 		
 		public static var stage: Stage = null;
@@ -27,6 +34,7 @@ package massdefense
 		
 		private var debugUI : TimeControll = new TimeControll();
 		private var ui : UI;
+		private var myUi : MyUI = new MyUI;
 		private var levelLoader:LevelLoader = new LevelLoader();
 		
 		public var paused : Boolean = false;
@@ -34,8 +42,19 @@ package massdefense
 		
 		public var currentLevel : Class = LevelLoader.Level_01;
 		
+		private var mainMenu : MainMenu = new MainMenu();
+		
 		public function Game() 
 		{
+			FeathersControl.defaultTextRendererFactory = function():ITextRenderer
+			{
+				var tr :TextFieldTextRenderer = new TextFieldTextRenderer();
+				tr.embedFonts = true;
+				tr.antiAliasType = AntiAliasType.ADVANCED;
+				return tr;
+			};
+			
+			mainMenu.addEventListener(MainMenu.START_GAME, startGame);
 			addEventListener(Event.ADDED_TO_STAGE, onAdd);
 		}
 		
@@ -45,6 +64,7 @@ package massdefense
 		}
 		
 		public function startGame() : void {
+			mainMenu.visible = false;
 			if (level != null) removeChild(level);
 			if (ui != null) removeChild(ui);
 			level = levelLoader.createLevel(currentLevel);
@@ -54,12 +74,16 @@ package massdefense
 			ui.x = 650;	ui.y = 50;
 			
 			
+			
 			level.debugDraw();
 			
 			
 			inputManager = new InputManager(level, ui);
 			addChild(level);
-			addChild(ui);
+			//addChild(ui);
+			
+			myUi = new MyUI();
+			addChild(myUi);
 		}
 		
 		private function onAdd(e:Event):void 
@@ -69,7 +93,13 @@ package massdefense
 			removeEventListener(Event.ADDED_TO_STAGE, onAdd);
 			addEventListener(EnterFrameEvent.ENTER_FRAME, update);
 			
-			startGame();
+			//startGame();
+			showMainMenu();
+		}
+		
+		private function showMainMenu():void 
+		{
+			addChild(mainMenu);
 		}
 		
 		private function addDebugTimeControll():void 

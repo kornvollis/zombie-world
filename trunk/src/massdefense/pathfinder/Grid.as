@@ -2,10 +2,7 @@ package massdefense.pathfinder
 {
 	import massdefense.pathfinder.Node;
 	import starling.display.Image;
-	/**
-	 * ...
-	 * @author OMLI
-	 */
+
 	public class Grid 
 	{
 		public var rows : uint;
