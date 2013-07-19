@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <level>
-	<rows>20</rows>
-	<cols>20</cols>
+	<rows>18</rows>
+	<cols>24</cols>
 	<cellSize>32</cellSize>
 	<money>230</money>
 	<life>5</life>
@@ -18,42 +18,40 @@
 	</Fortress>
 	
 	<closed_nodes>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|F|E|0|0|0|0|0|X|0|0|X|X|X|X|X|X|X|X|X</row>
-		<row>0|E|E|0|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|E|E|0|0|0|X|X|X|X|X|X|X|X|X|X|0|0|0|0</row>
-		<row>0|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>X|X|X|X|X|0|0|0|0|0|0|0|0|0|0|X|X|X|X|X</row>
-		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0</row>
-		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0</row>
-		<row>0|0|0|0|X|X|X|0|0|0|0|0|0|X|X|X|0|0|0|0</row>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|0|0</row>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|0|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X</row>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>E|E|E|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>E|E|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>E|0|0|0|0|0|0|0|X|0|0|X|X|X|X|X|X|X|X|X|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|X|X|X|X|X|X|X|X|X|X|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>X|X|X|X|X|0|0|0|0|0|0|0|0|0|0|X|X|X|X|X|0|0|0|0</row>
+		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|X|X|X|0|0|0|0|0|0|X|X|X|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X|X</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
 	</closed_nodes>
 	
 	<waves>
 		<wave>
-			<row>19</row>
-			<col>19</col>
+			<row>17</row>
+			<col>23</col>
 			<type>duck_00</type>
 			<repeat>4</repeat>
 			<repeatAfter>20</repeatAfter>
-			<startInSecond>3</startInSecond>
+			<startInSecond>0</startInSecond>
 			<creepsToSpawn>30</creepsToSpawn>
 			<delayBetweenSpansInSecond>0.4</delayBetweenSpansInSecond>
 		</wave>
 		<wave>
-			<row>19</row>
-			<col>19</col>
+			<row>17</row>
+			<col>23</col>
 			<type>duck_00</type>
 			<repeat>3</repeat>
 			<repeatAfter>20</repeatAfter>
@@ -61,10 +59,8 @@
 			<creepsToSpawn>8</creepsToSpawn>
 			<delayBetweenSpansInSecond>0.8</delayBetweenSpansInSecond>
 		</wave>
-		
 	</waves>
 	
 	<exits>
 	</exits>	
-	
 </level>

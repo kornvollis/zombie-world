@@ -19,7 +19,7 @@ package massdefense.ui.tower
 	{
 		public static const TOWER_SELL_EVENT:String = "TOWER_SELL_EVENT";
 		public static const UPGRADE_EVENT:String    = "upgradeEvent";
-		public static const BUTTON_FONT_SIZE:uint   = 20;
+		public static const BUTTON_FONT_SIZE:uint   = 6;
 		
 		private var level            : Level;
 		private var towerName        : TextField;
@@ -56,7 +56,7 @@ package massdefense.ui.tower
 		
 		private function addTowerName():void 
 		{
-			towerName = new TextField(114, 20 , "Simple tower", Game.FONT, 20);
+			towerName = new TextField(114, 20 , "Simple tower", Game.FONT, 12);
 			//towerName.border = true;
 			addChild(towerName);
 			towerName.x = 34;
@@ -67,7 +67,7 @@ package massdefense.ui.tower
 		
 		private function addTowerLevel():void 
 		{
-			towerLevel = new TextField(114, 20 , "Level: 1", Game.FONT, 16);
+			towerLevel = new TextField(114, 20 , "Level: 1", Game.FONT, 6);
 			//towerName.border = true;
 			addChild(towerLevel);
 			towerLevel.x = 34;
