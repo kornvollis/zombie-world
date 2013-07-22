@@ -7,6 +7,7 @@ package massdefense.ui
 	import flash.geom.Point;
 	import flash.text.TextFormat;
 	import massdefense.assets.Assets;
+	import massdefense.units.Units;
 	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -54,17 +55,21 @@ package massdefense.ui
 				for (var i:int = 0; i < tierOneCards.length; i++)
 				{
 					addChild(tierOneCards[i]);
-					tierOneCards[i].x = FIRST_CARD_TOP_LEFT_X;
+					tierOneCards[i].x = FIRST_CARD_TOP_LEFT_X + i* 194;
 					tierOneCards[i].y = FIRST_CARD_TOP_LEFT_Y;
 				}
 			}
-			
 		}
 		
 		private function initCards():void
 		{
-			var card : ShopCard = new ShopCard("Destructor", 20, 200, 100,50,[{iconName: "TargetIcon", iconText: "kaka"}]);
-			tierOneCards.push(card);
+			var tierOneTowerTypes : Vector.<String> = Units.getTowerTypes();
+			for (var i:int = 0; i < tierOneTowerTypes.length; i++) 
+			{
+				var towerProps : Object = Units.getTowerProperties(tierOneTowerTypes[i], 1);
+				var card   : ShopCard = new ShopCard(tierOneTowerTypes[i], towerProps.name, towerProps.damage, towerProps.range, towerProps.reloadTime, towerProps.cost, towerProps.shopImage, [{iconName: "TargetIcon", iconText: "kaka"}]);
+				tierOneCards.push(card);
+			}
 		}
 		
 		public function close():void 

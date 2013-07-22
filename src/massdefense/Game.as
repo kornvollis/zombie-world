@@ -70,20 +70,20 @@ package massdefense
 			level = levelLoader.createLevel(currentLevel);
 			level.init();
 			
-			ui = new UI(level);
-			ui.x = 650;	ui.y = 50;
-			
-			
-			
+			//ui = new UI(level);
+			//ui.x = 650;	ui.y = 50;
 			level.debugDraw();
 			
-			
-			inputManager = new InputManager(level, ui);
+			myUi = new MyUI();
+			inputManager = new InputManager(level, myUi);
 			addChild(level);
 			//addChild(ui);
 			
-			myUi = new MyUI();
+			
 			addChild(myUi);
+			
+			
+			Factory.addTower(12, 4, "simpleTower", true);
 		}
 		
 		private function onAdd(e:Event):void 

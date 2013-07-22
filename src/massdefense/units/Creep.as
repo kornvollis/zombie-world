@@ -98,10 +98,7 @@ package massdefense.units
 		
 		private function finishDieAnimation(e:Event):void 
 		{
-			// tween
-			
 			Starling.juggler.remove(dieAnimation);
-			
 			this.removeFromParent(true);
 		}
 		

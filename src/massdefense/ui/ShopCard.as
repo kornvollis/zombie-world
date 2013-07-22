@@ -4,11 +4,16 @@ package massdefense.ui
 	import feathers.controls.Label;
 	import flash.text.TextFormat;
 	import massdefense.assets.Assets;
+	import massdefense.Factory;
+	import massdefense.Utils;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.Event;
 
 	public class ShopCard extends Sprite 
 	{
+		static public const TOWER_BUY_CLICK:String = "towerBuyClick";
+		
 		private var cardName : Label = new Label;
 		
 		private var damageLabel : Label = new Label;
@@ -17,8 +22,11 @@ package massdefense.ui
 		private var coinLabel   : Label = new Label;
 		private var buy         : Button = new Button;
 		
-		public function ShopCard(name:String, damage:int, range:int,speed:int, price:int, abilities:Array=null)
+		private var towerType   : String;
+		
+		public function ShopCard(towerType: String, name:String, damage:String, range:String,speed:String, price:String, shopImage:String, abilities:Array=null)
 		{
+			this.towerType = towerType;
 			addChild(Assets.getImage("ShopCard"));
 			
 			var cardName : Label = new Label();
@@ -62,6 +70,7 @@ package massdefense.ui
 			buy.hoverSkin = Assets.getImage("ShopBuyOver");
 			buy.x = 109;
 			buy.y = 253;
+			buy.addEventListener(Event.TRIGGERED, onBuyClick);
 			
 			// COIN
 			addChild(coinLabel);
@@ -70,6 +79,12 @@ package massdefense.ui
 			coinLabel.x = 10;
 			coinLabel.y = 258;
 			
+			// SHOP IMAGE
+			var image : Image = Assets.getImage(shopImage);
+			image.x = 91;
+			image.y = 64;
+			Utils.centerPivot(image);
+			addChild(image);
 			
 			// Add abilities
 			if(abilities != null) {
@@ -80,10 +95,15 @@ package massdefense.ui
 					
 					var icon : Image = Assets.getImage(iconName)
 					addChild(icon);
-					icon.x = 6;
+					icon.x = 6+i*45;
 					icon.y = 185;
 				}
 			}
+		}
+		
+		private function onBuyClick(e:Event):void 
+		{
+			dispatchEvent(new Event(TOWER_BUY_CLICK, true, towerType));
 		}
 		
 	}

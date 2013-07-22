@@ -337,7 +337,6 @@ package massdefense.level
 		
 		public function set money(value:int):void 
 		{
-			trace("money set");
 			_money = value;
 			dispatchEvent(new Event(MONEY_CHANGED));
 		}

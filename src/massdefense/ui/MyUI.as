@@ -12,6 +12,9 @@ package massdefense.ui
 			addChild(shop);
 		}
 		
+		public function closeShop() : void {
+			shop.close();
+		}
 	}
 
 }

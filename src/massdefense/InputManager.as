@@ -6,6 +6,7 @@ package massdefense
 	import massdefense.pathfinder.Node;
 	import massdefense.ui.MyShop;
 	import massdefense.ui.MyUI;
+	import massdefense.ui.ShopCard;
 	import massdefense.ui.UI;
 	import massdefense.ui.tower.ShopButton;
 	import massdefense.units.Tower;
@@ -25,7 +26,7 @@ package massdefense
 		
 		private var state : String = IDLE;
 		private var level:Level;
-		private var ui:UI;
+		private var ui:MyUI;
 		
 		private var mouseDown : Boolean = false;
 		private var shiftDown : Boolean = false;
@@ -33,17 +34,18 @@ package massdefense
 		private var selectedTower : Tower;
 		private var towerToBuild : String = "";
 		
-		public function InputManager(level:Level, ui: UI)
+		public function InputManager(level:Level, ui: MyUI)
 		{
 			this.ui = ui;
 			this.level = level;
 			
+			ui.addEventListener(ShopCard.TOWER_BUY_CLICK, onTowerBuyClick);
 			//ui.addEventListener(UI.SIMPLE_TOWER_CLICK, onTowerBuilderButtonClick);
 			//ui.addEventListener(UI.BLOCK_CLICK, onBlockClick);
 			
-			ui.addEventListener(ShopButton.CLICK, onTowerBuyClick);
-			ui.addEventListener(UI.TOWER_UPGRADE, onTowerUpgrade);
-			ui.addEventListener(UI.TOWER_SELL, onTowerSell);
+			//ui.addEventListener(ShopButton.CLICK, onTowerBuyClick);
+			//ui.addEventListener(UI.TOWER_UPGRADE, onTowerUpgrade);
+			//ui.addEventListener(UI.TOWER_SELL, onTowerSell);
 			level.addEventListener(TouchEvent.TOUCH, onLevelTouch);
 			level.addEventListener(Tower.CLICK, onTowerClick);
 			level.addEventListener(Tower.HOVER, onTowerHover);
@@ -55,20 +57,20 @@ package massdefense
 		private function onTowerSell(e:Event):void 
 		{
 			Factory.sellTower(Tower(e.data));
-			ui.hideTowerSell();
-			ui.hideTowerUpgrade();
+			//ui.hideTowerSell();
+			//ui.hideTowerUpgrade();
 		}
 		
 		private function onTowerUpgrade(e:Event):void 
 		{
-			if (Units.getTowerUpgradeCost(UI.selectedTower.type, UI.selectedTower.level + 1) <= level.money) {
-				Factory.upgradeTower(UI.selectedTower);
-			}
+			//if (Units.getTowerUpgradeCost(UI.selectedTower.type, UI.selectedTower.level + 1) <= level.money) {
+				//Factory.upgradeTower(UI.selectedTower);
+			//}
 		}
 		
 		private function onTowerHoverOut(e:Event):void 
 		{
-			UI.popUp.hide();
+			//UI.popUp.hide();
 		}
 		
 		private function onTowerHover(e:Event):void 
@@ -81,19 +83,26 @@ package massdefense
 		{
 			state = SIMPLE_TOWER_BUILD;
 			towerToBuild = String(e.data);
-			ui.showTowerInformation(towerToBuild, 1);
+			trace("tower bulid mode");
+			
+			if (Factory.affordable(Units.getTowerProperties(towerToBuild, 1).cost)) {
+				ui.closeShop();
+			} else {
+				
+			}
+			//ui.showTowerInformation(towerToBuild, 1);
 		}
 		
 		private function onTowerClick(e:Event):void 
 		{
-			if (UI.selectedTower != null) UI.selectedTower.deselect();
+			//if (UI.selectedTower != null) UI.selectedTower.deselect();
 			
 			var tower : Tower = Tower(e.data);
-			UI.selectedTower = tower;
+			//UI.selectedTower = tower;
 			// UI.selectedTower.select();
-			if(!tower.isMaxLevel()) ui.showTowerUpgrade();
-			ui.showTowerSell();
-			ui.showTowerUpgradeInformation(tower.type, tower.level);
+			//if(!tower.isMaxLevel()) ui.showTowerUpgrade();
+			//ui.showTowerSell();
+			//ui.showTowerUpgradeInformation(tower.type, tower.level);
 		}
 		
 		private function onKeyUp(e:KeyboardEvent):void 
@@ -142,11 +151,11 @@ package massdefense
 			MyShop.instance.close();
 			
 			//ui.hideTowerPanel();
-			if (UI.selectedTower != null) {
-				UI.selectedTower.deselect();
-				ui.hideTowerUpgrade();
-				ui.hideTowerSell();
-			}
+			//if (UI.selectedTower != null) {
+			//	UI.selectedTower.deselect();
+			//	ui.hideTowerUpgrade();
+			//	ui.hideTowerSell();
+			//}
 			
 			
 			if(!shiftDown) state = IDLE;

@@ -12,19 +12,6 @@ package massdefense.units
 		
 		public function Units() {}
 		
-		public static function getTowerTypes() : Vector.<String>
-		{
-			var towerTypes : Vector.<String> = new Vector.<String>;
-			
-			for each(var tower : XML in units.tower) 
-			{
-				var towerType : String = tower.attribute("type");
-				towerTypes.push(towerType);
-			}
-			
-			return towerTypes;
-		}
-		
 		public static function getTowerCost(type:String) : int  
 		{
 			return int(units.tower.(@type == type).upgradeLevel.(@num == "1").cost);
@@ -95,6 +82,41 @@ package massdefense.units
 			{
 				var attributeName  : String = creepAttributeNode.localName();
 				var attributeValue : Object = creepAttributeNode.attribute("value");
+				properties[attributeName] = attributeValue;
+			}
+			
+			return properties;
+		}
+		
+		static public function getTowerTypes(tier:uint = -1):Vector.<String> 
+		{
+			var towerTypes : Vector.<String> = new Vector.<String>;
+			
+			var towers : Object = units.tower;
+			
+			if (tier != -1) {
+				towers = units.tower.(@tier == tier);
+			}
+			
+			for each(var tower : XML in towers) 
+			{
+				var towerType : String = tower.attribute("type");
+				towerTypes.push(towerType);
+			}
+			
+			return towerTypes;
+		}
+		
+		static public function getTowerProperties(type: String, level:uint):Object 
+		{
+			var properties : Object = new Object;
+			
+			trace(units.tower.(@type == type).level.(@num == level.toString()).children());
+			
+			for each(var towerAttributeNode : XML in units.tower.(@type == type).level.(@num == level.toString()).children())
+			{
+				var attributeName  : String = towerAttributeNode.localName();
+				var attributeValue : Object = String(towerAttributeNode.attribute("value"));
 				properties[attributeName] = attributeValue;
 			}
 			

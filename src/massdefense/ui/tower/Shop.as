@@ -33,13 +33,15 @@ package massdefense.ui.tower
 		
 		private function addTowers():void 
 		{
-			var towerTypes : Vector.<String> = Units.getTowerTypes();
 			
+			var towerTypes : Vector.<String> = Units.getTowerTypes();
+			/*
 			for (var i:int = 0; i < towerTypes.length ; i++) 
 			{
 				towerButtons[i].addButtonGraphics(Units.getTowerImage(towerTypes[i], 1));
 				towerButtons[i].type = towerTypes[i];
 			}
+			*/
 		}
 		
 		private function addArrows():void 
