@@ -26,15 +26,19 @@ package massdefense.units
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	
-	public class Tower extends Sprite 
+	public class Tower extends GameObject 
 	{
+		// EVENTS
+		public static const CLICK        : String = "TOWER_CLICKED";
+		
 		// FIRE TYPES
 		public static const FT_POINT     : String = "ft_point";
 		public static const FT_BEAM      : String = "ft_beam";
 		public static const FT_DIRECTION : String = "ft_direction";
-		public static const CLICK        : String = "TOWER_CLICKED";
-		public static const SIMPLE_TOWER : String = "simpleTower";
 		
+		//public static const SIMPLE_TOWER : String = "simpleTower";
+		
+		// STATES
 		public static const IDLE   : String = "idle";
 		public static const FIRING : String = "firing";
 		static public const HOVER  : String = "hover";
@@ -46,8 +50,8 @@ package massdefense.units
 		private var _sellPrice    : int = 0;
 		private var _position     : Position = new Position();
 		private var _targetList   : Vector.<Creep>;
-		private var splash        : Boolean = false;
-		private var splashRange   : int = 0;
+		public var splash        : Boolean = false;
+		public var splashRange   : int = 0;
 		private var target        : Creep = null;
 		public var type           : String = "";
 		
@@ -75,46 +79,18 @@ package massdefense.units
 		private var upgradeIndicator     : Image;
 		private var towerImage           : Image;
 		private var rangeGraphics        : Sprite = new Sprite();
-		private var bulletGraphics       : String = "";
-		private var towerSelection       : TowerSelection = new TowerSelection();
+		public  var bulletImage          : String = "";
+		public  var shopImage            : String = "";
+		// private var towerSelection       : TowerSelection = new TowerSelection();
 		
 		
 		public function Tower() {}
-		
-		public function init(row:int, col:int, type:String = ""):void 
-		{
-			this.row  = row;
-			this.col  = col;
-			this.type = type;
-			
-			setTypeSpecificAttributes();
-			
-			if (fireType == FT_BEAM) {
-				beam = new Beam(position);
-			}
-			
-			addChild(towerSelection);
-		}
-		
-		private function setTypeSpecificAttributes():void 
-		{
-			var towerProps : XMLList = Units.getTowerTypeAtUpgradeLevel(type, level);
-			
-			fireType = Units.getTowerFireType(type);
-			
-			for each(var typeSpecPropety : XML in towerProps) 
-			{
-				var propName  : String = typeSpecPropety.localName();
-				var propValue : Object= typeSpecPropety;
-				this[propName] = propValue;
-			}
-		}
 		
 		public function upgrade():void 
 		{
 			level++;
 			
-			setTypeSpecificAttributes();
+			//setTypeSpecificAttributes();
 			
 			updateRangeGraphics();
 			
@@ -132,7 +108,7 @@ package massdefense.units
 			rangeGraphics.addChild(SimpleGraphics.drawCircle(-range, -range, range, 1, 0xff0000));
 		}
 		
-		public function addGraphics():void 
+		override public function addGraphics():void 
 		{
 			baseImage = new Image(Assets.getTexture("BaseSprite"));
 			towerImage = new Image(Assets.getTexture(image));
@@ -145,7 +121,12 @@ package massdefense.units
 			baseImage.pivotY = 16;
 			
 			addChild(baseImage);
-			if(fireType == FT_BEAM) addChild(beam);
+			if (fireType == FT_BEAM) {
+				if (beam == null) {
+					beam = new Beam(position);
+				}
+				addChild(beam);
+			}
 			addChild(towerImage);
 			
 			
@@ -162,7 +143,7 @@ package massdefense.units
 			upgradeIndicator.y = -20;
 			Utils.centerPivot(upgradeIndicator);
 			addChild(upgradeIndicator);
-			upgradeIndicator.visible = false;
+			//upgradeIndicator.visible = false;
 			TweenMax.to(upgradeIndicator, 0.5, { y: -30,yoyo :true, repeat: -1 , ease:Linear.easeNone} );
 		}
 		
@@ -204,11 +185,6 @@ package massdefense.units
 				event = new Event(HOVER_OUT, true, this);
 				dispatchEvent(event);
 			}
-		}
-		
-		public function setPositionRowCol(row:Number, col:Number):void 
-		{
-			
 		}
 		
 		public function update(timeElapssed : Number) : void
@@ -276,13 +252,13 @@ package massdefense.units
 		public function select():void 
 		{
 			showRange();
-			towerSelection.show();
+			//towerSelection.show();
 		}
 		
 		public function deselect():void 
 		{
 			hideRange();
-			towerSelection.hide();
+			//towerSelection.hide();
 		}
 		
 		public function maxLevel() : int {
@@ -362,7 +338,7 @@ package massdefense.units
 			towerPosition.x = x; towerPosition.y = y;
 			var bulletPorperties : BulletProperties = new BulletProperties;
 			bulletPorperties.damage = damage;
-			bulletPorperties.image = bulletGraphics;
+			bulletPorperties.image = bulletImage;
 			bulletPorperties.splash = splash;
 			bulletPorperties.splashRange = this.splashRange;
 			bulletPorperties.slowDuration = slowDuration;

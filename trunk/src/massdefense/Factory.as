@@ -33,12 +33,15 @@ package massdefense
 		
 		public static function addTower(row:int, col:int, type:String, isFree:Boolean = false ):void 
 		{
-			var cost : int = Units.getTowerCost(type);
+			var towerProperties : Object = Units.getTowerProperties(type, 1);
+			var cost : int = towerProperties.cost;
 
 			if(isOpenNode(row,col) && affordable(cost,isFree) )
 			{
 				var tower: Tower = new Tower();
-				tower.init(row, col, type);
+				tower.injectProperties(towerProperties);
+				tower.row = row;
+				tower.col = col;
 				
 				level.addTower(tower);
 				
@@ -57,7 +60,7 @@ package massdefense
 			return (level != null && level.pathfinder.grid.getNode(row, col).isOpen());
 		}
 		
-		private static function affordable(cost:int, isFree:Boolean):Boolean 
+		public static function affordable(cost:int, isFree:Boolean = false):Boolean 
 		{
 			return (level.money >= cost || isFree);
 		}
