@@ -14,14 +14,16 @@ package massdefense.bullets
 
 	public class Beam extends Sprite 
 	{
-		private var _beamReleased : Boolean = false;
-		public var target : Creep = null;
+		private var _beamReleased   : Boolean = false;
+		public  var target          : Creep = null;
 		private var beamSpriteWidth : Number = 10;
-		private var tower:Tower;
-		private var position : Position = new Position;
+		private var tower           : Tower;
+		private var position        : Position = new Position;
+		private var range           : uint;
 		
-		public function Beam(position : Position) 
+		public function Beam(position:Position, range:uint) 
 		{
+			this.range = range;
 			this.position = position;
 			//visible = false;
 			addChild(Assets.getImage("Laser"));
@@ -30,7 +32,7 @@ package massdefense.bullets
 		}
 		
 		public function update(timeElapssed : Number) :void {
-			if (target == null || target.health <= 0) beamReleased = false;
+			if (target == null || target.health <= 0 || Position.distance(position, target.position) > range) beamReleased = false;
 			else {
 				rotation = 0;
 				width = Position.distance(target.position, position);

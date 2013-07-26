@@ -232,6 +232,7 @@ package massdefense.ui.tower
 		
 		private function updateTowerInformations(type:String, level:uint):void 
 		{
+			/*
 			if (level == Units.getTowerMaxLevel(type)) {
 				setUpgradeMaxed();
 			} else {
@@ -247,6 +248,7 @@ package massdefense.ui.tower
 			setTowerRange(Units.getTowerRange(type, level));
 			setTowerFireRate(Units.getTowerReloadTime(type, level));
 			//towerInformation.setSellPrice(tower.sellPrice.toString());
+			*/
 		}
 		
 		public function hide():void 

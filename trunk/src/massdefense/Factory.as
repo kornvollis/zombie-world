@@ -35,13 +35,13 @@ package massdefense
 		{
 			var towerProperties : Object = Units.getTowerProperties(type, 1);
 			var cost : int = towerProperties.cost;
-
 			if(isOpenNode(row,col) && affordable(cost,isFree) )
 			{
 				var tower: Tower = new Tower();
 				tower.injectProperties(towerProperties);
 				tower.row = row;
 				tower.col = col;
+				tower.type = type;
 				
 				level.addTower(tower);
 				
@@ -127,13 +127,14 @@ package massdefense
 			level.addFortress(fortress);
 		}
 		
-		static public function upgradeTower(selectedTower:Tower):void 
+		static public function upgradeTower(selectedTower:Tower):int 
 		{
-			var upgradeCost : int = Units.getTowerUpgradeCost(selectedTower.type, selectedTower.level + 1);
-			if (upgradeCost <= level.money) {
+			if (selectedTower.upgradeCost <= level.money) {
 				selectedTower.upgrade();
-				level.money -= upgradeCost;
+				level.money -= selectedTower.upgradeCost;
+				return 1;
 			}
+			return -1;
 		}
 		
 		static private function addExplosionEffect(projectil:Projectil):void 

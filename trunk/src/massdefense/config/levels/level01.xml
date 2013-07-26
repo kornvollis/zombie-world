@@ -3,8 +3,8 @@
 	<rows>18</rows>
 	<cols>24</cols>
 	<cellSize>32</cellSize>
-	<money>230</money>
-	<life>5</life>
+	<money>50</money>
+	<life>20</life>
 	
 	<start_nodes>
 		<node row = '0' col = '0' />
@@ -12,18 +12,13 @@
 		<node row = '2' col = '0' />
 	</start_nodes>
 	
-	<Fortress>
-		<width>2</width>
-		<height>3</height>
-	</Fortress>
-	
 	<closed_nodes>
-		<row>E|E|E|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>E|E|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
-		<row>E|0|0|0|0|0|0|0|X|0|0|X|X|X|X|X|X|X|X|X|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|X|0|0|X|X|X|X|X|X|X|X|X|0|0|0|0</row>
 		<row>0|0|0|0|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
 		<row>0|0|0|0|0|0|X|X|X|X|X|X|X|X|X|X|0|0|0|0|0|0|0|0</row>
-		<row>0|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>E|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
 		<row>X|X|X|X|X|0|0|0|0|0|0|0|0|0|0|X|X|X|X|X|0|0|0|0</row>
 		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0|0|0|0|0</row>
 		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0|0|0|0|0</row>
@@ -52,12 +47,22 @@
 		<wave>
 			<row>17</row>
 			<col>23</col>
-			<type>duck_00</type>
+			<type>deer_00</type>
 			<repeat>3</repeat>
 			<repeatAfter>20</repeatAfter>
-			<startInSecond>43</startInSecond>
-			<creepsToSpawn>8</creepsToSpawn>
-			<delayBetweenSpansInSecond>0.8</delayBetweenSpansInSecond>
+			<startInSecond>10</startInSecond>
+			<creepsToSpawn>5</creepsToSpawn>
+			<delayBetweenSpansInSecond>1.5</delayBetweenSpansInSecond>
+		</wave>
+		<wave>
+			<row>17</row>
+			<col>23</col>
+			<type>croco_00</type>
+			<repeat>10</repeat>
+			<repeatAfter>15</repeatAfter>
+			<startInSecond>10</startInSecond>
+			<creepsToSpawn>1</creepsToSpawn>
+			<delayBetweenSpansInSecond>1.5</delayBetweenSpansInSecond>
 		</wave>
 	</waves>
 	

@@ -1,5 +1,6 @@
 package massdefense
 {
+	import feathers.core.PopUpManager;
 	import flash.geom.Point;
 	import massdefense.level.Level;
 	import massdefense.misc.Position;
@@ -24,7 +25,7 @@ package massdefense
 		public static const BLOCK_BUILDER : String = "BLOCK_BUILDER";
 		public static const IDLE : String = "IDLE";
 		
-		private var state : String = IDLE;
+		private var _state : String = IDLE;
 		private var level:Level;
 		private var ui:MyUI;
 		
@@ -39,7 +40,12 @@ package massdefense
 			this.ui = ui;
 			this.level = level;
 			
+			ui.setLife(level.life.toString());
+			ui.setCoins(level.money.toString());
+			
 			ui.addEventListener(ShopCard.TOWER_BUY_CLICK, onTowerBuyClick);
+			ui.addEventListener(MyUI.TOWER_UPGRADE_CLICKED, onTowerUpgrade);
+			ui.addEventListener(MyUI.TOWER_SELL_CLICKED, onTowerSell);
 			//ui.addEventListener(UI.SIMPLE_TOWER_CLICK, onTowerBuilderButtonClick);
 			//ui.addEventListener(UI.BLOCK_CLICK, onBlockClick);
 			
@@ -50,22 +56,36 @@ package massdefense
 			level.addEventListener(Tower.CLICK, onTowerClick);
 			level.addEventListener(Tower.HOVER, onTowerHover);
 			level.addEventListener(Tower.HOVER_OUT, onTowerHoverOut);
+			level.addEventListener(Level.LIFE_LOST, onLifeLost);
+			level.addEventListener(Level.MONEY_CHANGED, onMoneyChanged);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			Game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyUp);
 		}
 		
+		private function onMoneyChanged(e:Event):void 
+		{
+			ui.setCoins(String(e.data));
+		}
+		
+		private function onLifeLost(e:Event):void 
+		{
+			ui.setLife(String(e.data));
+		}
+		
 		private function onTowerSell(e:Event):void 
 		{
-			Factory.sellTower(Tower(e.data));
-			//ui.hideTowerSell();
-			//ui.hideTowerUpgrade();
+			Factory.sellTower(selectedTower);
+			ui.hideTowerSellButton();
+			ui.hideUpgradeButton();
 		}
 		
 		private function onTowerUpgrade(e:Event):void 
 		{
-			//if (Units.getTowerUpgradeCost(UI.selectedTower.type, UI.selectedTower.level + 1) <= level.money) {
-				//Factory.upgradeTower(UI.selectedTower);
-			//}
+			var success : int = Factory.upgradeTower(selectedTower);
+			if (success == 1) {
+				ui.hideTowerSellButton();
+				ui.hideUpgradeButton();
+			} 
 		}
 		
 		private function onTowerHoverOut(e:Event):void 
@@ -88,7 +108,8 @@ package massdefense
 			if (Factory.affordable(Units.getTowerProperties(towerToBuild, 1).cost)) {
 				ui.closeShop();
 			} else {
-				
+				ui.shop.showMessage("You have NOT ENOUGH MONEY",2);
+				state = IDLE;
 			}
 			//ui.showTowerInformation(towerToBuild, 1);
 		}
@@ -96,8 +117,9 @@ package massdefense
 		private function onTowerClick(e:Event):void 
 		{
 			//if (UI.selectedTower != null) UI.selectedTower.deselect();
-			
-			var tower : Tower = Tower(e.data);
+			selectedTower = Tower(e.data);
+			ui.showUpgradeButton(new Point(selectedTower.x, selectedTower.y));
+			ui.showTowerSellButton(new Point(selectedTower.x, selectedTower.y));
 			//UI.selectedTower = tower;
 			// UI.selectedTower.select();
 			//if(!tower.isMaxLevel()) ui.showTowerUpgrade();
@@ -126,6 +148,16 @@ package massdefense
 			if (touch != null) 
 			{
 				var clickPos:Point = touch.getLocation(level);
+				var row : uint = clickPos.y / 32;
+				var col : uint = clickPos.x / 32;
+				ui.towerPlaceIndicator.y = row*32;
+				ui.towerPlaceIndicator.x = col*32;
+				
+				if(level.pathfinder.grid.getNode(row, col) != null) {
+					if (level.pathfinder.grid.getNode(row, col).distance != Node.INFINIT) {
+						ui.towerPlaceIndicator.showGoodSpot();
+					} else ui.towerPlaceIndicator.showBadSpot();
+				}
 				
 				if (touch.phase == TouchPhase.ENDED) 
 				{
@@ -151,17 +183,27 @@ package massdefense
 			MyShop.instance.close();
 			
 			//ui.hideTowerPanel();
-			//if (UI.selectedTower != null) {
-			//	UI.selectedTower.deselect();
-			//	ui.hideTowerUpgrade();
-			//	ui.hideTowerSell();
-			//}
-			
-			
+			if (selectedTower != null) {
+				//selectedTower.deselect();
+				ui.hideUpgradeButton();
+				ui.hideTowerSellButton();
+			}
 			if(!shiftDown) state = IDLE;
 		}
 		
+		public function get state():String 
+		{
+			return _state;
+		}
 		
-		
+		public function set state(value:String):void 
+		{
+			if (value == InputManager.SIMPLE_TOWER_BUILD) {
+				ui.towerPlaceIndicator.visible = true;
+			} else {
+				ui.towerPlaceIndicator.visible = false;
+			}
+			_state = value;
+		}
 	}
 }

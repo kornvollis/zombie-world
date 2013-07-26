@@ -1,6 +1,7 @@
 package massdefense.assets 
 {
 	import flash.display.Bitmap;
+	import flash.media.Sound;
 	import flash.utils.Dictionary;
 	import starling.display.Button;
 	import starling.display.Image;
@@ -10,6 +11,15 @@ package massdefense.assets
 
 	public class Assets
 	{
+		// SOUNDS
+		[Embed(source = "sounds/laser_fire.mp3")]
+		//[Embed(source="sounds/ufo_laser_beam_ray.mp3")]
+		public static const LaserFire : Class;
+		[Embed(source="sounds/aa_fire.mp3")]
+		public static const AAfire : Class;
+		[Embed(source="sounds/Martian_Death_Ray-Mike_Koenig-937891031.mp3")]
+		public static const BeamSound : Class;
+		
 		// PARTICLE
 		[Embed(source="particle/drugs.pex", mimeType="application/octet-stream")]
         public static const DrugsConfig:Class;		
@@ -21,12 +31,12 @@ package massdefense.assets
 		[Embed(source="images/levels/level_01.PNG")]
 		public static const Level_01 : Class;
 		
-		// BORDER
-		[Embed(source = "images/gui/border_small.png")]
-		public static const BorderSmall : Class;
+		[Embed(source = "images/gui/coins.png")]
+		public static const Coin : Class;
+		[Embed(source = "images/gui/life.PNG")]
+		public static const Life : Class;
 		[Embed(source = "images/gui/heart.png")]
 		public static const Heart : Class;
-		// BORDER
 		
 		// MAIN_MENU 
 		[Embed(source = "images/main_menu/menu_bg.png")]
@@ -161,12 +171,11 @@ package massdefense.assets
 		[Embed(source="font/astera_font_0.png")]
 		public static const FontTexture:Class;
 		
-		
-		
-		[Embed(source="images/creeps/test.png")]
+		[Embed(source="images/creeps/creep_textures.png")]
 		public static const AtlasTextureGame:Class;
 		
-		[Embed(source="images/creeps/test.xml", mimeType="application/octet-stream")]
+		//[Embed(source = "images/creeps/test.xml", mimeType = "application/octet-stream")]
+		[Embed(source="images/creeps/creep_textures.xml" , mimeType = "application/octet-stream")]
 		public static const AtlasXmlGame:Class;
 		
 		public static function getAtlas():TextureAtlas
@@ -195,6 +204,13 @@ package massdefense.assets
 			var image:Image = new Image(texture);
 			
 			return image;
+		}
+		
+		public static function getSound(name:String):Sound {
+
+			var sound : Sound = new Assets[name]();
+			
+			return sound;
 		}
 	}
 }

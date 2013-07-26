@@ -57,6 +57,7 @@ package massdefense.ui
 		
 		private function onMoneyChanged(e:Event):void 
 		{
+			/*
 			trace("money: " + level.money);
 			if (selectedTower != null && Units.getTowerUpgradeCost(selectedTower.type, selectedTower.level + 1) > level.money ) {
 				trace("upgr disabled cost: " + Units.getTowerUpgradeCost(selectedTower.type, selectedTower.level + 1));
@@ -64,7 +65,7 @@ package massdefense.ui
 			} else {
 				trace("upgr enabled");
 				towerUpgrade.enable();
-			}
+			}*/
 		}
 		
 		private function addTowerSell():void 
@@ -164,7 +165,7 @@ package massdefense.ui
 		
 		private function onLifeLost(e:Event):void 
 		{
-			lifePanel.life = uint(e.data); 
+			//lifePanel.life = uint(e.data); 
 		}
 		
 		private function addShop(posx : int, posy:int):void 
@@ -181,7 +182,7 @@ package massdefense.ui
 			lifePanel.x = posx;
 			lifePanel.y = posy;
 			addChild(lifePanel);
-			lifePanel.life = level.life;
+			//lifePanel.life = level.life;
 		}
 		
 		private function addTowerPanel(posx : int, posy:int):void 

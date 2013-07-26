@@ -32,7 +32,7 @@ package massdefense.units
 		
 		public static function getTowerMaxLevel(type:String) : int 
 		{
-			var tower:XMLList = units.tower.(@type == type).upgradeLevel;
+			var tower:XMLList = units.tower.(@type == type).level;
 			
 			return tower.length();
 		}
@@ -42,35 +42,6 @@ package massdefense.units
 			var tower:XMLList = units.tower.(@type == type).upgradeLevel.(@num == level.toString()).children();
 			
 			return tower;
-		}
-		
-		static public function getTowerUpgradeCost(type:String, level:int):int 
-		{
-			var tower:XMLList = units.tower.(@type == type).upgradeLevel.(@num == level.toString());
-			
-			return tower.cost;
-		}
-		
-		static public function getTowerDamage(type:String, level:int):int 
-		{
-			var tower:XMLList = units.tower.(@type == type).upgradeLevel.(@num == level.toString());
-			
-			return tower.damage;
-		}
-		
-		static public function getTowerRange(type:String, level:int):int 
-		{
-			return int(units.tower.(@type == type).upgradeLevel.(@num == level.toString()).range);
-		}
-		
-		static public function getTowerName(type:String):String
-		{
-			return String(units.tower.(@type == type).name);
-		}
-		
-		static public function getTowerReloadTime(type:String, level:int):Number 
-		{
-			return Number(units.tower.(@type == type).upgradeLevel.(@num == level.toString()).reloadTime);
 		}
 		
 		static public function getCreepProperties(type:String):Object
