@@ -1,5 +1,6 @@
 package massdefense.units 
 {
+	import com.greensock.TweenMax;
 	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
@@ -11,6 +12,7 @@ package massdefense.units
 	import massdefense.pathfinder.PathFinder;
 	import massdefense.tests.creeptest.CreepTestFakeMain;
 	import massdefense.Utils;
+	import starling.animation.Juggler;
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
@@ -72,11 +74,11 @@ package massdefense.units
 		override public function addGraphics():void 
 		{
 			var runTextures : Vector.<Texture> = Assets.getAtlas().getTextures(image + "_run");
-			var dieTextures : Vector.<Texture> = Assets.getAtlas().getTextures(image+"_die");
+			var dieTextures : Vector.<Texture> = Assets.getAtlas().getTextures(image + "_die");
 			
 			runAnimation = new MovieClip(runTextures);
 			dieAnimation = new MovieClip(dieTextures);
-			dieAnimation.addEventListener(Event.COMPLETE, finishDieAnimation);
+			dieAnimation.loop = false;
 			
 			Utils.centerPivot(runAnimation);
 			Utils.centerPivot(dieAnimation);
@@ -97,8 +99,15 @@ package massdefense.units
 		}
 		
 		private function finishDieAnimation(e:Event):void 
-		{
-			Starling.juggler.remove(dieAnimation);
+		{			
+			TweenMax.delayedCall(10, removeAniamtion);
+		}
+		
+		private function removeAniamtion() : void {
+			TweenMax.to(this, 2, { alpha:0, onComplete:removeFromStage});
+		}
+		
+		private function removeFromStage() : void {
 			this.removeFromParent(true);
 		}
 		
@@ -286,6 +295,8 @@ package massdefense.units
 			
 			Starling.juggler.remove(runAnimation);
 			Starling.juggler.add(dieAnimation);
+			
+			dieAnimation.addEventListener(Event.COMPLETE, finishDieAnimation);
 		}
 		
 		public function get pathfinder():PathFinder 

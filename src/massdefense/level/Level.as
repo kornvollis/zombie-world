@@ -109,8 +109,8 @@ package massdefense.level
 			for each (var tower: Tower in towers) 
 			{
 				tower.update(passedTime);
-				if (tower.level < Units.getTowerMaxLevel(tower.type)) {
-					if (money >= Units.getTowerUpgradeCost(tower.type, tower.level +1)) {
+				if (tower.level < tower.maxLevel) {
+					if (money >= tower.upgradeCost) {
 						tower.showUpgradeIndicator();
 					} else {
 						tower.hideUpgradeIndicator();
@@ -338,7 +338,7 @@ package massdefense.level
 		public function set money(value:int):void 
 		{
 			_money = value;
-			dispatchEvent(new Event(MONEY_CHANGED));
+			dispatchEvent(new Event(MONEY_CHANGED, true, this.money));
 		}
 		
 		public function get blocks():Vector.<Block> 

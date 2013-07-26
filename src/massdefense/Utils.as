@@ -4,9 +4,9 @@ package massdefense
 	import starling.display.Image;
 	public class Utils 
 	{
-		public static function centerPivot(image : DisplayObject) : void {
-			image.pivotX = image.width * 0.5;
-			image.pivotY = image.height* 0.5;
+		public static function centerPivot(displayObject : DisplayObject) : void {
+			displayObject.pivotX = displayObject.width * 0.5;
+			displayObject.pivotY = displayObject.height* 0.5;
 		}
 	}
 }

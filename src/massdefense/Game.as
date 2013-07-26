@@ -27,6 +27,7 @@ package massdefense
 		private static const FONT_PIXEL:String;
 		
 		public static var stage: Stage = null;
+		public static var muted: Boolean = true;
 		
 		private var inputManager : InputManager;
 		
@@ -83,9 +84,8 @@ package massdefense
 			addChild(myUi);
 			
 			
-			Factory.addTower(12, 4, "simpleTower", true);
+			Factory.addTower(14, 14, "beamTower", true);
 		}
-		
 		private function onAdd(e:Event):void 
 		{
 			Game.stage = stage;

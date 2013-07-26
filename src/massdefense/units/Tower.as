@@ -2,9 +2,11 @@ package massdefense.units
 {
 	import adobe.utils.ProductManager;
 	import com.greensock.easing.Linear;
+	import com.greensock.plugins.SoundTransformPlugin;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import flash.geom.Point;
+	import flash.media.Sound;
 	import flash.utils.Dictionary;
 	import flexunit.utils.ArrayList;
 	import massdefense.assets.Assets;
@@ -39,24 +41,26 @@ package massdefense.units
 		//public static const SIMPLE_TOWER : String = "simpleTower";
 		
 		// STATES
-		public static const IDLE   : String = "idle";
-		public static const FIRING : String = "firing";
-		static public const HOVER  : String = "hover";
-		static public const HOVER_OUT:String = "hoverOut";
+		public static const IDLE         : String = "idle";
+		public static const FIRING       : String = "firing";
+		static public const HOVER        : String = "hover";
+		static public const HOVER_OUT    : String = "hoverOut";
 		
 		// Properties
 		public  var angle         : Number = 0;
 		private var _cost         : int = 50;
+		private var _upgradeCost  : int;
 		private var _sellPrice    : int = 0;
 		private var _position     : Position = new Position();
 		private var _targetList   : Vector.<Creep>;
-		public var splash        : Boolean = false;
-		public var splashRange   : int = 0;
+		public var splash         : Boolean = false;
+		public var splashRange    : int = 0;
 		private var target        : Creep = null;
 		public var type           : String = "";
 		
-		public var image : String = "";
-		public var level : int = 1;
+		public var image    : String = "";
+		public var level    : int = 1;
+		public var maxLevel : int = 1;
 		
 		private var _row       : int;
 		private var _col       : int;
@@ -77,29 +81,82 @@ package massdefense.units
 		// GRAPHICS
 		private var baseImage            : Image;
 		private var upgradeIndicator     : Image;
-		private var towerImage           : Image;
+		private var turretImage          : Image;
 		private var rangeGraphics        : Sprite = new Sprite();
 		public  var bulletImage          : String = "";
 		public  var shopImage            : String = "";
 		// private var towerSelection       : TowerSelection = new TowerSelection();
 		
+		// SOUNDS
+		private var fireSound            : Sound;
+		public  var fireSoundName        : String = "";
 		
 		public function Tower() {}
+		
+		public function update(timeElapssed : Number) : void
+		{
+			checkIfTargetIsAlive();
+			reloadProgress(timeElapssed);
+			
+			if(outOfRange(target)) target = null;
+			
+			if (target == null) {
+				//target = findTheFirstTargetInRange();
+				target = findTheClosestTargetInRange();
+				if (fireType == FT_BEAM) {
+					reloaded = false;
+					timeToReload = reloadTime;
+				}
+			}
+			
+			if (target != null) {
+				rotateTurretToTarget();
+				if (reloaded) fire(timeElapssed);
+			}
+			
+			if (beam != null) beam.update(timeElapssed);
+		}
+		
+		private function checkIfTargetIsAlive():void 
+		{
+			if (target != null) {
+				if (target.health <= 0) {
+					target = null;
+					if (fireType == FT_BEAM) {
+						reloaded = false;
+						timeToReload = reloadTime;
+					}
+				}
+			}
+		}
+		
+		override public function injectProperties(properties:Object):void 
+		{
+			for (var property:String in properties) {
+				if (this.hasOwnProperty(property)) {
+					this[property] = properties[property];
+				} else {
+					throw new Error("Private or missing property: " + property);
+				}
+			}
+			
+			if(fireSoundName != "")	fireSound = Assets.getSound(fireSoundName);
+		}
 		
 		public function upgrade():void 
 		{
 			level++;
 			
-			//setTypeSpecificAttributes();
+			injectProperties(Units.getTowerProperties(type, level));
 			
 			updateRangeGraphics();
 			
-			removeChild(towerImage);
-			towerImage = new Image(Assets.getTexture(image));
-			towerImage.pivotX = towerImage.width*0.5;
-			towerImage.pivotY = towerImage.height*0.5;
-			towerImage.useHandCursor = true;
-			addChild(towerImage);
+			removeChild(turretImage);
+			turretImage = new Image(Assets.getTexture(image));
+			turretImage.pivotX = turretImage.width*0.5;
+			turretImage.pivotY = turretImage.height*0.5;
+			turretImage.useHandCursor = true;
+			addChild(turretImage);
 		}
 		
 		private function updateRangeGraphics():void 
@@ -110,40 +167,34 @@ package massdefense.units
 		
 		override public function addGraphics():void 
 		{
-			baseImage = new Image(Assets.getTexture("BaseSprite"));
-			towerImage = new Image(Assets.getTexture(image));
-			towerImage.touchable = false;
+			baseImage = Assets.getImage("BaseSprite");
+			addChild(baseImage);
+			Utils.centerPivot(baseImage);
+			
+			turretImage = Assets.getImage(image);
+			addChild(turretImage);
+			Utils.centerPivot(turretImage);
+			turretImage.touchable = false;
+			
 			addRangeGraphics();
 			
-			Utils.centerPivot(towerImage);
 			
-			baseImage.pivotX = 16;
-			baseImage.pivotY = 16;
-			
-			addChild(baseImage);
 			if (fireType == FT_BEAM) {
 				if (beam == null) {
-					beam = new Beam(position);
+					beam = new Beam(position, range);
 				}
 				addChild(beam);
 			}
-			addChild(towerImage);
-			
 			
 			baseImage.useHandCursor = true;
-			towerImage.useHandCursor = true;
+			turretImage.useHandCursor = true;
 			
 			addEventListener(TouchEvent.TOUCH, onClick);
-			addUpgradeIndicator();
-		}
-		
-		private function addUpgradeIndicator():void 
-		{
+			
 			upgradeIndicator = Assets.getImage("TowerUpgradeIndicator");
+			addChild(upgradeIndicator);
 			upgradeIndicator.y = -20;
 			Utils.centerPivot(upgradeIndicator);
-			addChild(upgradeIndicator);
-			//upgradeIndicator.visible = false;
 			TweenMax.to(upgradeIndicator, 0.5, { y: -30,yoyo :true, repeat: -1 , ease:Linear.easeNone} );
 		}
 		
@@ -159,7 +210,7 @@ package massdefense.units
 		
 		private function addRangeGraphics():void 
 		{
-			addChild(rangeGraphics);
+			addChildAt(rangeGraphics,0);
 			rangeGraphics.touchable = false;
 			rangeGraphics.visible = false;
 			rangeGraphics.addChild(SimpleGraphics.drawCircle( -range, -range, range, 1, 0xff0000));
@@ -184,35 +235,6 @@ package massdefense.units
 				//trace("hover out");
 				event = new Event(HOVER_OUT, true, this);
 				dispatchEvent(event);
-			}
-		}
-		
-		public function update(timeElapssed : Number) : void
-		{
-			checkIfTargetIsAlive();
-			reloadProgress(timeElapssed);
-			
-			if(target == null || outOfRange(target) || target.health <= 0 ) {
-				target = findTheFirstTargetInRange();
-				if (fireType == FT_BEAM) {
-					
-				}
-			}
-			
-			if (target != null) {
-				rotateTurretToTarget();
-				if (reloaded) fire(timeElapssed);
-			}
-			
-			if (beam != null) beam.update(timeElapssed);
-		}
-		
-		private function checkIfTargetIsAlive():void 
-		{
-			if (target != null) {
-				if (target.health <= 0) {
-					target = null;
-				}
 			}
 		}
 		
@@ -261,19 +283,9 @@ package massdefense.units
 			//towerSelection.hide();
 		}
 		
-		public function maxLevel() : int {
-			return Units.getTowerMaxLevel(type);
-		}
-		
 		public function isMaxLevel() : Boolean {
-			if (maxLevel() == level) return true;
+			if (maxLevel == level) return true;
 			else return false;
-		}
-		
-		public function upgradeCost() : int {
-			if (level == maxLevel()) return -1;
-			
-			return Units.getTowerUpgradeCost(type, level + 1);
 		}
 		
 		private function rotateTurretToTarget():void 
@@ -284,13 +296,11 @@ package massdefense.units
 			
 			angle = Math.atan2(vect.y, vect.x);
 			
-			towerImage.rotation = angle;
+			turretImage.rotation = angle;
 		}
 		
 		private function findTheFirstTargetInRange():Creep
-		{
-			var nearestTarget : Creep = null;
-			
+		{			
 			for each (var creep:Creep in targetList ) 
 			{				
 				if (Position.distance(creep.position, this.position) <= this.range && creep.health > 0 && !creep.isEscaped()) {
@@ -299,6 +309,33 @@ package massdefense.units
 			}
 			
 			return null;
+		}
+		
+		private function findTheClosestTargetInRange():Creep
+		{
+			var target      : Creep  = null;
+			var minDistance : Number = 0;
+			
+			for each (var creep:Creep in targetList ) 
+			{
+				var creepDistance : Number = Position.distance(creep.position, this.position);
+				if (creepDistance <= this.range && creep.health > 0) {
+					//trace("haho3");
+					if (target == null) {
+						target = creep;
+						minDistance = creepDistance;
+						//trace("haho2");
+					} else {
+						if (minDistance > creepDistance) {
+							target = creep;
+							minDistance = creepDistance;
+							//trace("haho");
+						}
+					}
+				}
+			}
+			
+			return target;
 		}
 		
 		private function fire(timeElapssed:Number):void 
@@ -324,8 +361,11 @@ package massdefense.units
 		}
 		
 		private function beamFire(timeElapssed:Number):void 
-		{
-			beam.beamReleased = true;
+		{			
+			if (beam.beamReleased == false) {
+				beam.beamReleased = true;
+				//fireSound.play();
+			}
 			beam.target = target;
 
 			target.health -= damage * timeElapssed;
@@ -334,6 +374,8 @@ package massdefense.units
 		
 		private function pointFire():void 
 		{
+			if(fireSound != null && !Game.muted)fireSound.play();
+			
 			var towerPosition : Position = new Position;
 			towerPosition.x = x; towerPosition.y = y;
 			var bulletPorperties : BulletProperties = new BulletProperties;
@@ -414,6 +456,16 @@ package massdefense.units
 		public function set sellPrice(value:int):void 
 		{
 			_sellPrice = value;
+		}
+		
+		public function get upgradeCost():int 
+		{
+			return _upgradeCost;
+		}
+		
+		public function set upgradeCost(value:int):void 
+		{
+			_upgradeCost = value;
 		}
 	}
 }
