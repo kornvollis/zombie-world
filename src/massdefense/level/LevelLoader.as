@@ -14,17 +14,26 @@ package massdefense.level
 	{
 		[Embed(source="../config/levels/level01.xml", mimeType = "application/octet-stream")] 
 		public static const Level_01:Class;
+		[Embed(source = "../config/levels/level02.xml", mimeType = "application/octet-stream")] 
+		public static const Level_02:Class;
 		
 		private var levelData:XML;
 		
-		public function LevelLoader() {}
+		private var levels : Vector.<Class> = new Vector.<Class>;
 		
-		public function createLevel(LevelClass : Class): Level 
+		public function LevelLoader() 
+		{
+			levels.push(Level_01);
+			levels.push(Level_02);
+		}
+		
+		public function createLevel(levelIndex : uint): Level 
 		{
 			var level : Level = new Level();
 			
 			Factory.level = level;
-			levelData = XML(new LevelClass());
+			var levelClass : Class = levels[levelIndex];
+			levelData = XML(new levelClass() );
 			
 			setStartingMoney(level);
 			setLife(level);

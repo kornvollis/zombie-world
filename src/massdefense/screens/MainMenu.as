@@ -7,9 +7,9 @@ package massdefense.screens
 	import starling.display.Sprite;
 	import starling.events.Event;
 	
-	public class MainMenu extends Screen 
+	public class MainMenu extends Sprite 
 	{
-		public static const START_GAME : String = "START_GAME";
+		public static const NEW_GAME : String = "START_GAME";
 		
 		private var start : Button = new Button();
 		private var load  : Button = new Button();
@@ -45,7 +45,7 @@ package massdefense.screens
 		
 		private function onStartClick(e:Event):void 
 		{
-			dispatchEvent(new Event(START_GAME));
+			dispatchEvent(new Event(NEW_GAME, true));
 		}
 		
 		private function addLoadButton():void 

@@ -3,18 +3,18 @@
 
 	<tower type="simpleTower" tier="1">
 		<level num="1">
-			<name         value="Gunner" />
-			<fireType     value="ft_point" />
-			<maxLevel     value="2" />
-			<cost         value="50" />
-			<upgradeCost  value="150" />
-			<damage       value="1" />
-			<range        value="170" />
-			<reloadTime   value="1" />
+			<name          value="Gunner" />
+			<fireType      value="ft_point" />
+			<maxLevel      value="2" />
+			<cost          value="50" />
+			<upgradeCost   value="150" />
+			<damage        value="1" />
+			<range         value="170" />
+			<reloadTime    value="1" />
 			<fireSoundName value="LaserFire" />
-			<image        value="TowerSprite01" />
-			<bulletImage  value="SimpleBullet" />
-			<shopImage    value="TowerSprite01" />
+			<image         value="TowerSprite01" />
+			<bulletImage   value="SimpleBullet" />
+			<shopImage     value="TowerSprite01" />
 		</level>
 		<level num="2">
 			<cost         value="60" />
