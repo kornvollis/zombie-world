@@ -54,6 +54,10 @@ package massdefense.assets
 		[Embed(source = "images/main_menu/menu_new_game_over.PNG")]
 		public static const MainMenuNewGameOver : Class;
 		
+		// LEVELS
+		[Embed(source="images/gui/levels/levelBox.png")]
+		public static const LevelBox : Class;
+		
 		//SHOP
 		[Embed(source="images/gui/shop/shop_bg.PNG")]
 		public static const ShopBG : Class;

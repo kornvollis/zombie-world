@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<level>
+	<rows>18</rows>
+	<cols>24</cols>
+	<cellSize>32</cellSize>
+	<money>50</money>
+	<life>20</life>
+	
+	<start_nodes>
+		<node row = '0' col = '0' />
+		<node row = '1' col = '0' />
+		<node row = '2' col = '0' />
+	</start_nodes>
+	
+	<closed_nodes>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|X|0|0|X|X|X|X|X|X|X|X|X|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|X|X|X|X|X|X|X|X|X|X|0|0|0|0|0|0|0|0</row>
+		<row>E|0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>X|X|X|X|X|0|0|0|0|0|0|0|0|0|0|X|X|X|X|X|0|0|0|0</row>
+		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|X|0|0|0|0|0|0|0|0|0|0|X|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|X|X|X|0|0|0|0|0|0|X|X|X|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>X|X|X|X|X|X|X|0|0|0|0|0|X|X|X|X|X|X|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+		<row>0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0</row>
+	</closed_nodes>
+	
+	<waves>
+		<wave>
+			<row>17</row>
+			<col>23</col>
+			<type>duck_00</type>
+			<repeat>4</repeat>
+			<repeatAfter>20</repeatAfter>
+			<startInSecond>0</startInSecond>
+			<creepsToSpawn>30</creepsToSpawn>
+			<delayBetweenSpansInSecond>0.4</delayBetweenSpansInSecond>
+		</wave>
+		<wave>
+			<row>17</row>
+			<col>23</col>
+			<type>deer_00</type>
+			<repeat>3</repeat>
+			<repeatAfter>20</repeatAfter>
+			<startInSecond>10</startInSecond>
+			<creepsToSpawn>5</creepsToSpawn>
+			<delayBetweenSpansInSecond>1.5</delayBetweenSpansInSecond>
+		</wave>
+		<wave>
+			<row>17</row>
+			<col>23</col>
+			<type>croco_00</type>
+			<repeat>10</repeat>
+			<repeatAfter>15</repeatAfter>
+			<startInSecond>10</startInSecond>
+			<creepsToSpawn>1</creepsToSpawn>
+			<delayBetweenSpansInSecond>1.5</delayBetweenSpansInSecond>
+		</wave>
+	</waves>
+	
+	<exits>
+	</exits>	
+</level>

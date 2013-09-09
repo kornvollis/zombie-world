@@ -118,15 +118,6 @@ package massdefense
 			// var projectil = new Projectil(
 		}
 		
-		static public function createFortress(row:int, col:int, width:int, height:int):void 
-		{
-			var fortress : Fortress = new Fortress(width, height);
-			fortress.x = col * 32;
-			fortress.y = row * 32;
-			
-			level.addFortress(fortress);
-		}
-		
 		static public function upgradeTower(selectedTower:Tower):int 
 		{
 			if (selectedTower.upgradeCost <= level.money) {

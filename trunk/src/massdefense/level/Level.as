@@ -3,11 +3,13 @@ package massdefense.level
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import massdefense.Block;
+	import massdefense.InputManager;
 	import massdefense.misc.SimpleGraphics;
 	import massdefense.pathfinder.Grid;
 	import massdefense.pathfinder.Node;
 	import massdefense.pathfinder.PathFinder;
 	import massdefense.tests.TestSuit;
+	import massdefense.ui.MyUI;
 	import massdefense.ui.TimeControll;
 	import massdefense.units.Creep;
 	import massdefense.units.Fortress;
@@ -27,14 +29,11 @@ package massdefense.level
 		public static const MONEY_CHANGED:String = "moneyChanged";
 		static public const LIFE_LOST:String = "lifeLost";
 		
-		// LEVEL LOADER
-		// private var _levelData : XML;
-		// private var levelLoader:LevelLoader;
+		// INPUT MANAGER
+		private var inputManager : InputManager;
 		
 		// UI
-		private var timeControll : TimeControll;
-		private var lifeDisplay  : TextField;
-		private var moneyDisplay : TextField;
+		private var ui : MyUI = new MyUI;
 		
 		// PATHFINDER 
 		private var _pathfinder  : PathFinder;
@@ -45,7 +44,6 @@ package massdefense.level
 		private var _blocks      : Vector.<Block> = new Vector.<Block>;
 		private var _projectils  : Vector.<Projectil> = new Vector.<Projectil>;
 		private var _creeps      : Vector.<Creep> = new Vector.<Creep>;
-		private var _fortress	 : Fortress;
 		
 		// GAME attributes
 		private var _life : int = 1;
@@ -67,6 +65,8 @@ package massdefense.level
 			addChild(layer_2);
 			
 			addChild(SimpleGraphics.drawLineFromTo(new Point(0, 0), new Point(0, 100), 1, 0x990000));
+			addChild(ui);
+			inputManager = new InputManager(this, ui);
 		}
 		
 		public function addToLayer_1(obj : DisplayObject) : void {
@@ -245,16 +245,7 @@ package massdefense.level
 			layer_1.removeChild(projectil);
 		}
 		
-		public function addFortress(fortress:Fortress):void 
-		{
-			this.fortress = fortress;
-			
-			if (!TestSuit.isTestRun) {
-				layer_1.addChild(fortress);
-				fortress.addGraphics();
-			}
-		
-		}
+
 		
 		private function drawDebugWalls():void 
 		{
@@ -349,16 +340,6 @@ package massdefense.level
 		public function set blocks(value:Vector.<Block>):void 
 		{
 			_blocks = value;
-		}
-		
-		public function get fortress():Fortress 
-		{
-			return _fortress;
-		}
-		
-		public function set fortress(value:Fortress):void 
-		{
-			_fortress = value;
 		}
 	}
 

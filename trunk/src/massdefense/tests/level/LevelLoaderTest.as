@@ -10,7 +10,7 @@ package massdefense.tests.level
 		public function testCreateLevelNotNull():void {
 			var levelLoader : LevelLoader = new LevelLoader();
 			
-			var level : Level = levelLoader.createLevel(LevelLoader.Level_01);
+			var level : Level = levelLoader.createLevel(0);
 			
 			Assert.assertNotNull(level);
 		}
